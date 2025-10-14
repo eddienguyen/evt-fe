@@ -11,6 +11,8 @@ import React, { useState } from 'react';
 import { GuestForm } from './_components/GuestForm';
 import { InvitationPreview } from './_components/InvitationPreview';
 import { SuccessMessage } from './_components/SuccessMessage';
+import { TextPositionControls, type TextPositionSettings } from './_components/TextPositionControls';
+import { CANVAS_CONFIG } from './_components/canvasConfig';
 import type { GuestFormData, GuestRecord, CreateGuestResponse } from '../../types/admin';
 
 // Get API base URL from environment
@@ -29,6 +31,28 @@ const AdminGuests: React.FC = () => {
     venue: 'hue',
     secondaryNote: ''
   });
+
+  // Text position settings
+  const [positionSettings, setPositionSettings] = useState<TextPositionSettings>(() => {
+    const venue = 'hue'; // Default venue
+    const config = CANVAS_CONFIG[venue];
+    return {
+      nameX: config.frontImage.namePosition.x,
+      secondaryNoteX: config.mainImage.secondaryNotePosition.x,
+      textColor: config.frontImage.namePosition.color
+    };
+  });
+
+  // Update position settings when venue changes
+  React.useEffect(() => {
+    const venue = previewData.venue || 'hue';
+    const config = CANVAS_CONFIG[venue];
+    setPositionSettings({
+      nameX: config.frontImage.namePosition.x,
+      secondaryNoteX: config.mainImage.secondaryNotePosition.x,
+      textColor: config.frontImage.namePosition.color
+    });
+  }, [previewData.venue]);
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -174,12 +198,21 @@ const AdminGuests: React.FC = () => {
             </div>
 
             {/* Preview Section (Right - 3 columns) */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 space-y-6">
+              {/* Position Controls */}
+              <TextPositionControls
+                settings={positionSettings}
+                onSettingsChange={setPositionSettings}
+                venue={previewData.venue || 'hue'}
+              />
+              
+              {/* Canvas Preview */}
               <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
                 <InvitationPreview
                   venue={previewData.venue || 'hue'}
                   guestName={previewData.name || ''}
                   secondaryNote={previewData.secondaryNote}
+                  positionOverrides={positionSettings}
                 />
               </div>
             </div>

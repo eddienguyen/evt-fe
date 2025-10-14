@@ -16,6 +16,11 @@ export interface InvitationPreviewProps {
   guestName: string;
   secondaryNote?: string;
   className?: string;
+  positionOverrides?: {
+    nameX?: number;
+    secondaryNoteX?: number;
+    textColor?: string;
+  };
 }
 
 /**
@@ -28,12 +33,14 @@ export const InvitationPreview: React.FC<InvitationPreviewProps> = ({
   venue,
   guestName,
   secondaryNote,
-  className
+  className,
+  positionOverrides
 }) => {
   const { frontCanvasRef, mainCanvasRef, isLoading, error } = useCanvasPreview({
     venue,
     guestName,
-    secondaryNote
+    secondaryNote,
+    overrides: positionOverrides
   });
 
   return (

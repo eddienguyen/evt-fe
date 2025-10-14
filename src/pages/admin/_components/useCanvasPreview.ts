@@ -14,6 +14,11 @@ export interface CanvasPreviewConfig {
   venue: 'hue' | 'hanoi';
   guestName: string;
   secondaryNote?: string;
+  overrides?: {
+    nameX?: number;
+    secondaryNoteX?: number;
+    textColor?: string;
+  };
 }
 
 export interface UseCanvasPreviewReturn {
@@ -30,11 +35,12 @@ function renderTextOnCanvas(
   ctx: CanvasRenderingContext2D,
   text: string,
   position: TextPosition,
-  canvasWidth: number
+  canvasWidth: number,
+  overrides?: { x?: number; color?: string }
 ) {
   // Set font and styling
   ctx.font = `${position.fontSize}px ${position.fontFamily}`;
-  ctx.fillStyle = position.color;
+  ctx.fillStyle = overrides?.color || position.color;
   ctx.textAlign = position.align;
   ctx.textBaseline = 'middle';
 
@@ -44,12 +50,12 @@ function renderTextOnCanvas(
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;
 
-  // Calculate X position based on alignment
-  let x = position.x;
+  // Calculate X position based on alignment and overrides
+  let x = overrides?.x ?? position.x;
   if (position.align === 'center') {
     x = canvasWidth / 2;
   } else if (position.align === 'right') {
-    x = canvasWidth - position.x;
+    x = canvasWidth - x;
   }
 
   // Draw text
@@ -153,7 +159,11 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             frontCtx,
             config.guestName,
             venueConfig.frontImage.namePosition,
-            frontCanvas.width
+            frontCanvas.width,
+            {
+              x: config.overrides?.nameX,
+              color: config.overrides?.textColor
+            }
           );
         }
 
@@ -194,7 +204,11 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             mainCtx,
             config.secondaryNote,
             venueConfig.mainImage.secondaryNotePosition,
-            mainCanvas.width
+            mainCanvas.width,
+            {
+              x: config.overrides?.secondaryNoteX,
+              color: config.overrides?.textColor
+            }
           );
         }
 
