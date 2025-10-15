@@ -1,28 +1,40 @@
 /**
  * Admin Guests Page
- * 
+ *
  * Main admin interface for creating guests with live invitation preview.
  * Combines form, canvas preview, and success feedback components.
- * 
+ *
  * @module pages/admin/AdminGuests
  */
 
-import React, { useState, useRef } from 'react';
-import { GuestForm } from './_components/GuestForm';
-import { InvitationPreview, type InvitationPreviewHandle } from './_components/InvitationPreview';
-import { SuccessMessage } from './_components/SuccessMessage';
-import { TextPositionControls, type TextPositionSettings } from './_components/TextPositionControls';
-import { ExportControls } from './_components/ExportControls';
-import { CANVAS_CONFIG } from './_components/canvasConfig';
-import { canvasService } from '../../services/canvasService';
-import type { GuestFormData, GuestRecord, CreateGuestResponse } from '../../types/admin';
+import React, { useState, useRef } from "react";
+import { GuestForm } from "./_components/GuestForm";
+import {
+  InvitationPreview,
+  type InvitationPreviewHandle,
+} from "./_components/InvitationPreview";
+import { SuccessMessage } from "./_components/SuccessMessage";
+import { Modal } from "../../components/ui/Modal";
+import {
+  TextPositionControls,
+  type TextPositionSettings,
+} from "./_components/TextPositionControls";
+import { ExportControls } from "./_components/ExportControls";
+import { CANVAS_CONFIG } from "./_components/canvasConfig";
+import { canvasService } from "../../services/canvasService";
+import type {
+  GuestFormData,
+  GuestRecord,
+  CreateGuestResponse,
+} from "../../types/admin";
 
 // Get API base URL from environment
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 /**
  * Admin Guests Page Component
- * 
+ *
  * Provides interface for creating guests with real-time preview
  * and form validation.
  */
@@ -32,34 +44,35 @@ const AdminGuests: React.FC = () => {
 
   // Form state for live preview
   const [previewData, setPreviewData] = useState<Partial<GuestFormData>>({
-    name: '',
-    venue: 'hue',
-    secondaryNote: ''
+    name: "",
+    venue: "hue",
+    secondaryNote: "",
   });
 
   // Text position settings
-  const [positionSettings, setPositionSettings] = useState<TextPositionSettings>(() => {
-    const venue = 'hue'; // Default venue
-    const config = CANVAS_CONFIG[venue];
-    return {
-      nameX: config.frontImage.namePosition.x,
-      nameY: config.frontImage.namePosition.y,
-      secondaryNoteX: config.mainImage.secondaryNotePosition.x,
-      secondaryNoteY: config.mainImage.secondaryNotePosition.y,
-      textColor: config.frontImage.namePosition.color
-    };
-  });
+  const [positionSettings, setPositionSettings] =
+    useState<TextPositionSettings>(() => {
+      const venue = "hue"; // Default venue
+      const config = CANVAS_CONFIG[venue];
+      return {
+        nameX: config.frontImage.namePosition.x,
+        nameY: config.frontImage.namePosition.y,
+        secondaryNoteX: config.mainImage.secondaryNotePosition.x,
+        secondaryNoteY: config.mainImage.secondaryNotePosition.y,
+        textColor: config.frontImage.namePosition.color,
+      };
+    });
 
   // Update position settings when venue changes
   React.useEffect(() => {
-    const venue = previewData.venue || 'hue';
+    const venue = previewData.venue || "hue";
     const config = CANVAS_CONFIG[venue];
     setPositionSettings({
       nameX: config.frontImage.namePosition.x,
       nameY: config.frontImage.namePosition.y,
       secondaryNoteX: config.mainImage.secondaryNotePosition.x,
       secondaryNoteY: config.mainImage.secondaryNotePosition.y,
-      textColor: config.frontImage.namePosition.color
+      textColor: config.frontImage.namePosition.color,
     });
   }, [previewData.venue]);
 
@@ -69,40 +82,93 @@ const AdminGuests: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   /**
-   * Handle form submission - create guest via API
+   * Handle form submission - create guest via API with image upload
+   * Uses current canvas preview as image source (not export methods)
    */
   const handleSubmit = async (data: GuestFormData) => {
     setIsSubmitting(true);
     setError(null);
 
     try {
+      // Step 1: Get canvas blobs from current preview
+      let frontBlob: Blob | null = null;
+      let mainBlob: Blob | null = null;
+
+      if (previewRef.current) {
+        try {
+          // Use exportPreview to capture current canvas state
+          frontBlob = await previewRef.current.exportPreview("front");
+          mainBlob = await previewRef.current.exportPreview("main");
+          console.log("✅ Canvas blobs generated:", {
+            front: frontBlob
+              ? `${(frontBlob.size / 1024).toFixed(2)}KB`
+              : "null",
+            main: mainBlob ? `${(mainBlob.size / 1024).toFixed(2)}KB` : "null",
+          });
+        } catch (error) {
+          console.warn("⚠️ Failed to generate canvas blobs:", error);
+          // Continue without images (graceful degradation)
+        }
+      }
+
+      // Step 2: Build FormData with guest data and optional images
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("venue", data.venue);
+      if (data.secondaryNote) {
+        formData.append("secondaryNote", data.secondaryNote);
+      }
+
+      // Attach canvas blobs if available
+      if (frontBlob) {
+        formData.append(
+          "invitationImageFront",
+          frontBlob,
+          `${data.name}-front.png`
+        );
+      }
+      if (mainBlob) {
+        formData.append(
+          "invitationImageMain",
+          mainBlob,
+          `${data.name}-main.png`
+        );
+      }
+
+      // Step 3: Submit FormData to API (no Content-Type header - browser sets it with boundary)
       const response = await fetch(`${API_BASE_URL}/api/guests`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        method: "POST",
+        body: formData,
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Không thể tạo thiệp cho khách mời');
+        throw new Error(errorData.error || "Không thể tạo thiệp cho khách mời");
       }
 
       const result: CreateGuestResponse = await response.json();
-      
+
       if (result.success && result.data) {
         setCreatedGuest(result.data);
         setError(null);
+
+        // Show warnings if image upload failed
+        if (
+          "warnings" in result &&
+          Array.isArray(result.warnings) &&
+          result.warnings.length > 0
+        ) {
+          console.warn("⚠️ Image upload warnings:", result.warnings);
+        }
       } else {
-        throw new Error('Invalid response from server');
+        throw new Error("Invalid response from server");
       }
     } catch (err) {
-      console.error('Failed to create guest:', err);
+      console.error("Failed to create guest:", err);
       setError(
-        err instanceof Error 
-          ? err.message 
-          : 'Có lỗi xảy ra khi tạo khách mời. Vui lòng thử lại.'
+        err instanceof Error
+          ? err.message
+          : "Có lỗi xảy ra khi tạo khách mời. Vui lòng thử lại."
       );
     } finally {
       setIsSubmitting(false);
@@ -123,9 +189,9 @@ const AdminGuests: React.FC = () => {
     setCreatedGuest(null);
     setError(null);
     setPreviewData({
-      name: '',
-      venue: 'hue',
-      secondaryNote: ''
+      name: "",
+      venue: "hue",
+      secondaryNote: "",
     });
   };
 
@@ -184,52 +250,56 @@ const AdminGuests: React.FC = () => {
           </div>
         )}
 
-        {/* Success State */}
-        {createdGuest && (
-          <SuccessMessage
-            guest={createdGuest}
-            onCreateAnother={handleCreateAnother}
-          />
-        )}
+        {/* Success Modal */}
+        <Modal
+          isOpen={!!createdGuest}
+          onClose={handleCreateAnother}
+          size="lg"
+        >
+          {createdGuest && (
+            <div className="p-6">
+              <SuccessMessage
+                guest={createdGuest}
+                onCreateAnother={handleCreateAnother}
+              />
+            </div>
+          )}
+        </Modal>
 
         {/* Form & Preview State */}
-        {!createdGuest && (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-            {/* Form Section (Left - 2 columns) */}
-            <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-                <GuestForm
-                  onSubmit={handleSubmit}
-                  isSubmitting={isSubmitting}
-                  onFormChange={handleFormChange}
-                />
-              </div>
-{/* Position Controls */}
-              <TextPositionControls
-                settings={positionSettings}
-                onSettingsChange={setPositionSettings}
-                venue={previewData.venue || 'hue'}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+          {/* Form Section (Left - 2 columns) */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <GuestForm
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                onFormChange={handleFormChange}
               />
+            </div>
+            {/* Position Controls */}
+            <TextPositionControls
+              settings={positionSettings}
+              onSettingsChange={setPositionSettings}
+              venue={previewData.venue || "hue"}
+            />
+          </div>
 
+          {/* Preview Section (Right - 3 columns) */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Canvas Preview */}
+            <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+              <InvitationPreview
+                ref={previewRef}
+                venue={previewData.venue || "hue"}
+                guestName={previewData.name || ""}
+                secondaryNote={previewData.secondaryNote}
+                positionOverrides={positionSettings}
+              />
             </div>
 
-            {/* Preview Section (Right - 3 columns) */}
-            <div className="lg:col-span-3 space-y-6">
-              
-              
-              {/* Canvas Preview */}
-              <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-                <InvitationPreview
-                  ref={previewRef}
-                  venue={previewData.venue || 'hue'}
-                  guestName={previewData.name || ''}
-                  secondaryNote={previewData.secondaryNote}
-                  positionOverrides={positionSettings}
-                />
-              </div>
-
-              {/* Export Controls */}
-              {/* <ExportControls
+            {/* Export Controls */}
+            {/* <ExportControls
                 onExportPreview={async (canvasType) => {
                   if (!previewRef.current) return;
                   const blob = await previewRef.current.exportPreview(canvasType);
@@ -244,9 +314,8 @@ const AdminGuests: React.FC = () => {
                 }}
                 disabled={!previewData.name}
               /> */}
-            </div>
           </div>
-        )}
+        </div>
       </main>
 
       {/* Footer */}

@@ -126,7 +126,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         'duration-250'
       ),
       outline: cn(
-        'bg-transparent text-text',
+        'bg-transparent text-taupe',
         'border border-text-light',
         'hover:bg-base hover:border-accent-gold hover:text-accent-gold',
         'duration-250'

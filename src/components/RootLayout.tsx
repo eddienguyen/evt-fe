@@ -2,7 +2,6 @@ import React from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { copyright } from '../config/site'
 import FloatingCTAs from './FloatingCTAs'
-import { useAnchorNavigation } from '../hooks/useScrollTo'
 
 const RootLayout: React.FC = () => {
   const location = useLocation()
@@ -13,6 +12,13 @@ const RootLayout: React.FC = () => {
    */
   const isActivePath = (path: string): boolean => {
     return location.pathname === path
+  }
+
+  /**
+   * Check if current path is an admin page
+   */
+  const isAdminPage = (): boolean => {
+    return location.pathname.startsWith('/admin')
   }
 
   /**
@@ -79,8 +85,8 @@ const RootLayout: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating CTAs - Persistent across all pages */}
-      <FloatingCTAs />
+      {/* Floating CTAs - Persistent across all pages except admin */}
+      {!isAdminPage() && <FloatingCTAs />}
     </div>
   )
 }

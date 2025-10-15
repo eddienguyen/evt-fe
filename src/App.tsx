@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import RootLayout from './components/RootLayout'
 import ErrorBoundary from './components/ErrorBoundary'
-import BackgroundCanvas from './components/BackgroundCanvas'
+import { GuestProvider } from './contexts/GuestContext'
 import Home from './pages/Home'
 import Gallery from './pages/Gallery'
 import LocationMap from './pages/LocationMap'
@@ -38,7 +38,15 @@ const router = createBrowserRouter([
         element: <Suspense fallback={<div>Loading...</div>}><LazyHN /></Suspense>,
       },
       {
+        path: 'hn/:guestId',
+        element: <Suspense fallback={<div>Loading...</div>}><LazyHN /></Suspense>,
+      },
+      {
         path: 'hue',
+        element: <Suspense fallback={<div>Loading...</div>}><LazyHue /></Suspense>,
+      },
+      {
+        path: 'hue/:guestId',
         element: <Suspense fallback={<div>Loading...</div>}><LazyHue /></Suspense>,
       },
       {
@@ -59,13 +67,13 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <GuestProvider>
       {/* Global 3D Background Canvas - Fixed position, behind all content */}
       {/* <BackgroundCanvas /> */}
       
       {/* Page Content - Layers above 3D background */}
       <RouterProvider router={router} />
-    </>
+    </GuestProvider>
   )
 }
 

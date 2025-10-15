@@ -28,7 +28,8 @@ export interface GuestRecord {
 export interface CreateGuestResponse {
   success: boolean;
   data: GuestRecord;
-  message: string;
+  message?: string;
+  warnings?: string[];
 }
 
 export interface CreateGuestError {

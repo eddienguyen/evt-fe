@@ -271,7 +271,8 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
   }, [config.venue, config.guestName, config.secondaryNote]);
 
   /**
-   * Export current preview canvas as blob
+   * Export current preview canvas as blob (EXACT canvas quality - no recompression)
+   * This produces the same quality as right-clicking and "Save Image"
    */
   const exportPreview = useCallback(async (canvasType: 'front' | 'main'): Promise<Blob> => {
     const canvas = canvasType === 'front' ? frontCanvasRef.current : mainCanvasRef.current;
@@ -280,11 +281,14 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
       throw new Error('Canvas not available');
     }
 
-    return canvasService.exportAsBlob(canvas, 0.95, 'image/png');
+    // Use PNG format with maximum quality (1.0) to preserve exact canvas pixels
+    // This is the same as "Save Image" - no compression or quality loss
+    return canvasService.exportAsBlob(canvas, 1.0, 'image/png');
   }, []);
 
   /**
-   * Generate high-resolution export (2x scaling)
+   * Generate high-resolution export (3x scaling with native resolution)
+   * This re-renders the canvas at 3x resolution for print quality
    */
   const exportHighResolution = useCallback(async (canvasType: 'front' | 'main'): Promise<Blob> => {
     const canvas = canvasType === 'front' ? frontCanvasRef.current : mainCanvasRef.current;
@@ -301,39 +305,67 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
       ? venueConfig.frontImage.namePosition 
       : venueConfig.mainImage.secondaryNotePosition;
 
-    // Load high-res image
+    // Load high-res image at original quality
     const imagePath = imageConfig.path;
     const image = await canvasService.loadImage(imagePath);
 
-    return canvasService.exportHighResolution(
-      canvas,
-      {
-        width: image.width * 2,
-        height: image.height * 2,
-        quality: 0.95,
-        format: 'image/png'
-      },
-      (ctx) => {
-        // Draw background image
-        ctx.drawImage(image, 0, 0);
+    // Create high-res canvas at 3x resolution
+    const scaleFactor = 3;
+    const highResCanvas = document.createElement('canvas');
+    highResCanvas.width = image.naturalWidth * scaleFactor;
+    highResCanvas.height = image.naturalHeight * scaleFactor;
 
-        // Render text with scaling
-        if (text) {
-          renderTextOnCanvas(
-            ctx,
-            text,
-            position,
-            image.width,
-            imageConfig.autoSize,
-            {
-              x: config.overrides?.[canvasType === 'front' ? 'nameX' : 'secondaryNoteX'],
-              y: config.overrides?.[canvasType === 'front' ? 'nameY' : 'secondaryNoteY'],
-              color: config.overrides?.textColor
-            }
-          );
+    const ctx = highResCanvas.getContext('2d', {
+      alpha: true,
+      desynchronized: false,
+      willReadFrequently: false
+    });
+
+    if (!ctx) {
+      throw new Error('Failed to get canvas context');
+    }
+
+    // Enable high-quality rendering
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Scale context for high-res rendering
+    ctx.scale(scaleFactor, scaleFactor);
+
+    // Draw background image at original resolution
+    ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight);
+
+    // Render text with scaled positions
+    if (text) {
+      const scaledPosition = {
+        ...position,
+        fontSize: position.fontSize * scaleFactor,
+        x: position.x,
+        y: position.y
+      };
+
+      renderTextOnCanvas(
+        ctx,
+        text,
+        scaledPosition,
+        image.naturalWidth,
+        imageConfig.autoSize ? {
+          ...imageConfig.autoSize,
+          minFontSize: imageConfig.autoSize.minFontSize * scaleFactor,
+          maxFontSize: imageConfig.autoSize.maxFontSize * scaleFactor,
+          baseFontSize: position.fontSize * scaleFactor,
+          maxWidth: imageConfig.autoSize.maxWidth
+        } : undefined,
+        {
+          x: config.overrides?.[canvasType === 'front' ? 'nameX' : 'secondaryNoteX'],
+          y: config.overrides?.[canvasType === 'front' ? 'nameY' : 'secondaryNoteY'],
+          color: config.overrides?.textColor
         }
-      }
-    );
+      );
+    }
+
+    // Export at maximum PNG quality (lossless)
+    return canvasService.exportAsBlob(highResCanvas, 1.0, 'image/png');
   }, [config.venue, config.guestName, config.secondaryNote, config.overrides]);
 
   return {

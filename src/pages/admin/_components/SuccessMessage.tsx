@@ -110,15 +110,46 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
               className="flex-1 px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white font-mono"
             />
             <Button
-              variant="outline"
+              variant="primary"
               size="sm"
               onClick={handleCopyUrl}
               aria-label="Copy invitation URL"
+              className='text-blue'
             >
               Copy
             </Button>
           </div>
         </div>
+
+        {guest.invitationImageFrontUrl && (
+          <div>
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Ảnh thiệp mời (Mặt ngoài)
+            </div>
+            <div className="mt-1">
+              <img
+                src={guest.invitationImageFrontUrl}
+                alt="Invitation Front"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700"
+              />
+            </div>
+          </div>
+        )}
+
+        {guest.invitationImageMainUrl && (
+          <div className='w-full'>
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Ảnh thiệp mời (Mặt trong)
+            </div>
+            <div className="mt-1">
+              <img
+                src={guest.invitationImageMainUrl}
+                alt="Invitation Main"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Actions */}
