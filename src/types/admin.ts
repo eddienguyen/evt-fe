@@ -36,3 +36,11 @@ export interface CreateGuestError {
   error: string;
   details?: Record<string, string>;
 }
+
+export interface TextPositionSettings {
+  nameX: number;
+  nameY: number;
+  secondaryNoteX: number;
+  secondaryNoteY: number;
+  textColor: string;
+}

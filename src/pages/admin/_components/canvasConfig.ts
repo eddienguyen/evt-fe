@@ -15,16 +15,27 @@ export interface TextPosition {
   color: string;
   align: 'left' | 'center' | 'right';
   maxWidth?: number;
+  lineHeight?: number;
+}
+
+export interface AutoSizeConfig {
+  enabled?: boolean;
+  minFontSize: number;
+  maxFontSize: number;
+  baseFontSize: number;
+  maxWidth: number;
 }
 
 export interface VenueCanvasConfig {
   frontImage: {
     path: string;
     namePosition: TextPosition;
+    autoSize?: AutoSizeConfig;
   };
   mainImage: {
     path: string;
     secondaryNotePosition: TextPosition;
+    autoSize?: AutoSizeConfig;
   };
 }
 
@@ -48,6 +59,14 @@ export const CANVAS_CONFIG: Record<'hue' | 'hanoi', VenueCanvasConfig> = {
         fontFamily: 'Dancing Script, cursive',
         color: '#2C1810',
         align: 'left',
+        maxWidth: 600,
+        lineHeight: 60
+      },
+      autoSize: {
+        enabled: true,
+        minFontSize: 24,
+        maxFontSize: 60,
+        baseFontSize: 50,
         maxWidth: 600
       }
     },
@@ -61,6 +80,14 @@ export const CANVAS_CONFIG: Record<'hue' | 'hanoi', VenueCanvasConfig> = {
         fontFamily: 'Dancing Script, cursive',
         color: '#5A4A42',
         align: 'left',
+        maxWidth: 600,
+        lineHeight: 48
+      },
+      autoSize: {
+        enabled: true,
+        minFontSize: 18,
+        maxFontSize: 48,
+        baseFontSize: 38,
         maxWidth: 600
       }
     }
@@ -76,6 +103,14 @@ export const CANVAS_CONFIG: Record<'hue' | 'hanoi', VenueCanvasConfig> = {
         fontFamily: 'Dancing Script, cursive',
         color: '#2C1810',
         align: 'left',
+        maxWidth: 600,
+        lineHeight: 66
+      },
+      autoSize: {
+        enabled: true,
+        minFontSize: 28,
+        maxFontSize: 64,
+        baseFontSize: 56,
         maxWidth: 600
       }
     },
@@ -89,6 +124,14 @@ export const CANVAS_CONFIG: Record<'hue' | 'hanoi', VenueCanvasConfig> = {
         fontFamily: 'Dancing Script, cursive',
         color: '#5A4A42',
         align: 'left',
+        maxWidth: 600,
+        lineHeight: 50
+      },
+      autoSize: {
+        enabled: true,
+        minFontSize: 20,
+        maxFontSize: 50,
+        baseFontSize: 40,
         maxWidth: 600
       }
     }
@@ -106,7 +149,7 @@ export function loadDancingScriptFont(): Promise<void> {
     }
 
     // Check if font is already loaded
-    if (document.fonts && document.fonts.check('12px "Dancing Script"')) {
+    if (document.fonts?.check('12px "Dancing Script"')) {
       resolve();
       return;
     }

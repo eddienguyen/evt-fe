@@ -3,11 +3,12 @@
  * 
  * Displays live canvas preview of personalized invitation image
  * with text overlay based on venue, guest name, and secondary note.
+ * Exposes export methods via forwardRef.
  * 
  * @module pages/admin/_components/InvitationPreview
  */
 
-import React from 'react';
+import React, { useImperativeHandle, forwardRef } from 'react';
 import { useCanvasPreview } from './useCanvasPreview';
 import { cn } from '../../../lib/utils';
 
@@ -18,9 +19,16 @@ export interface InvitationPreviewProps {
   className?: string;
   positionOverrides?: {
     nameX?: number;
+    nameY?: number;
     secondaryNoteX?: number;
+    secondaryNoteY?: number;
     textColor?: string;
   };
+}
+
+export interface InvitationPreviewHandle {
+  exportPreview: (canvasType: 'front' | 'main') => Promise<Blob>;
+  exportHighResolution: (canvasType: 'front' | 'main') => Promise<Blob>;
 }
 
 /**
@@ -28,20 +36,27 @@ export interface InvitationPreviewProps {
  * 
  * Renders a canvas-based preview of the invitation image with text overlay.
  * Updates in real-time as form values change.
+ * Exposes export methods via ref.
  */
-export const InvitationPreview: React.FC<InvitationPreviewProps> = ({
+export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationPreviewProps>(({
   venue,
   guestName,
   secondaryNote,
   className,
   positionOverrides
-}) => {
-  const { frontCanvasRef, mainCanvasRef, isLoading, error } = useCanvasPreview({
+}, ref) => {
+  const { frontCanvasRef, mainCanvasRef, isLoading, error, exportPreview, exportHighResolution } = useCanvasPreview({
     venue,
     guestName,
     secondaryNote,
     overrides: positionOverrides
   });
+
+  // Expose export methods to parent
+  useImperativeHandle(ref, () => ({
+    exportPreview,
+    exportHighResolution
+  }), [exportPreview, exportHighResolution]);
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -157,6 +172,8 @@ export const InvitationPreview: React.FC<InvitationPreviewProps> = ({
       </div>
     </div>
   );
-};
+});
+
+InvitationPreview.displayName = 'InvitationPreview';
 
 export default InvitationPreview;

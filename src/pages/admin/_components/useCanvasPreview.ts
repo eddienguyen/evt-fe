@@ -3,12 +3,15 @@
  * 
  * Custom hook for managing TWO canvas-based invitation previews with text overlay.
  * Front canvas shows guest name, Main canvas shows secondary note.
+ * Integrated with CanvasService for auto-sizing and export capabilities.
  * 
  * @module pages/admin/_components/useCanvasPreview
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { CANVAS_CONFIG, loadDancingScriptFont, type TextPosition } from './canvasConfig';
+import { canvasService } from '../../../services/canvasService';
+import type { AutoSizeConfig } from '../../../types/canvas';
 
 export interface CanvasPreviewConfig {
   venue: 'hue' | 'hanoi';
@@ -16,7 +19,9 @@ export interface CanvasPreviewConfig {
   secondaryNote?: string;
   overrides?: {
     nameX?: number;
+    nameY?: number;
     secondaryNoteX?: number;
+    secondaryNoteY?: number;
     textColor?: string;
   };
 }
@@ -26,20 +31,34 @@ export interface UseCanvasPreviewReturn {
   mainCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   isLoading: boolean;
   error: string | null;
+  exportPreview: (canvasType: 'front' | 'main') => Promise<Blob>;
+  exportHighResolution: (canvasType: 'front' | 'main') => Promise<Blob>;
 }
 
 /**
- * Helper function to render text on canvas with proper styling
+ * Helper function to render text on canvas with auto-sizing and styling
  */
 function renderTextOnCanvas(
   ctx: CanvasRenderingContext2D,
   text: string,
   position: TextPosition,
   canvasWidth: number,
-  overrides?: { x?: number; color?: string }
+  autoSizeConfig?: AutoSizeConfig,
+  overrides?: { x?: number; y?: number; color?: string }
 ) {
+  // Calculate optimal font size if auto-sizing is enabled
+  let fontSize = position.fontSize;
+  if (autoSizeConfig && autoSizeConfig.enabled) {
+    fontSize = canvasService.calculateOptimalFontSize(ctx, text, {
+      minFontSize: autoSizeConfig.minFontSize,
+      maxFontSize: autoSizeConfig.maxFontSize,
+      baseFontSize: position.fontSize,
+      maxWidth: autoSizeConfig.maxWidth
+    });
+  }
+
   // Set font and styling
-  ctx.font = `${position.fontSize}px ${position.fontFamily}`;
+  ctx.font = `${fontSize}px ${position.fontFamily}`;
   ctx.fillStyle = overrides?.color || position.color;
   ctx.textAlign = position.align;
   ctx.textBaseline = 'middle';
@@ -50,30 +69,26 @@ function renderTextOnCanvas(
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;
 
-  // Calculate X position based on alignment and overrides
+  // Calculate position based on alignment and overrides
   let x = overrides?.x ?? position.x;
+  const y = overrides?.y ?? position.y;
+  
   if (position.align === 'center') {
     x = canvasWidth / 2;
   } else if (position.align === 'right') {
     x = canvasWidth - x;
   }
 
-  // Draw text
-  if (position.maxWidth) {
-    // Measure text and scale if needed
-    const metrics = ctx.measureText(text);
-    if (metrics.width > position.maxWidth) {
-      const scale = position.maxWidth / metrics.width;
-      ctx.save();
-      ctx.translate(x, position.y);
-      ctx.scale(scale, 1);
-      ctx.fillText(text, 0, 0);
-      ctx.restore();
-    } else {
-      ctx.fillText(text, x, position.y);
-    }
+  // Handle multi-line text if line height is specified
+  if (position.lineHeight && position.maxWidth) {
+    const lines = canvasService.wrapText(ctx, text, position.maxWidth);
+    lines.forEach((line, index) => {
+      const lineY = y + (index * (position.lineHeight || 0));
+      ctx.fillText(line, x, lineY);
+    });
   } else {
-    ctx.fillText(text, x, position.y);
+    // Single line text
+    ctx.fillText(text, x, y);
   }
 
   // Reset shadow
@@ -160,8 +175,10 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             config.guestName,
             venueConfig.frontImage.namePosition,
             frontCanvas.width,
+            venueConfig.frontImage.autoSize,
             {
               x: config.overrides?.nameX,
+              y: config.overrides?.nameY,
               color: config.overrides?.textColor
             }
           );
@@ -205,8 +222,10 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             config.secondaryNote,
             venueConfig.mainImage.secondaryNotePosition,
             mainCanvas.width,
+            venueConfig.mainImage.autoSize,
             {
               x: config.overrides?.secondaryNoteX,
+              y: config.overrides?.secondaryNoteY,
               color: config.overrides?.textColor
             }
           );
@@ -251,10 +270,78 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
     };
   }, [config.venue, config.guestName, config.secondaryNote]);
 
+  /**
+   * Export current preview canvas as blob
+   */
+  const exportPreview = useCallback(async (canvasType: 'front' | 'main'): Promise<Blob> => {
+    const canvas = canvasType === 'front' ? frontCanvasRef.current : mainCanvasRef.current;
+    
+    if (!canvas) {
+      throw new Error('Canvas not available');
+    }
+
+    return canvasService.exportAsBlob(canvas, 0.95, 'image/png');
+  }, []);
+
+  /**
+   * Generate high-resolution export (2x scaling)
+   */
+  const exportHighResolution = useCallback(async (canvasType: 'front' | 'main'): Promise<Blob> => {
+    const canvas = canvasType === 'front' ? frontCanvasRef.current : mainCanvasRef.current;
+    
+    if (!canvas) {
+      throw new Error('Canvas not available');
+    }
+
+    const venueConfig = CANVAS_CONFIG[config.venue];
+    const imageConfig = canvasType === 'front' ? venueConfig.frontImage : venueConfig.mainImage;
+    const text = canvasType === 'front' ? config.guestName : (config.secondaryNote || '');
+    
+    const position = canvasType === 'front' 
+      ? venueConfig.frontImage.namePosition 
+      : venueConfig.mainImage.secondaryNotePosition;
+
+    // Load high-res image
+    const imagePath = imageConfig.path;
+    const image = await canvasService.loadImage(imagePath);
+
+    return canvasService.exportHighResolution(
+      canvas,
+      {
+        width: image.width * 2,
+        height: image.height * 2,
+        quality: 0.95,
+        format: 'image/png'
+      },
+      (ctx) => {
+        // Draw background image
+        ctx.drawImage(image, 0, 0);
+
+        // Render text with scaling
+        if (text) {
+          renderTextOnCanvas(
+            ctx,
+            text,
+            position,
+            image.width,
+            imageConfig.autoSize,
+            {
+              x: config.overrides?.[canvasType === 'front' ? 'nameX' : 'secondaryNoteX'],
+              y: config.overrides?.[canvasType === 'front' ? 'nameY' : 'secondaryNoteY'],
+              color: config.overrides?.textColor
+            }
+          );
+        }
+      }
+    );
+  }, [config.venue, config.guestName, config.secondaryNote, config.overrides]);
+
   return {
     frontCanvasRef,
     mainCanvasRef,
     isLoading,
-    error
+    error,
+    exportPreview,
+    exportHighResolution
   };
 }

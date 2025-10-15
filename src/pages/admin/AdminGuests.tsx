@@ -7,12 +7,14 @@
  * @module pages/admin/AdminGuests
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { GuestForm } from './_components/GuestForm';
-import { InvitationPreview } from './_components/InvitationPreview';
+import { InvitationPreview, type InvitationPreviewHandle } from './_components/InvitationPreview';
 import { SuccessMessage } from './_components/SuccessMessage';
 import { TextPositionControls, type TextPositionSettings } from './_components/TextPositionControls';
+import { ExportControls } from './_components/ExportControls';
 import { CANVAS_CONFIG } from './_components/canvasConfig';
+import { canvasService } from '../../services/canvasService';
 import type { GuestFormData, GuestRecord, CreateGuestResponse } from '../../types/admin';
 
 // Get API base URL from environment
@@ -25,6 +27,9 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000
  * and form validation.
  */
 const AdminGuests: React.FC = () => {
+  // Ref to access export methods from InvitationPreview
+  const previewRef = useRef<InvitationPreviewHandle>(null);
+
   // Form state for live preview
   const [previewData, setPreviewData] = useState<Partial<GuestFormData>>({
     name: '',
@@ -38,7 +43,9 @@ const AdminGuests: React.FC = () => {
     const config = CANVAS_CONFIG[venue];
     return {
       nameX: config.frontImage.namePosition.x,
+      nameY: config.frontImage.namePosition.y,
       secondaryNoteX: config.mainImage.secondaryNotePosition.x,
+      secondaryNoteY: config.mainImage.secondaryNotePosition.y,
       textColor: config.frontImage.namePosition.color
     };
   });
@@ -49,7 +56,9 @@ const AdminGuests: React.FC = () => {
     const config = CANVAS_CONFIG[venue];
     setPositionSettings({
       nameX: config.frontImage.namePosition.x,
+      nameY: config.frontImage.namePosition.y,
       secondaryNoteX: config.mainImage.secondaryNotePosition.x,
+      secondaryNoteY: config.mainImage.secondaryNotePosition.y,
       textColor: config.frontImage.namePosition.color
     });
   }, [previewData.venue]);
@@ -195,26 +204,46 @@ const AdminGuests: React.FC = () => {
                   onFormChange={handleFormChange}
                 />
               </div>
-            </div>
-
-            {/* Preview Section (Right - 3 columns) */}
-            <div className="lg:col-span-3 space-y-6">
-              {/* Position Controls */}
+{/* Position Controls */}
               <TextPositionControls
                 settings={positionSettings}
                 onSettingsChange={setPositionSettings}
                 venue={previewData.venue || 'hue'}
               />
+
+            </div>
+
+            {/* Preview Section (Right - 3 columns) */}
+            <div className="lg:col-span-3 space-y-6">
+              
               
               {/* Canvas Preview */}
               <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
                 <InvitationPreview
+                  ref={previewRef}
                   venue={previewData.venue || 'hue'}
                   guestName={previewData.name || ''}
                   secondaryNote={previewData.secondaryNote}
                   positionOverrides={positionSettings}
                 />
               </div>
+
+              {/* Export Controls */}
+              {/* <ExportControls
+                onExportPreview={async (canvasType) => {
+                  if (!previewRef.current) return;
+                  const blob = await previewRef.current.exportPreview(canvasType);
+                  const filename = `${previewData.name || 'guest'}-${canvasType}-preview.png`;
+                  canvasService.downloadBlob(blob, filename);
+                }}
+                onExportHighRes={async (canvasType) => {
+                  if (!previewRef.current) return;
+                  const blob = await previewRef.current.exportHighResolution(canvasType);
+                  const filename = `${previewData.name || 'guest'}-${canvasType}-highres.png`;
+                  canvasService.downloadBlob(blob, filename);
+                }}
+                disabled={!previewData.name}
+              /> */}
             </div>
           </div>
         )}

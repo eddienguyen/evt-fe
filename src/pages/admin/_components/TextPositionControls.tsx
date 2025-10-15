@@ -11,7 +11,9 @@ import React, { useState } from 'react';
 
 export interface TextPositionSettings {
   nameX: number;
+  nameY: number;
   secondaryNoteX: number;
+  secondaryNoteY: number;
   textColor: string;
 }
 
@@ -41,10 +43,24 @@ export const TextPositionControls: React.FC<TextPositionControlsProps> = ({
     });
   };
 
+  const handleNameYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSettingsChange({
+      ...settings,
+      nameY: parseInt(e.target.value, 10)
+    });
+  };
+
   const handleSecondaryNoteXChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSettingsChange({
       ...settings,
       secondaryNoteX: parseInt(e.target.value, 10)
+    });
+  };
+
+  const handleSecondaryNoteYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSettingsChange({
+      ...settings,
+      secondaryNoteY: parseInt(e.target.value, 10)
     });
   };
 
@@ -107,66 +123,124 @@ export const TextPositionControls: React.FC<TextPositionControlsProps> = ({
       {isExpanded && (
         <div className="border-t border-gray-200 dark:border-gray-700 p-6 space-y-6">
           {/* Help Text */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+          {/* <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
             <p className="text-xs text-blue-800 dark:text-blue-300">
-              💡 <strong>Mẹo:</strong> Thay đổi sẽ cập nhật ngay lập tức trên preview bên phải
+              <strong>Mẹo:</strong> Thay đổi sẽ cập nhật ngay lập tức trên preview bên phải
             </p>
+          </div> */}
+
+          {/* Name Position Controls */}
+          <div className="space-y-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              📝 Vị trí tên khách mời (Mặt ngoài)
+            </h4>
+            
+            {/* Name X Position Slider */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="nameX"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Vị trí ngang (X)
+                </label>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                  {settings.nameX}px
+                </span>
+              </div>
+              <input
+                id="nameX"
+                type="range"
+                min="0"
+                max="2000"
+                step="10"
+                value={settings.nameX}
+                onChange={handleNameXChange}
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
+
+            {/* Name Y Position Slider */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="nameY"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Vị trí dọc (Y)
+                </label>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                  {settings.nameY}px
+                </span>
+              </div>
+              <input
+                id="nameY"
+                type="range"
+                min="0"
+                max="1200"
+                step="10"
+                value={settings.nameY}
+                onChange={handleNameYChange}
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
           </div>
 
-          {/* Name X Position Slider */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="nameX"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Vị trí ngang - Tên khách mời
-              </label>
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                {settings.nameX}px
-              </span>
+          {/* Secondary Note Position Controls */}
+          <div className="space-y-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              💬 Vị trí ghi chú (Mặt trong)
+            </h4>
+            
+            {/* Secondary Note X Position Slider */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="secondaryNoteX"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Vị trí ngang (X)
+                </label>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                  {settings.secondaryNoteX}px
+                </span>
+              </div>
+              <input
+                id="secondaryNoteX"
+                type="range"
+                min="0"
+                max="2000"
+                step="10"
+                value={settings.secondaryNoteX}
+                onChange={handleSecondaryNoteXChange}
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
             </div>
-            <input
-              id="nameX"
-              type="range"
-              min="0"
-              max="2000"
-              step="10"
-              value={settings.nameX}
-              onChange={handleNameXChange}
-              className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Điều chỉnh vị trí ngang của tên trên ảnh mặt ngoài
-            </p>
-          </div>
 
-          {/* Secondary Note X Position Slider */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="secondaryNoteX"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Vị trí ngang - Ghi chú
-              </label>
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                {settings.secondaryNoteX}px
-              </span>
+            {/* Secondary Note Y Position Slider */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="secondaryNoteY"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Vị trí dọc (Y)
+                </label>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                  {settings.secondaryNoteY}px
+                </span>
+              </div>
+              <input
+                id="secondaryNoteY"
+                type="range"
+                min="0"
+                max="1200"
+                step="10"
+                value={settings.secondaryNoteY}
+                onChange={handleSecondaryNoteYChange}
+                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
             </div>
-            <input
-              id="secondaryNoteX"
-              type="range"
-              min="0"
-              max="2000"
-              step="10"
-              value={settings.secondaryNoteX}
-              onChange={handleSecondaryNoteXChange}
-              className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Điều chỉnh vị trí ngang của ghi chú trên ảnh mặt trong
-            </p>
           </div>
 
           {/* Color Picker */}
