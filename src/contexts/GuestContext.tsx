@@ -8,6 +8,7 @@
  */
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import axios from 'axios';
 
 export interface GuestData {
   id: string;
@@ -109,29 +110,36 @@ export const GuestProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/guests/${guestId}`);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Không tìm thấy thông tin khách mời');
-        }
-        throw new Error('Không thể tải thông tin khách mời');
-      }
-
-      const result = await response.json();
+      // Use axios for guest fetch
+      console.log('🔍 [GuestContext] Fetching guest:', guestId);
+      const axiosResponse = await axios.get(
+        `${API_BASE_URL}/api/guests/${guestId}`,
+        { timeout: 15000 }
+      );
+      const result = axiosResponse.data;
+      console.log('✅ [GuestContext] API response:', result);
 
       if (result.success && result.data) {
         const guestData = result.data as GuestData;
         setGuest(guestData);
         saveToCache(guestData);
-        console.log('✅ Guest data loaded:', guestData.name);
+        console.log('✅ [GuestContext] Guest data loaded:', guestData.name);
       } else {
         throw new Error('Invalid response from server');
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Có lỗi xảy ra';
-      setError(errorMessage);
-      console.error('Failed to fetch guest:', err);
+    } catch (axiosErr: any) {
+      if (axiosErr.response) {
+        // Server responded with error
+        setError(axiosErr.response.data.error || 'Không thể tải thông tin khách mời');
+        console.error('❌ [GuestContext] API error response:', axiosErr.response.data);
+      } else if (axiosErr.request) {
+        // No response received
+        setError('Không nhận được phản hồi từ máy chủ. Vui lòng thử lại.');
+        console.error('❌ [GuestContext] No response from API:', axiosErr.request);
+      } else {
+        setError('Có lỗi xảy ra khi gửi yêu cầu.');
+        console.error('❌ [GuestContext] Request error:', axiosErr.message);
+      }
     } finally {
       setIsLoading(false);
     }

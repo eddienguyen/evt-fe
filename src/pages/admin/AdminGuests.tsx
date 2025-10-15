@@ -8,6 +8,7 @@
  */
 
 import React, { useState, useRef } from "react";
+import axios from 'axios';
 import { GuestForm } from "./_components/GuestForm";
 import {
   InvitationPreview,
@@ -19,9 +20,7 @@ import {
   TextPositionControls,
   type TextPositionSettings,
 } from "./_components/TextPositionControls";
-import { ExportControls } from "./_components/ExportControls";
 import { CANVAS_CONFIG } from "./_components/canvasConfig";
-import { canvasService } from "../../services/canvasService";
 import type {
   GuestFormData,
   GuestRecord,
@@ -135,20 +134,39 @@ const AdminGuests: React.FC = () => {
         );
       }
 
-      // Step 3: Submit FormData to API (no Content-Type header - browser sets it with boundary)
-      const response = await fetch(`${API_BASE_URL}/api/guests`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Không thể tạo thiệp cho khách mời");
+      // Step 3: Submit FormData to API using axios (replaced fetch for mobile compatibility)
+      console.log('🔍 [AdminGuests] Submitting guest data...');
+      let result: CreateGuestResponse | undefined;
+      try {
+        const axiosResponse = await axios.post(
+          `${API_BASE_URL}/api/guests`,
+          formData,
+          {
+            headers: {
+              // Let browser set Content-Type for FormData
+            },
+            timeout: 15000 // 15s timeout for mobile reliability
+          }
+        );
+        result = axiosResponse.data;
+        console.log('✅ [AdminGuests] API response:', result);
+      } catch (axiosErr: any) {
+        if (axiosErr.response) {
+          // Server responded with error
+          console.error('❌ [AdminGuests] API error response:', axiosErr.response.data);
+          throw new Error(axiosErr.response.data.error || 'Không thể tạo thiệp cho khách mời');
+        } else if (axiosErr.request) {
+          // No response received
+          console.error('❌ [AdminGuests] No response from API:', axiosErr.request);
+          throw new Error('Không nhận được phản hồi từ máy chủ. Vui lòng thử lại.');
+        } else {
+          // Other error
+          console.error('❌ [AdminGuests] Request error:', axiosErr.message);
+          throw new Error('Có lỗi xảy ra khi gửi yêu cầu.');
+        }
       }
 
-      const result: CreateGuestResponse = await response.json();
-
-      if (result.success && result.data) {
+      if (result && result.success && result.data) {
         setCreatedGuest(result.data);
         setError(null);
 
@@ -297,23 +315,6 @@ const AdminGuests: React.FC = () => {
                 positionOverrides={positionSettings}
               />
             </div>
-
-            {/* Export Controls */}
-            {/* <ExportControls
-                onExportPreview={async (canvasType) => {
-                  if (!previewRef.current) return;
-                  const blob = await previewRef.current.exportPreview(canvasType);
-                  const filename = `${previewData.name || 'guest'}-${canvasType}-preview.png`;
-                  canvasService.downloadBlob(blob, filename);
-                }}
-                onExportHighRes={async (canvasType) => {
-                  if (!previewRef.current) return;
-                  const blob = await previewRef.current.exportHighResolution(canvasType);
-                  const filename = `${previewData.name || 'guest'}-${canvasType}-highres.png`;
-                  canvasService.downloadBlob(blob, filename);
-                }}
-                disabled={!previewData.name}
-              /> */}
           </div>
         </div>
       </main>

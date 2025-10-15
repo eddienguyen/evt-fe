@@ -9,9 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
-    "deploy": "npm run build && aws s3 sync dist/ s3://ngocquanwd.com --delete",
+    "deploy": "npm run build && aws s3 sync dist/ s3://ngocquanwd.com --delete && aws cloudfront create-invalidation --distribution-id EJETB6DK025YT --paths '/*'",
     "deploy:sdk": "npm run build && tsx scripts/s3-sync.ts upload",
-    "download:sdk": "tsx scripts/s3-sync.ts download"
+    "download:sdk": "tsx scripts/s3-sync.ts download",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id EJETB6DK025YT --paths '/*'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.901.0",
