@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { SEOHead } from '../components/SEO'
 import { StoryTimeline } from '../components/timeline'
 import { EventDetailsSection } from '../components/events'
 import { CountdownTimer } from '../components/countdown'
@@ -22,6 +23,7 @@ const Hue: React.FC = () => {
 
   return (
     <>
+      <SEOHead />
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center min-h-screen bg-base">

@@ -74,7 +74,7 @@ export const siteConfig: SiteConfig = {
     title: "Ngoc Quan's Wedding",
     description: "Join us in celebrating our wedding in Hue (Nov 1st) and Hanoi (Nov 8th), 2025",
     url: "https://ngocquanwd.com",
-    ogImage: "/og-image.jpg", // To be created in future story
+    ogImage: "/og-image.jpg",
   },
 
   copyright: {

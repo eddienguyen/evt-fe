@@ -1,8 +1,11 @@
 import React from 'react'
+import { SEOHead } from '../components/SEO'
 
 const LocationMap: React.FC = () => {
   return (
-    <main className="min-h-screen">
+    <>
+      <SEOHead />
+      <main className="min-h-screen">
       <div className="h-[60vh] w-full">
         {/* Map component will be added here */}
       </div>
@@ -13,6 +16,7 @@ const LocationMap: React.FC = () => {
         </div>
       </div>
     </main>
+    </>
   )
 }
 

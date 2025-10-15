@@ -7,6 +7,7 @@
  */
 
 import React from 'react'
+import { SEOHead } from '../components/SEO'
 import { Gallery as GalleryComponent } from '@/components/gallery'
 
 /**
@@ -17,7 +18,9 @@ import { Gallery as GalleryComponent } from '@/components/gallery'
  */
 const Gallery: React.FC = () => {
   return (
-    <main className="min-h-screen bg-warm-50 py-16">
+    <>
+      <SEOHead />
+      <main className="min-h-screen bg-warm-50 py-16">
       <div className="container mx-auto px-4">
         {/* Page Header */}
         <header className="text-center mb-12">
@@ -33,6 +36,7 @@ const Gallery: React.FC = () => {
         <GalleryComponent />
       </div>
     </main>
+    </>
   )
 }
 

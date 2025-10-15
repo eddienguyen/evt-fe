@@ -1,11 +1,11 @@
 /**
-* Timeline Item Component
-*
-* Individual milestone display with responsive layouts and animations.
-*
-* @module components/timeline/TimelineItem
-*/
- 
+ * Timeline Item Component
+ *
+ * Individual milestone display with responsive layouts and animations.
+ *
+ * @module components/timeline/TimelineItem
+ */
+
 import React, { useRef, useEffect } from "react";
 import { type TimelineMilestone } from "../../config/timeline";
 import {
@@ -16,10 +16,11 @@ import { cn } from "../../lib/utils/cn";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { prefersReducedMotion } from "../../lib/a11y";
- 
+import CustomEase from "gsap/CustomEase";
+
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
- 
+
 export interface TimelineItemProps {
   /** Milestone data */
   milestone: TimelineMilestone;
@@ -32,13 +33,13 @@ export interface TimelineItemProps {
   /** Enable animations */
   enableAnimations?: boolean;
 }
- 
+
 /**
-* Timeline Item Component
-*
-* Displays a single milestone with date, title, description, and optional image.
-* Supports vertical (mobile) and horizontal (desktop) layouts with GSAP animations.
-*/
+ * Timeline Item Component
+ *
+ * Displays a single milestone with date, title, description, and optional image.
+ * Supports vertical (mobile) and horizontal (desktop) layouts with GSAP animations.
+ */
 const TimelineItem: React.FC<TimelineItemProps> = ({
   milestone,
   index,
@@ -49,11 +50,11 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   const itemRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
- 
+
   const isVertical = layout === "vertical";
   const isImageLeft = position === "left";
   const shouldAnimate = enableAnimations && !prefersReducedMotion();
- 
+
   // Category icon/badge
   const getCategoryIcon = (category?: string) => {
     switch (category) {
@@ -71,21 +72,21 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         return "📅";
     }
   };
- 
+
   useEffect(() => {
     if (!shouldAnimate || !itemRef.current) return;
- 
+
     const item = itemRef.current;
     const image = imageRef.current;
     const content = contentRef.current;
- 
+
     if (isVertical) {
       gsap.set(item, {
         opacity: 0,
         y: 80,
         scale: 0.9,
       });
- 
+
       ScrollTrigger.create({
         trigger: item,
         start: "top 90%",
@@ -95,7 +96,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
             y: 0,
             scale: 1,
             duration: 1.0,
-            ease: "power3.out",
+            ease: CustomEase.create("custom", ".87, 0, .13, 1"),
           });
         },
         once: true,
@@ -118,46 +119,54 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         });
         let tlImage = gsap.timeline();
         let tlText = gsap.timeline();
- 
+
         ScrollTrigger.create({
           trigger: item,
-          start: "top 75%",
+          start: "top 65%",
           onEnter: () => {
-            tlImage.to(image, {
-              x: 0,
-              opacity: 1,
-              scale: 1,
-              duration: 0.8,
-              ease: "power3.out",
-            }).to(
-              image,
-              {
-                y: 0,
-                duration: 1.5,
-                ease: "power3.out",
-              },
-              "-=0.8"
-            ); // Overlap with previous animation
- 
-            tlText.to(content, {
-              x: 0,
-              opacity: 1,
-              scale: 1,
-              duration: 0.8,
-              delay: 0.3,
-              ease: "power3.out",
-            }).to(content, {
-              y: 0,
-              duration: 1.5,
-              ease: "power3.out",
-            }, "-=0.8"); // Overlap with previous animation
+            tlImage
+              .to(image, {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.8,
+                ease: CustomEase.create("custom", ".87, 0, .13, 1"),
+              })
+              .to(
+                image,
+                {
+                  y: 0,
+                  duration: 1.5,
+                  ease: CustomEase.create("custom", ".87, 0, .13, 1"),
+                },
+                "-=0.8"
+              ); // Overlap with previous animation
+
+            tlText
+              .to(content, {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.8,
+                delay: 0.3,
+                ease: CustomEase.create("custom", ".87, 0, .13, 1"),
+              })
+              .to(
+                content,
+                {
+                  y: 0,
+                  duration: 1.5,
+                  ease: CustomEase.create("custom", ".87, 0, .13, 1"),
+                },
+                "-=0.8"
+              ); // Overlap with previous animation
           },
           once: false,
           markers: false,
         });
       }
     }
- 
+
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
         if (trigger.vars.trigger === item) {
@@ -166,7 +175,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
       });
     };
   }, [shouldAnimate, isVertical, isImageLeft]);
- 
+
   return (
     <article
       ref={itemRef}
@@ -205,7 +214,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
               </div>
             )}
           </div>
- 
+
           {/* Content Section */}
           <div
             ref={contentRef}
@@ -224,7 +233,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
                 {formatVietnameseDate(milestone.date)}
               </time>
             </div>
- 
+
             {/* Content Card */}
             <div className="bg-white rounded-lg shadow-soft p-8 hover:shadow-medium transition-shadow duration-300">
               {/* Category Badge */}
@@ -242,7 +251,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
                   </span>
                 )}
               </div>
- 
+
               {/* Title */}
               <h3
                 id={`milestone-${milestone.id}-title`}
@@ -250,7 +259,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
               >
                 {milestone.title}
               </h3>
- 
+
               {/* Description */}
               <p className="text-text-light text-lg leading-relaxed">
                 {milestone.description}
@@ -259,7 +268,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           </div>
         </>
       )}
- 
+
       {/* Mobile Layout: Vertical Stack */}
       {isVertical && (
         <>
@@ -273,7 +282,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
               {formatVietnameseDate(milestone.date)}
             </time>
           </div>
- 
+
           {/* Content Card */}
           <div className="bg-white rounded-lg shadow-soft p-6 hover:shadow-medium transition-shadow duration-300 mb-4">
             {/* Category Badge */}
@@ -291,7 +300,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
                 </span>
               )}
             </div>
- 
+
             {/* Title */}
             <h3
               id={`milestone-${milestone.id}-title`}
@@ -299,13 +308,13 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
             >
               {milestone.title}
             </h3>
- 
+
             {/* Description */}
             <p className="text-text-light leading-relaxed">
               {milestone.description}
             </p>
           </div>
- 
+
           {/* Image */}
           {milestone.image && (
             <div className="timeline-image w-full">
@@ -329,5 +338,5 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
     </article>
   );
 };
- 
+
 export default TimelineItem;

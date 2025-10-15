@@ -1,4 +1,5 @@
 import React from 'react'
+import { SEOHead } from '../components/SEO'
 import HeroSection from '../components/HeroSection'
 import { StoryTimeline } from '../components/timeline'
 import { EventDetailsSection } from '../components/events'
@@ -9,6 +10,7 @@ import { eventsConfig } from '../config/events'
 const Home: React.FC = () => {
   return (
     <>
+      <SEOHead />
       <HeroSection />
       
       {/* Event Details Section */}

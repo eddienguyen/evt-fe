@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import RootLayout from './components/RootLayout'
 import ErrorBoundary from './components/ErrorBoundary'
 import { GuestProvider } from './contexts/GuestContext'
@@ -67,13 +68,15 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <GuestProvider>
-      {/* Global 3D Background Canvas - Fixed position, behind all content */}
-      {/* <BackgroundCanvas /> */}
-      
-      {/* Page Content - Layers above 3D background */}
-      <RouterProvider router={router} />
-    </GuestProvider>
+    <HelmetProvider>
+      <GuestProvider>
+        {/* Global 3D Background Canvas - Fixed position, behind all content */}
+        {/* <BackgroundCanvas /> */}
+        
+        {/* Page Content - Layers above 3D background */}
+        <RouterProvider router={router} />
+      </GuestProvider>
+    </HelmetProvider>
   )
 }
 
