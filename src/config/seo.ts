@@ -59,14 +59,14 @@ export const routeSEO: Record<string, Partial<SEOData>> = {
   },
   
   '/hn': {
-    title: `Hanoi Wedding Ceremony - ${siteConfig.meta.title}`,
+    title: `You are invited!`,
     description: `Join ${siteConfig.couple.displayName} for their wedding celebration in ${siteConfig.events.hanoi.location} on ${siteConfig.events.hanoi.dateDisplay}`,
     keywords: ['hanoi wedding', 'wedding ceremony', 'vietnam wedding', 'wedding invitation'],
     ogType: 'event',
   },
   
   '/hue': {
-    title: `Hue Wedding Ceremony - ${siteConfig.meta.title}`,
+    title: `You are invited!`,
     description: `Join ${siteConfig.couple.displayName} for their wedding celebration in ${siteConfig.events.hue.location} on ${siteConfig.events.hue.dateDisplay}`,
     keywords: ['hue wedding', 'wedding ceremony', 'vietnam wedding', 'wedding invitation'],
     ogType: 'event',

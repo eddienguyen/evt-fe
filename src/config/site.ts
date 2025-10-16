@@ -60,13 +60,13 @@ export const siteConfig: SiteConfig = {
       date: "2025-11-01",
       dateDisplay: "November 1st, 2025",
       location: "Hue, Vietnam",
-      locationShort: "Hue",
+      locationShort: "Huế",
     },
     hanoi: {
       date: "2025-11-08",
       dateDisplay: "November 8th, 2025",
       location: "Hanoi, Vietnam",
-      locationShort: "HN",
+      locationShort: "Hà Nội",
     },
   },
 
