@@ -1,13 +1,14 @@
 /**
  * RSVP Panel Component
  * 
- * Main RSVP panel that replaces the placeholder in FloatingCTAs.
+ * Main RSVP panel that handles form submission to the backend API.
  * Manages form submission flow and state transitions.
  * 
  * @module components/RSVPPanel
  */
 
 import React, { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { X } from 'lucide-react'
 
 import { Button } from '@/components/ui/Button'
@@ -15,6 +16,7 @@ import RSVPForm from '@/components/forms/RSVPForm'
 import RSVPSuccessState from '@/components/forms/RSVPSuccessState'
 import { announceToScreenReader, focusElement } from '@/lib/a11y'
 import type { RSVPFormData } from '@/lib/schemas/rsvpSchema'
+import { submitRSVP as submitRSVPAPI, RSVPError } from '@/services/rsvpService'
 import { 
   RSVP_LABELS, 
   RSVP_ERRORS,
@@ -45,30 +47,31 @@ interface APIResponse {
   data?: {
     id: string
     message: string
+    guestName: string
   }
   error?: string
 }
 
 /**
- * Mock API submission (replace with actual API call)
+ * Submit RSVP using real API
  */
 const submitRSVP = async (data: RSVPFormData): Promise<APIResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1500))
-  
-  // Check honeypot field
-  if (data.honeypot && data.honeypot.trim() !== '') {
-    throw new Error(RSVP_ERRORS.spamDetected)
-  }
-  
-  // Simulate success response
-  // TODO: Replace with actual API endpoint call
-  return {
-    success: true,
-    data: {
-      id: `rsvp-${Date.now()}`,
-      message: 'RSVP submitted successfully'
+  try {
+    const response = await submitRSVPAPI(data)
+    
+    return {
+      success: true,
+      data: {
+        id: response.data.id,
+        message: response.data.message,
+        guestName: data.name
+      }
     }
+  } catch (error) {
+    if (error instanceof RSVPError) {
+      throw new Error(error.message)
+    }
+    throw error
   }
 }
 
@@ -79,6 +82,7 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
   isOpen,
   onClose
 }) => {
+  const location = useLocation()
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [successData, setSuccessData] = useState<{ id: string; guestName: string } | null>(null)
@@ -87,6 +91,14 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
   const panelRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  
+  // Detect venue from current route
+  const getDefaultVenue = (): 'hue' | 'hanoi' | undefined => {
+    if (location.pathname.startsWith('/hn')) return 'hanoi'
+    if (location.pathname.startsWith('/hue')) return 'hue'
+    return undefined
+  }
+  const defaultVenue = getDefaultVenue()
 
   // Focus management when panel opens
   useEffect(() => {
@@ -208,6 +220,7 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
           isSubmitting={submissionState === 'submitting'}
           error={submissionState === 'error' ? errorMessage : undefined}
           disabled={submissionState === 'submitting'}
+          defaultVenue={defaultVenue}
         />
       </div>
 

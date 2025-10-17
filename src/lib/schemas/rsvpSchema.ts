@@ -11,23 +11,32 @@ import { z } from 'zod'
 
 /**
  * RSVP Form Data Interface
+ * Updated to match backend schema from Story #17
  */
 export interface RSVPFormData {
+  guestId?: string // Optional UUID from personalized invitations
   name: string
   guestCount: number
-  phone?: string
+  willAttend: boolean
   wishes: string
+  venue: 'hue' | 'hanoi'
   honeypot: string // Hidden field for spam prevention
 }
 
 /**
  * RSVP Validation Schema with Vietnamese error messages
+ * Updated to match backend schema from Story #17
  */
 export const rsvpSchema = z.object({
+  guestId: z
+    .string()
+    .uuid({ message: 'ID khách mời không hợp lệ' })
+    .optional(),
+  
   name: z
     .string()
     .min(2, 'Tên phải có ít nhất 2 ký tự')
-    .max(50, 'Tên không được quá 50 ký tự')
+    .max(100, 'Tên không được quá 100 ký tự')
     .regex(/^[a-zA-ZÀ-ỹ\s]+$/, 'Tên chỉ được chứa chữ cái và khoảng trắng'),
   
   guestCount: z
@@ -37,19 +46,21 @@ export const rsvpSchema = z.object({
     .min(1, 'Số lượng khách phải ít nhất 1 người')
     .max(10, 'Số lượng khách không được quá 10 người')
     .int('Số lượng khách phải là số nguyên'),
-    
-  phone: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || /^(\+84|0)[3|5|7|8|9][0-9]{8}$/.test(val),
-      'Số điện thoại không đúng định dạng (VD: 0901234567 hoặc +84901234567)'
-    ),
+  
+  willAttend: z
+    .boolean({
+      message: 'Vui lòng xác nhận tham dự'
+    }),
     
   wishes: z
     .string()
     .min(10, 'Lời chúc phải có ít nhất 10 ký tự')
     .max(500, 'Lời chúc không được quá 500 ký tự'),
+  
+  venue: z
+    .enum(['hue', 'hanoi'], {
+      message: 'Vui lòng chọn địa điểm'
+    }),
     
   honeypot: z
     .string()
@@ -67,8 +78,9 @@ export type RSVPFormInput = z.infer<typeof rsvpSchema>
 export const rsvpDefaultValues: RSVPFormData = {
   name: '',
   guestCount: 1,
-  phone: '',
+  willAttend: true,
   wishes: '',
+  venue: 'hue',
   honeypot: ''
 }
 
@@ -77,18 +89,10 @@ export const rsvpDefaultValues: RSVPFormData = {
  */
 export const rsvpValidationHelpers = {
   /**
-   * Validate Vietnamese phone number format
-   */
-  isValidVietnamesePhone: (phone: string): boolean => {
-    if (!phone) return true // Optional field
-    return /^(\+84|0)[3|5|7|8|9][0-9]{8}$/.test(phone)
-  },
-
-  /**
    * Validate Vietnamese name format
    */
   isValidVietnameseName: (name: string): boolean => {
-    return /^[a-zA-ZÀ-ỹ\s]+$/.test(name) && name.length >= 2 && name.length <= 50
+    return /^[a-zA-ZÀ-ỹ\s]+$/.test(name) && name.length >= 2 && name.length <= 100
   },
 
   /**

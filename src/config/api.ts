@@ -20,9 +20,9 @@ const getApiBaseUrl = (): string => {
     return envUrl;
   }
 
-  // Fallback to production URL
+  // Fallback to production URL (Fly.io - migrated Oct 18, 2025)
   console.warn('VITE_API_BASE_URL not set, using production URL');
-  return 'https://la-wed-be.onrender.com';
+  return 'https://ngocquan-wedding-api.fly.dev';
 };
 
 export interface ApiConfig {

@@ -7,6 +7,7 @@ import { CountdownTimer } from "../components/countdown";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
 import figure from "../public/Hue-invitation.jpg";
+import { events } from "@/config/site";
 
 const Hue: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -61,7 +62,7 @@ const Hue: React.FC = () => {
           <CountdownTimer
             targetDate={eventsConfig.hue.date}
             eventName="Đám cưới Ngọc & Quân"
-            eventLocation="Huế"
+            eventLocation={events.hue.location}
             enableAnimations={true}
           />
 

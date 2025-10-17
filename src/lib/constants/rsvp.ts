@@ -18,8 +18,17 @@ export const RSVP_LABELS = {
   // Form fields
   name: 'Họ và tên',
   guestCount: 'Số lượng khách',
-  phone: 'Số điện thoại',
+  willAttend: 'Xác nhận tham dự',
+  venue: 'Địa điểm',
   wishes: 'Lời chúc',
+  
+  // Attendance options
+  attendingYes: 'Có, tôi sẽ tham dự',
+  attendingNo: 'Xin lỗi, tôi không thể tham dự',
+  
+  // Venue options
+  venueHue: 'Huế - 01/11/2025',
+  venueHanoi: 'Hà Nội - 08/11/2025',
   
   // Required field indicator
   required: 'Bắt buộc',
@@ -31,7 +40,6 @@ export const RSVP_LABELS = {
  */
 export const RSVP_PLACEHOLDERS = {
   name: 'Nhập họ và tên của bạn',
-  phone: 'VD: 0901234567',
   wishes: 'Gửi lời chúc đến cô dâu, chú rể...',
 } as const
 
@@ -41,7 +49,8 @@ export const RSVP_PLACEHOLDERS = {
 export const RSVP_HELP_TEXT = {
   name: 'Họ và tên đầy đủ của bạn',
   guestCount: 'Tổng số người tham dự (bao gồm cả bạn)',
-  phone: 'Số điện thoại để liên lạc (không bắt buộc)',
+  willAttend: 'Vui lòng cho chúng tôi biết bạn có thể tham dự không',
+  venue: 'Chọn địa điểm bạn muốn tham dự',
   wishes: 'Lời chúc, lời nhắn gửi đến cô dâu chú rể',
 } as const
 
