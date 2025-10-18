@@ -151,7 +151,7 @@ const FloatingCTAs: React.FC<FloatingCTAsProps> = ({
       />
 
       {/* Gift FAB */}
-      <FloatingCTAButton
+      {/* <FloatingCTAButton
         label="Wedding Gift"
         icon={<Gift className="w-full h-full" />}
         onClick={() => openPanel('gift')}
@@ -159,7 +159,7 @@ const FloatingCTAs: React.FC<FloatingCTAsProps> = ({
         position="secondary"
         isActive={activePanel === 'gift'}
         reducedMotion={shouldReduceMotion}
-      />
+      /> */}
 
       {/* Panel Backdrop and Container */}
       {activePanel && (

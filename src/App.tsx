@@ -17,6 +17,7 @@ const LazySmoothScrollTest = lazy(() => import('./components/test/SmoothScrollTe
 const LazyAdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
 const LazyAdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const LazyAdminGuests = lazy(() => import('./pages/admin/AdminGuests'))
+const LazyAdminGuestCreate = lazy(() => import('./pages/admin/AdminGuestCreate'))
 const LazyAdminRSVPs = lazy(() => import('./pages/admin/AdminRSVPs'))
 
 const router = createBrowserRouter([
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: 'guests',
         element: <Suspense fallback={<div>Loading...</div>}><LazyAdminGuests /></Suspense>,
+      },
+      {
+        path: 'guests/new',
+        element: <Suspense fallback={<div>Loading...</div>}><LazyAdminGuestCreate /></Suspense>,
       },
       {
         path: 'rsvps',

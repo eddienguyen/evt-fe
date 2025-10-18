@@ -7,6 +7,9 @@
  * @module types/admin
  */
 
+// Shared Types
+export type VenueFilter = 'all' | 'hue' | 'hanoi';
+
 export interface GuestFormData {
   name: string;
   venue: 'hue' | 'hanoi';
@@ -118,4 +121,124 @@ export interface StatsCardProps {
   };
   isLoading?: boolean;
   href?: string;
+}
+
+/**
+ * Guest Management Types
+ */
+
+export interface GuestListResponse {
+  success: boolean;
+  data: {
+    guests: GuestRecord[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrevious: boolean;
+    };
+  };
+}
+
+export interface UpdateGuestData {
+  name?: string;
+  venue?: 'hue' | 'hanoi';
+  secondaryNote?: string;
+}
+
+export interface UpdateGuestResponse {
+  success: boolean;
+  data: GuestRecord;
+  message?: string;
+}
+
+export interface DeleteGuestResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface CheckGuestRSVPsResponse {
+  hasRSVPs: boolean;
+  rsvpCount: number;
+  message: string;
+}
+
+export interface GuestFilters {
+  venue?: 'all' | 'hue' | 'hanoi';
+  search?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: GuestSortField;
+  sortDirection?: 'asc' | 'desc';
+}
+
+export type GuestSortField = 'name' | 'venue' | 'createdAt';
+export type SortDirection = 'asc' | 'desc';
+
+export interface GuestManagementState {
+  // Data States
+  guests: GuestRecord[];
+  isLoading: boolean;
+  error: string | null;
+  
+  // Pagination States
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  
+  // Filter States
+  searchQuery: string;
+  venueFilter: VenueFilter;
+  
+  // UI States
+  expandedRows: Set<string>;
+  selectedGuest: GuestRecord | null;
+  isEditModalOpen: boolean;
+  isDeleteDialogOpen: boolean;
+  deleteWarning: {
+    hasRSVPs: boolean;
+    rsvpCount: number;
+    message: string;
+  } | null;
+  
+  // Sort States
+  sortField: GuestSortField;
+  sortDirection: SortDirection;
+}
+
+export interface GuestManagementActions {
+  // Data Actions
+  fetchGuests: () => Promise<void>;
+  refreshData: () => Promise<void>;
+  updateGuest: (id: string, data: UpdateGuestData) => Promise<{ success: boolean; error?: string }>;
+  deleteGuest: (id: string) => Promise<{ success: boolean; error?: string }>;
+  checkGuestRSVPs: (guestId: string) => Promise<void>;
+  
+  // Filter Actions
+  setSearchQuery: (query: string) => void;
+  setVenueFilter: (venue: VenueFilter) => void;
+  clearFilters: () => void;
+  
+  // UI Actions
+  toggleRowExpansion: (guestId: string) => void;
+  openEditModal: (guest: GuestRecord) => void;
+  closeEditModal: () => void;
+  openDeleteDialog: (guest: GuestRecord) => void;
+  closeDeleteDialog: () => void;
+  
+  // Pagination Actions
+  goToPage: (page: number) => void;
+  setItemsPerPage: (count: number) => void;
+  
+  // Sort Actions
+  setSortField: (field: GuestSortField, direction?: SortDirection) => void;
 }
