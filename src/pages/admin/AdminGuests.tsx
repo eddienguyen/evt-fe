@@ -9,6 +9,7 @@
 
 import React, { useState, useRef } from "react";
 import axios from 'axios';
+import { executeWithRetry } from "../../services/apiRetryService";
 import { GuestForm } from "./_components/GuestForm";
 import {
   InvitationPreview,
@@ -134,18 +135,27 @@ const AdminGuests: React.FC = () => {
         );
       }
 
-      // Step 3: Submit FormData to API using axios (replaced fetch for mobile compatibility)
-      console.log('🔍 [AdminGuests] Submitting guest data...');
+      // Step 3: Submit FormData to API with intelligent retry logic
+      console.log('🔍 [AdminGuests] Submitting guest data with retry logic...');
       let result: CreateGuestResponse | undefined;
       try {
-        const axiosResponse = await axios.post(
-          `${API_BASE_URL}/api/guests`,
-          formData,
+        const axiosResponse = await executeWithRetry(
+          () => axios.post<CreateGuestResponse>(
+            `${API_BASE_URL}/api/guests`,
+            formData,
+            {
+              headers: {
+                // Let browser set Content-Type for FormData
+              },
+              timeout: 15000 // 15s timeout for mobile reliability
+            }
+          ),
           {
-            headers: {
-              // Let browser set Content-Type for FormData
-            },
-            timeout: 15000 // 15s timeout for mobile reliability
+            maxRetries: 3,
+            initialDelay: 1000,
+            maxDelay: 10000,
+            backoffMultiplier: 2,
+            useJitter: true,
           }
         );
         result = axiosResponse.data;
