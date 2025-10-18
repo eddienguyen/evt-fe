@@ -82,7 +82,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
   return (
     <div
       ref={ref}
-      className={cn('relative overflow-hidden rounded-lg bg-base', className)}
+      className={cn('relative overflow-hidden rounded-lg bg-base w-full', className)}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -92,6 +92,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
           onClick()
         }
       } : undefined}
+      style={{ height: 'auto' }}
     >
       {/* Loading/Error State */}
       {!shouldLoad && (
@@ -112,7 +113,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = ({
           src={currentSrc}
           alt={imageAlt}
           className={cn(
-            'w-full h-full object-cover transition-opacity duration-300',
+            'w-full h-auto block transition-opacity duration-300',
             isLoaded ? 'opacity-100' : 'opacity-0',
             onClick && 'cursor-pointer'
           )}

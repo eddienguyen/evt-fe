@@ -53,13 +53,13 @@ export const timelineConfig: TimelineConfig = {
       id: 'first-meet',
       date: '2020-03-15',
       title: 'Lần đầu gặp gỡ',
-      description: 'Cuộc gặp định mệnh tại quán cà phê yêu thích. Một nụ cười, một lời chào, và tất cả đã bắt đầu từ đó.',
+      description: '---',
       category: 'meeting',
       featured: true,
       order: 1,
       image: {
-        url: '/images/timeline/first-meet.jpg',
-        alt: 'Ngọc và Quân lần đầu gặp nhau tại quán cà phê',
+        url: '/timeline/first-meet.jpg',
+        alt: 'Ngọc và Quân lần đầu gặp nhau',
         width: 800,
         height: 600
       }
@@ -68,13 +68,13 @@ export const timelineConfig: TimelineConfig = {
       id: 'first-date',
       date: '2020-04-20',
       title: 'Buổi hẹn đầu tiên',
-      description: 'Dạo bộ bên bờ sông trong buổi chiều xuân ấm áp. Những câu chuyện không bao giờ muốn kết thúc.',
+      description: '---',
       category: 'dating',
       featured: false,
       order: 2,
       image: {
-        url: '/images/timeline/first-date.jpg',
-        alt: 'Buổi hẹn đầu tiên bên bờ sông',
+        url: '/timeline/first-date.jpg',
+        alt: 'Buổi hẹn đầu tiên',
         width: 800,
         height: 600
       }
@@ -83,12 +83,12 @@ export const timelineConfig: TimelineConfig = {
       id: 'first-trip',
       date: '2021-08-10',
       title: 'Chuyến du lịch đầu tiên',
-      description: 'Khám phá Đà Lạt cùng nhau. Những kỷ niệm đẹp trong thành phố ngàn hoa.',
+      description: '---',
       category: 'milestone',
       featured: true,
       order: 3,
       image: {
-        url: '/images/timeline/first-trip.jpg',
+        url: '/timeline/first-trip.jpg',
         alt: 'Chuyến du lịch Đà Lạt của cặp đôi',
         width: 800,
         height: 600
@@ -98,12 +98,12 @@ export const timelineConfig: TimelineConfig = {
       id: 'anniversary',
       date: '2022-03-15',
       title: 'Kỷ niệm 2 năm',
-      description: 'Hai năm bên nhau, từ những ngày đầu ngượng ngùng đến những khoảnh khắc tràn đầy hạnh phúc.',
+      description: '---',
       category: 'milestone',
       featured: false,
       order: 4,
       image: {
-        url: '/images/timeline/anniversary.jpg',
+        url: '/timeline/anniversary.jpg',
         alt: 'Kỷ niệm 2 năm yêu nhau',
         width: 800,
         height: 600
@@ -113,12 +113,12 @@ export const timelineConfig: TimelineConfig = {
       id: 'proposal',
       date: '2024-12-24',
       title: 'Lời cầu hôn',
-      description: 'Một đêm Giáng sinh đáng nhớ, câu "Có" ngọt ngào nhất, và khởi đầu hành trình mới.',
+      description: '---',
       category: 'proposal',
       featured: true,
       order: 5,
       image: {
-        url: '/images/timeline/proposal.jpg',
+        url: '/timeline/proposal.jpg',
         alt: 'Lời cầu hôn dưới ánh đèn Giáng sinh',
         width: 800,
         height: 600
@@ -128,12 +128,12 @@ export const timelineConfig: TimelineConfig = {
       id: 'wedding-prep',
       date: '2025-08-01',
       title: 'Chuẩn bị đám cưới',
-      description: 'Cùng nhau chuẩn bị cho ngày trọng đại. Từng chi tiết nhỏ đều được chăm chút với tình yêu.',
+      description: '---',
       category: 'wedding-prep',
       featured: false,
       order: 6,
       image: {
-        url: '/images/timeline/wedding-prep.jpg',
+        url: '/timeline/wedding-prep.jpg',
         alt: 'Chuẩn bị cho đám cưới',
         width: 800,
         height: 600

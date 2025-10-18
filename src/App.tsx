@@ -14,7 +14,10 @@ const LazyHN = lazy(() => import('./pages/HN'))
 const LazyHue = lazy(() => import('./pages/Hue'))
 const LazyComponentShowcase = lazy(() => import('./pages/ComponentShowcase'))
 const LazySmoothScrollTest = lazy(() => import('./components/test/SmoothScrollTestComponent'))
+const LazyAdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
+const LazyAdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const LazyAdminGuests = lazy(() => import('./pages/admin/AdminGuests'))
+const LazyAdminRSVPs = lazy(() => import('./pages/admin/AdminRSVPs'))
 
 const router = createBrowserRouter([
   {
@@ -58,10 +61,25 @@ const router = createBrowserRouter([
         path: 'smooth-scroll-test',
         element: <Suspense fallback={<div>Loading...</div>}><LazySmoothScrollTest /></Suspense>,
       },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <Suspense fallback={<div>Loading...</div>}><LazyAdminLayout /></Suspense>,
+    errorElement: <ErrorBoundary />,
+    children: [
       {
-        path: 'admin/guests',
+        index: true,
+        element: <Suspense fallback={<div>Loading...</div>}><LazyAdminDashboard /></Suspense>,
+      },
+      {
+        path: 'guests',
         element: <Suspense fallback={<div>Loading...</div>}><LazyAdminGuests /></Suspense>,
-      }
+      },
+      {
+        path: 'rsvps',
+        element: <Suspense fallback={<div>Loading...</div>}><LazyAdminRSVPs /></Suspense>,
+      },
     ],
   },
 ])

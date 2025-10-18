@@ -138,7 +138,7 @@ const LightboxControls: React.FC<LightboxControlsProps> = ({
               e.stopPropagation()
               onPrev()
             }}
-            className="fixed left-0 top-0 bottom-0 w-1/3 z-40"
+            className="fixed left-0 top-0 bottom-0 w-16 z-40 pointer-events-auto"
             aria-label="Ảnh trước"
           >
             <span className="sr-only">Ảnh trước</span>
@@ -152,7 +152,7 @@ const LightboxControls: React.FC<LightboxControlsProps> = ({
               e.stopPropagation()
               onNext()
             }}
-            className="fixed right-0 top-0 bottom-0 w-1/3 z-40"
+            className="fixed right-0 top-0 bottom-0 w-16 z-40 pointer-events-auto"
             aria-label="Ảnh tiếp theo"
           >
             <span className="sr-only">Ảnh tiếp theo</span>

@@ -64,15 +64,6 @@ const RootLayout: React.FC = () => {
                 Gallery
               </Link>
             </li>
-            <li>
-              <Link
-                to="/location"
-                className={getNavLinkClasses('/location')}
-                aria-current={isActivePath('/location') ? 'page' : undefined}
-              >
-                Location
-              </Link>
-            </li>
           </ul>
         </nav>
       </header>

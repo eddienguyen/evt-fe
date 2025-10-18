@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   return (
     <>
       <SEOHead />
-      <HeroSection />
+      {/* <HeroSection /> */}
       
       {/* Event Details Section */}
       <EventDetailsSection enableAnimations={true} />

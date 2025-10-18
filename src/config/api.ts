@@ -32,6 +32,8 @@ export interface ApiConfig {
     healthDatabase: string;
     // Add more endpoints as they are implemented
     guests: string;
+    rsvp: string;
+    adminStats: string;
   };
 }
 
@@ -44,6 +46,8 @@ export const apiConfig: ApiConfig = {
     health: '/api/health',
     healthDatabase: '/api/health/database',
     guests: '/api/guests', // Placeholder for future implementation
+    rsvp: '/api/rsvp',
+    adminStats: '/api/admin/stats',
   },
 };
 

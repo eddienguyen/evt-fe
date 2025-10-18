@@ -132,8 +132,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
           className={cn(
             // Break-inside-avoid keeps items intact in columns
             'break-inside-avoid',
-            'mb-3 sm:mb-4',
-            'relative overflow-hidden'
+            'mb-3 sm:mb-4'
           )}
         >
           <GalleryItem

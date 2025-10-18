@@ -67,7 +67,7 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-lg bg-white shadow-md',
+        'group relative overflow-hidden rounded-lg bg-white shadow-md w-full h-auto',
         'hover:shadow-lg transition-shadow duration-150',
         onClick && 'cursor-pointer',
         className
@@ -79,12 +79,12 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
       aria-label={`Xem ảnh: ${image.caption || image.alt}`}
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative overflow-hidden">
         <ImageLoader
           image={image}
           lazy={lazy}
           size="medium"
-          className="w-full h-full"
+          className="w-full h-auto"
         />
 
         {/* Metadata Overlay (Desktop only) */}
