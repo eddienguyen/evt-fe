@@ -2,13 +2,20 @@
  * RSVP Service
  * 
  * Handles all RSVP-related API calls with proper error handling,
- * rate limiting detection, and response parsing.
+ * rate limiting detection, response parsing, and intelligent retry logic.
+ * 
+ * Features:
+ * - Automatic retry on 502/503 (machine wake-up)
+ * - Exponential backoff
+ * - Vietnamese error messages
+ * - Console logging for debugging
  * 
  * @module services/rsvpService
  */
 
 import axios, { AxiosError } from 'axios'
 import type { RSVPFormData } from '../lib/schemas/rsvpSchema'
+import { executeWithRetry, getErrorMessage } from './apiRetryService'
 
 // Get API base URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
@@ -63,13 +70,18 @@ export class RSVPError extends Error {
 }
 
 /**
- * Submit RSVP to backend API
+ * Submit RSVP form data to the API
  * 
- * @param data - RSVP form data
- * @returns Promise with API response
- * @throws {RSVPError} When submission fails
+ * Includes intelligent retry logic for handling machine wake-up scenarios.
+ * All retry progress is logged to console for debugging.
+ * 
+ * @param data - RSVP form data to submit
+ * @returns Promise with the API response containing RSVP confirmation details
+ * @throws RSVPError with user-friendly message if submission fails
  */
-export const submitRSVP = async (data: RSVPFormData): Promise<RSVPSuccessResponse> => {
+export const submitRSVP = async (
+  data: RSVPFormData
+): Promise<RSVPSuccessResponse> => {
   try {
     console.log('📤 [RSVP Service] Submitting RSVP:', {
       name: data.name,
@@ -79,31 +91,41 @@ export const submitRSVP = async (data: RSVPFormData): Promise<RSVPSuccessRespons
       hasGuestId: !!data.guestId
     })
 
-    const response = await axios.post<RSVPResponse>(
-      `${API_BASE_URL}/api/rsvp`,
-      {
-        guestId: data.guestId,
-        name: data.name,
-        guestCount: data.guestCount,
-        willAttend: data.willAttend,
-        wishes: data.wishes,
-        venue: data.venue,
-        honeypot: data.honeypot
-      },
-      {
-        timeout: 15000,
-        headers: {
-          'Content-Type': 'application/json'
+    // Execute with retry logic
+    const response = await executeWithRetry<RSVPResponse>(
+      () => axios.post<RSVPResponse>(
+        `${API_BASE_URL}/api/rsvp`,
+        {
+          guestId: data.guestId,
+          name: data.name,
+          guestCount: data.guestCount,
+          willAttend: data.willAttend,
+          wishes: data.wishes,
+          venue: data.venue,
+          honeypot: data.honeypot
+        },
+        {
+          timeout: 15000,
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
+      ),
+      {
+        maxRetries: 3,
+        initialDelay: 1000,
+        maxDelay: 10000,
+        backoffMultiplier: 2,
+        useJitter: true,
       }
     )
 
     console.log('✅ [RSVP Service] API response:', response.data)
 
     if (response.data.success) {
-      return response.data as RSVPSuccessResponse
+      return response.data
     } else {
-      const errorResponse = response.data as RSVPErrorResponse
+      const errorResponse = response.data
       throw new RSVPError(
         errorResponse.error || 'Có lỗi xảy ra khi gửi RSVP',
         response.status,
@@ -111,11 +133,14 @@ export const submitRSVP = async (data: RSVPFormData): Promise<RSVPSuccessRespons
       )
     }
   } catch (error) {
-    console.error('❌ [RSVP Service] Error:', error)
+    console.error('❌ [RSVP Service] Error after all retries:', error)
 
     // Handle axios errors
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<RSVPErrorResponse>
+
+      // Get user-friendly error message
+      const userMessage = getErrorMessage(axiosError)
 
       // Rate limiting error (429)
       if (axiosError.response?.status === 429) {
@@ -135,25 +160,25 @@ export const submitRSVP = async (data: RSVPFormData): Promise<RSVPSuccessRespons
         )
       }
 
-      // Server error (500+)
+      // Server error (500+) - Already retried
       if (axiosError.response?.status && axiosError.response.status >= 500) {
         throw new RSVPError(
-          'Lỗi máy chủ. Vui lòng thử lại sau.',
+          userMessage + ' (Đã thử lại 3 lần)',
           axiosError.response.status
         )
       }
 
-      // Network error (no response)
+      // Network error (no response) - Already retried
       if (axiosError.request && !axiosError.response) {
         throw new RSVPError(
-          'Không thể kết nối với máy chủ. Vui lòng kiểm tra kết nối mạng.',
+          userMessage + ' (Đã thử lại 3 lần)',
           0
         )
       }
 
       // Other axios errors
       throw new RSVPError(
-        axiosError.response?.data?.error || 'Có lỗi xảy ra khi gửi RSVP',
+        axiosError.response?.data?.error || userMessage,
         axiosError.response?.status
       )
     }

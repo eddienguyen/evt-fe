@@ -4,12 +4,17 @@
  * Main RSVP panel that handles form submission to the backend API.
  * Manages form submission flow and state transitions.
  * 
+ * Features:
+ * - Intelligent retry logic for machine wake-up (logged to console)
+ * - Simple loading indicator for users
+ * - Enhanced error handling
+ * 
  * @module components/RSVPPanel
  */
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { X } from 'lucide-react'
+import { X, RefreshCw } from 'lucide-react'
 
 import { Button } from '@/components/ui/Button'
 import RSVPForm from '@/components/forms/RSVPForm'
@@ -54,8 +59,11 @@ interface APIResponse {
 
 /**
  * Submit RSVP using real API
+ * Note: Retry progress is logged to console, not shown to users
  */
-const submitRSVP = async (data: RSVPFormData): Promise<APIResponse> => {
+const submitRSVP = async (
+  data: RSVPFormData
+): Promise<APIResponse> => {
   try {
     const response = await submitRSVPAPI(data)
     
@@ -122,6 +130,8 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
   }, [isOpen])
 
   // Handle form submission
+  // Note: Retry logic is handled automatically in the background
+  // Progress is logged to console, users see simple loading state
   const handleSubmit = async (data: RSVPFormData): Promise<void> => {
     setSubmissionState('submitting')
     setErrorMessage('')
@@ -227,6 +237,17 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
       {/* Retry Button for Error State */}
       {submissionState === 'error' && (
         <div className="mt-4 pt-4 border-t">
+          <div className="mb-3 p-3 bg-error-light/10 border border-error-light rounded-lg">
+            <p className="text-sm text-error">
+              <strong>Lỗi:</strong> {errorMessage}
+            </p>
+            {errorMessage.includes('Đã thử lại 3 lần') && (
+              <p className="text-xs text-text-light mt-2">
+                Hệ thống đã tự động thử kết nối lại 3 lần nhưng không thành công. 
+                Vui lòng kiểm tra kết nối internet hoặc thử lại sau ít phút.
+              </p>
+            )}
+          </div>
           <Button
             variant="outline"
             onClick={() => {
@@ -235,6 +256,7 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
             }}
             className="w-full"
           >
+            <RefreshCw className="w-4 h-4 mr-2" />
             {RSVP_BUTTONS.tryAgain}
           </Button>
         </div>

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { copyright } from '../config/site'
 import FloatingCTAs from './FloatingCTAs'
+import { versionInfo } from '@/version'
 
 const RootLayout: React.FC = () => {
   const location = useLocation()
+  const [showVersionDetails, setShowVersionDetails] = useState(false)
   // const handleAnchorClick = useAnchorNavigation({ offset: 80 })
 
   /**
@@ -81,7 +83,58 @@ const RootLayout: React.FC = () => {
 
       <footer className="bg-base py-8" role="contentinfo">
         <div className="container mx-auto px-4 text-center text-text-light">
-          <p>{copyright.text} - {copyright.year} and continuing...</p>
+          {/* Copyright text - Click to toggle version info */}
+          <p 
+            onClick={() => setShowVersionDetails(!showVersionDetails)}
+            className="cursor-pointer hover:text-text transition-colors duration-150 select-none"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                setShowVersionDetails(!showVersionDetails)
+              }
+            }}
+            aria-expanded={showVersionDetails}
+            aria-label="Click to show version information"
+          >
+            {copyright.text} - {copyright.year} and continuing...
+          </p>
+          
+          {/* Version Details - Shows on click, hidden by default */}
+          {showVersionDetails && (
+            <div className="mt-4 inline-block bg-base-dark/50 backdrop-blur-sm border border-text-light/20 rounded-lg p-4 text-left shadow-lg">
+              <div className="font-mono text-xs space-y-1">
+                <div className="flex items-center gap-2 mb-2 pb-2 border-b border-text-light/20">
+                  <span className="text-green-400">●</span>
+                  <span className="font-bold text-sm text-accent-gold">v{versionInfo.version}</span>
+                </div>
+                <div className="text-text-light/80 space-y-0.5">
+                  <div>
+                    <span className="text-text-light/50">Commit:</span>{' '}
+                    <span className="text-text">{versionInfo.gitCommit}</span>
+                  </div>
+                  <div>
+                    <span className="text-text-light/50">Branch:</span>{' '}
+                    <span className="text-text">{versionInfo.gitBranch}</span>
+                  </div>
+                  <div>
+                    <span className="text-text-light/50">Built:</span>{' '}
+                    <span className="text-text">
+                      {new Date(versionInfo.buildTimestamp).toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-text-light/50">Env:</span>{' '}
+                    <span className="text-text">{versionInfo.environment}</span>
+                  </div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-text-light/10 text-[10px] text-text-light/40">
+                  Click copyright to hide
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </footer>
 
