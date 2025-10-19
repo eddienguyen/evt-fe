@@ -22,11 +22,11 @@ const AdaptiveStars: React.FC<AdaptiveStarsProps> = React.memo(({ qualityLevel }
     const config = (() => {
       switch (qualityLevel) {
         case 'high':
-          return { count: 50, radius: 100, depth: 50, factor: 12 } // 3x bigger (4→12)
+          return { count: 500, radius: 200, depth: 100, factor: 12 } 
         case 'mid':
-          return { count: 50, radius: 75, depth: 35, factor: 9 } // 3x bigger (3→9)
+          return { count: 300, radius: 150, depth: 70, factor: 9 } 
         case 'low':
-          return { count: 50, radius: 50, depth: 25, factor: 6 } // 3x bigger (2→6)
+          return { count: 100, radius: 100, depth: 50, factor: 6 } 
       }
     })()
     
@@ -44,8 +44,8 @@ const AdaptiveStars: React.FC<AdaptiveStarsProps> = React.memo(({ qualityLevel }
       count={starConfig.count}
       factor={starConfig.factor}
       saturation={0}
-      fade={false}
-      speed={0.5}
+      fade={true}
+      speed={10}
     />
   )
 })
@@ -205,11 +205,11 @@ const HeroScene: React.FC<HeroSceneProps> = ({ qualityLevel = 'mid' }) => {
         <ambientLight intensity={1.0} />
         
         <AdaptiveStars qualityLevel={currentQuality} />
-        <FloatingText />
+        {/* <FloatingText /> */}
       </Canvas>
       
       {/* Content overlay - positioned below 3D text */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div className="text-center text-accent-white mt-32">
           <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
             {events.hue.dateDisplay} • {events.hue.locationShort}
@@ -219,7 +219,7 @@ const HeroScene: React.FC<HeroSceneProps> = ({ qualityLevel = 'mid' }) => {
             {events.hanoi.dateDisplay} • {events.hanoi.locationShort}
           </p>
         </div>
-      </div>
+      </div> */}
       
       {/* Performance stats in development */}
       {import.meta.env.DEV && (

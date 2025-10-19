@@ -123,22 +123,22 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
           <div className="flex-1 pb-2">
             <div className="flex items-baseline gap-3 flex-wrap">
               <time
-                className="font-body text-sm text-accent-gold font-semibold shrink-0"
+                className={`font-body  text-accent-gold ${item.hightlight ? "font-extrabold text-lg" : "font-semibold text-sm"} shrink-0`}
                 dateTime={item.time}
               >
                 {item.time}
               </time>
               
-              <span className="font-body text-base md:text-lg text-text font-medium">
+              <span className={`font-body  text-text ${item.hightlight ? "text-accent-gold font-semibold text-lg md:text-2xl" : "font-medium text-base md:text-lg"}`}>
                 {item.title}
               </span>
             </div>
             
-            {item.description && (
+            {/* {item.description && (
               <p className="font-body text-sm text-text-secondary mt-1">
                 {item.description}
               </p>
-            )}
+            )} */}
           </div>
         </div>
       ))}

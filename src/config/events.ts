@@ -17,6 +17,7 @@ export interface ScheduleItem {
   title: string
   /** Optional additional details */
   description?: string
+  hightlight?: boolean
 }
 
 /**
@@ -46,6 +47,8 @@ export interface EventDetails {
   date: string
   /** Formatted date for display */
   dateDisplay: string
+  /** Lunatic Formatted date for display */
+  dateDisplay2: string
   /** Venue information */
   venue: VenueDetails
   /** Event schedule timeline */
@@ -73,9 +76,10 @@ export const eventsConfig: EventsConfig = {
   // Hue Ceremony - November 1st, 2025
   hue: {
     id: 'hue',
-    displayName: 'Hue Ceremony',
+    displayName: 'Lễ Vu Quy',
     date: '2025-11-01',
-    dateDisplay: 'Thứ Bảy, 1 Tháng 11, 2025',
+    dateDisplay: 'Thứ Bảy, 1 tháng 11, 2025',
+    dateDisplay2: '(nhằm ngày 12 tháng 09, năm Ất Tỵ)',
     venue: {
       name: 'Trung Tâm Sự Kiện Asia Palace',
       address: '32 Phạm Ngũ Lão, Phú Hội, Thành phố Huế',
@@ -97,14 +101,10 @@ export const eventsConfig: EventsConfig = {
       },
       {
         time: '11:00 AM',
-        title: 'Đón khách',
-        description: 'Guest reception'
-      },
-      {
-        time: '11:30 AM',
         title: 'Tiệc cưới',
-        description: 'Wedding banquet'
-      }
+        description: 'Guest reception',
+        hightlight: true,
+      },
     ],
     notes: [
       'Rất hân hạnh được đón tiếp quý khách tại buổi lễ trọng đại này.',
@@ -114,9 +114,10 @@ export const eventsConfig: EventsConfig = {
   // Hanoi Ceremony - November 8th, 2025
   hanoi: {
     id: 'hanoi',
-    displayName: 'Hanoi Ceremony',
+    displayName: 'Lễ Thành Hôn',
     date: '2025-11-08',
-    dateDisplay: 'Thứ Bảy, 8 Tháng 11, 2025',
+    dateDisplay: 'Thứ Bảy, 8 tháng 11, 2025',
+    dateDisplay2: '(nhằm ngày 19 tháng 09, năm Ất Tỵ)',
     venue: {
       name: 'Nhà khách Trúc Bạch',
       address: '1 P. Trấn Vũ, Quán Thánh, Hoàn Kiếm, Hà Nội',
@@ -134,7 +135,8 @@ export const eventsConfig: EventsConfig = {
       {
         time: '6:00 PM',
         title: 'Tiệc cưới',
-        description: 'Wedding banquet'
+        description: 'Wedding banquet',
+        hightlight: true
       }
     ],
     notes: [

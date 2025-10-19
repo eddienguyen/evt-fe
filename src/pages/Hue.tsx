@@ -4,6 +4,7 @@ import { SEOHead } from "../components/SEO";
 import { StoryTimeline } from "../components/timeline";
 import { EventDetailsSection } from "../components/events";
 import { CountdownTimer } from "../components/countdown";
+import { CouplePresentation } from "../components/couple";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
 import figure from "../public/Hue-invitation.jpg";
@@ -38,6 +39,9 @@ const Hue: React.FC = () => {
       {/* Main Content - Only show when not loading */}
       {!isLoading && (
         <>
+          {/* Couple Presentation Section */}
+          <CouplePresentation enableAnimations={true} />
+
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
             {guest && (

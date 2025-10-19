@@ -14,6 +14,8 @@ export interface SiteConfig {
     displayName: string;    // For headings/titles
     husband: string;        // "Quân"
     wife: string;          // "Ngọc"
+    husbandImage: string;  // Path to husband's image
+    wifeImage: string;     // Path to wife's image
   };
 
   // Event Information
@@ -53,6 +55,8 @@ export const siteConfig: SiteConfig = {
     displayName: "Ngọc & Quân",
     husband: "Quân",
     wife: "Ngọc",
+    husbandImage: "/album/NAM_0721.jpg",
+    wifeImage: "/album/NAM_0376.jpg",
   },
 
   events: {

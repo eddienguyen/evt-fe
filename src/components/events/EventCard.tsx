@@ -65,7 +65,7 @@ const EventCard: React.FC<EventCardProps> = ({
         >
           {event.displayName}
         </h3>
-        <p className="font-body text-lg text-text-secondary">
+        <p className="font-semibold text-2xl text-text-secondary">
           {event.dateDisplay}
         </p>
       </header>
@@ -97,6 +97,9 @@ const EventCard: React.FC<EventCardProps> = ({
           <div className="flex-1">
             <p className="font-body text-base text-text">
               {event.dateDisplay}
+            </p>
+             <p className="font-body text-xs text-text-light">
+              {event.dateDisplay2}
             </p>
           </div>
         </div>

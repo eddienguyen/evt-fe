@@ -6,13 +6,14 @@ import { EventDetailsSection } from '../components/events'
 import { CountdownTimer } from '../components/countdown'
 import { GalleryTeaser } from '../components/gallery'
 import { eventsConfig } from '../config/events'
+import BackgroundCanvas from '@/components/BackgroundCanvas'
 
 const Home: React.FC = () => {
   return (
     <>
       <SEOHead />
       {/* <HeroSection /> */}
-      
+      <BackgroundCanvas />
       {/* Event Details Section */}
       <EventDetailsSection enableAnimations={true} />
 
