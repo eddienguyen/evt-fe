@@ -14,6 +14,7 @@ import { prefersReducedMotion } from '@/lib/a11y'
 import { cn } from '@/lib/utils/cn'
 import { eventsConfig, type EventDetails } from '@/config/events'
 import EventCard from './EventCard'
+import { ImageLoader } from '../gallery'
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger)
@@ -108,6 +109,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
         {/* Hue Event Card */}
         {(eventID === "" || eventID === "hue") && 
         <div
+          id="hue-event-card"
           ref={(el) => {
             cardsRef.current[0] = el
           }}
@@ -131,6 +133,17 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
             enableAnimations={enableAnimations}
           />
         </div>
+        }
+
+        {/* Figure when there's only one event */}
+        {
+          eventID !== "" && 
+          <div className="" aria-hidden="true">
+
+            <img
+              src={'/album/NAM_9875_(2) Large.jpeg'}
+            />
+          </div>
         }
 
       </div>

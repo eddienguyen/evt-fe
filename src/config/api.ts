@@ -45,7 +45,7 @@ export const apiConfig: ApiConfig = {
   endpoints: {
     health: '/api/health',
     healthDatabase: '/api/health/database',
-    guests: '/api/guests', // Placeholder for future implementation
+    guests: '/api/admin/guests', // Admin guest management endpoint
     rsvp: '/api/rsvp',
     adminStats: '/api/admin/stats',
   },

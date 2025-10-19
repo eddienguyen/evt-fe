@@ -107,8 +107,7 @@ export const eventsConfig: EventsConfig = {
       }
     ],
     notes: [
-      'Trang phục: Áo dài hoặc vest lịch sự',
-      'Vui lòng đến đúng giờ để không bỏ lỡ các nghi lễ quan trọng'
+      'Rất hân hạnh được đón tiếp quý khách tại buổi lễ trọng đại này.',
     ]
   },
 
@@ -139,7 +138,6 @@ export const eventsConfig: EventsConfig = {
       }
     ],
     notes: [
-      'Trang phục: Áo dài hoặc vest lịch sự',
       'Bãi đỗ xe có sẵn tại địa điểm'
     ]
   }

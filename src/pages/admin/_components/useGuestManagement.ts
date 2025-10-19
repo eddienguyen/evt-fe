@@ -7,7 +7,7 @@
  * @module pages/admin/_components/useGuestManagement
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import * as guestAdminService from '../../../services/guestAdminService';
 import type {
   GuestRecord,
@@ -54,11 +54,13 @@ const INITIAL_STATE: GuestManagementState = {
  */
 export const useGuestManagement = (): GuestManagementState & GuestManagementActions => {
   const [state, setState] = useState<GuestManagementState>(INITIAL_STATE);
+  const prevSearchQueryRef = useRef<string>(INITIAL_STATE.searchQuery);
 
   /**
    * Fetch guests from API with current filters
+   * Note: Not using useCallback to avoid dependency issues
    */
-  const fetchGuests = useCallback(async () => {
+  const fetchGuests = async () => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
     
     try {
@@ -72,15 +74,27 @@ export const useGuestManagement = (): GuestManagementState & GuestManagementActi
       };
 
       const response = await guestAdminService.getGuests(filters);
-
+      console.log("RESPONSE:", response);
+      
+      // Safely extract data with fallbacks
+      const guests = response?.data?.guests || [];
+      const pagination = response?.data?.pagination || {
+        page: 1,
+        limit: 20,
+        total: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrevious: false,
+      };
+      
       setState(prev => ({
         ...prev,
-        guests: response.data.guests,
-        totalItems: response.data.pagination.total,
-        totalPages: response.data.pagination.totalPages,
-        currentPage: response.data.pagination.page,
-        hasNext: response.data.pagination.hasNext,
-        hasPrevious: response.data.pagination.hasPrevious,
+        guests,
+        totalItems: pagination.total,
+        totalPages: pagination.totalPages,
+        currentPage: pagination.page,
+        hasNext: pagination.hasNext,
+        hasPrevious: pagination.hasPrevious,
         isLoading: false,
       }));
     } catch (error) {
@@ -90,37 +104,40 @@ export const useGuestManagement = (): GuestManagementState & GuestManagementActi
         isLoading: false,
       }));
     }
-  }, [state.currentPage, state.itemsPerPage, state.sortField, state.sortDirection, state.venueFilter, state.searchQuery]);
+  };
 
   /**
-   * Debounced search effect
+   * Unified effect for all data fetching
+   * Debounces search queries, immediate for other changes
    */
   useEffect(() => {
-    const debounceTimer = setTimeout(() => {
+    const searchChanged = state.searchQuery !== prevSearchQueryRef.current;
+    
+    if (searchChanged) {
+      // Debounce search queries
+      const debounceTimer = setTimeout(() => {
+        fetchGuests();
+        prevSearchQueryRef.current = state.searchQuery;
+      }, 300);
+
+      return () => clearTimeout(debounceTimer);
+    } else {
+      // Immediate fetch for pagination/filter/sort changes
       fetchGuests();
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [state.searchQuery, fetchGuests]);
-
-  /**
-   * Fetch on filter/sort/pagination changes (except search which is debounced)
-   */
-  useEffect(() => {
-    fetchGuests();
-  }, [state.currentPage, state.itemsPerPage, state.sortField, state.sortDirection, state.venueFilter]);
+    }
+  }, [state.currentPage, state.itemsPerPage, state.sortField, state.sortDirection, state.venueFilter, state.searchQuery]);
 
   /**
    * Refresh data (manual)
    */
-  const refreshData = useCallback(async () => {
+  const refreshData = async () => {
     await fetchGuests();
-  }, [fetchGuests]);
+  };
 
   /**
    * Update guest
    */
-  const updateGuest = useCallback(async (
+  const updateGuest = async (
     id: string,
     data: UpdateGuestData
   ): Promise<{ success: boolean; error?: string }> => {
@@ -147,12 +164,12 @@ export const useGuestManagement = (): GuestManagementState & GuestManagementActi
         error: error instanceof Error ? error.message : 'Không thể cập nhật khách mời',
       };
     }
-  }, [fetchGuests]);
+  };
 
   /**
    * Delete guest with RSVP check
    */
-  const deleteGuest = useCallback(async (
+  const deleteGuest = async (
     id: string
   ): Promise<{ success: boolean; error?: string }> => {
     try {
@@ -178,7 +195,7 @@ export const useGuestManagement = (): GuestManagementState & GuestManagementActi
         error: error instanceof Error ? error.message : 'Không thể xóa khách mời',
       };
     }
-  }, [fetchGuests]);
+  };
 
   /**
    * Check guest RSVPs before opening delete dialog

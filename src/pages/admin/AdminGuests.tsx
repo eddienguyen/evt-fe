@@ -176,7 +176,7 @@ const AdminGuests: React.FC = () => {
       )}
 
       {/* Pagination */}
-      {!isLoading && !error && guests.length > 0 && (
+      {!isLoading && !error && Array.isArray(guests) && guests.length > 0 && (
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Items per page */}

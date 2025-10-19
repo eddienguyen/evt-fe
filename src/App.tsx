@@ -93,8 +93,6 @@ function App() {
   return (
     <HelmetProvider>
       <GuestProvider>
-        {/* Global 3D Background Canvas - Fixed position, behind all content */}
-        {/* <BackgroundCanvas /> */}
         
         {/* Page Content - Layers above 3D background */}
         <RouterProvider router={router} />

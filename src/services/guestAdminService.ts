@@ -67,7 +67,6 @@ export const getGuests = async (
       () => axios.get<GuestListResponse>(url)
     );
 
-    console.log('✅ [Guest Admin Service] Guests fetched successfully:', response.data.data.guests.length);
     return response.data;
   } catch (error) {
     console.error('❌ [Guest Admin Service] Error fetching guests:', error);
@@ -92,7 +91,7 @@ export const updateGuest = async (
     const url = `${apiConfig.baseUrl}${apiConfig.endpoints.guests}/${id}`;
 
     const response = await executeWithRetry<UpdateGuestResponse>(
-      () => axios.patch<UpdateGuestResponse>(url, data)
+      () => axios.put<UpdateGuestResponse>(url, data)
     );
 
     console.log('✅ [Guest Admin Service] Guest updated successfully');

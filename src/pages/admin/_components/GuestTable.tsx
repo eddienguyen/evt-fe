@@ -34,7 +34,10 @@ export const GuestTable: React.FC<GuestTableProps> = ({
   onDelete,
   isLoading = false,
 }) => {
-  if (guests.length === 0 && !isLoading) {
+  // Safety check: ensure guests is an array
+  const safeGuests = Array.isArray(guests) ? guests : [];
+  
+  if (safeGuests.length === 0 && !isLoading) {
     return (
       <div className="text-center py-12">
         <svg
@@ -110,7 +113,7 @@ export const GuestTable: React.FC<GuestTableProps> = ({
 
       {/* Table Rows / Cards */}
       <div className="space-y-2">
-        {guests.map((guest) => (
+        {safeGuests.map((guest) => (
           <GuestTableRow
             key={guest.id}
             guest={guest}
