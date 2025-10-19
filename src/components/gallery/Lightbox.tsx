@@ -165,18 +165,103 @@ const Lightbox: React.FC<LightboxProps> = ({
       aria-modal="true"
       aria-label="Image viewer"
     >
-      {/* Controls */}
-      <LightboxControls
-        onClose={handleClose}
-        onPrev={onPrev}
-        onNext={onNext}
-        hasPrev={hasPrev}
-        hasNext={hasNext}
-        currentIndex={currentIndex}
-        totalImages={images.length}
-      />
+      {/* Navigation Arrows */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onPrev?.()
+          }}
+          disabled={!hasPrev}
+          className={cn(
+            'fixed left-4 top-1/2 -translate-y-1/2 z-[10000]',
+            'w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm',
+            'flex items-center justify-center',
+            'text-white hover:bg-black/70 transition-colors',
+            'disabled:opacity-30 disabled:cursor-not-allowed',
+            'focus:outline-none focus:ring-2 focus:ring-white/50'
+          )}
+          aria-label="Previous image"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
 
-      {/* Image Container */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onNext?.()
+          }}
+          disabled={!hasNext}
+          className={cn(
+            'fixed right-4 top-1/2 -translate-y-1/2 z-[10000]',
+            'w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm',
+            'flex items-center justify-center',
+            'text-white hover:bg-black/70 transition-colors',
+            'disabled:opacity-30 disabled:cursor-not-allowed',
+            'focus:outline-none focus:ring-2 focus:ring-white/50'
+          )}
+          aria-label="Next image"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        {/* Close Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            handleClose()
+          }}
+          className={cn(
+            'fixed top-4 right-4 z-[10000]',
+            'w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm',
+            'flex items-center justify-center',
+            'text-white hover:bg-black/70 transition-colors',
+            'focus:outline-none focus:ring-2 focus:ring-white/50'
+          )}
+          aria-label="Close lightbox"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        {/* Image Container */}
       <div
         className={cn(
           'absolute inset-0 flex items-center justify-center',

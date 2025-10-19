@@ -68,16 +68,16 @@ const TeaserImage: React.FC<TeaserImageProps> = ({
   return (
     <div
       className={cn(
-        // Base styling
-        "relative bg-white rounded-lg shadow-soft overflow-hidden",
+        // Polaroid frame styling
+        "relative bg-base-light p-3 pb-12 shadow-lg",
         "cursor-pointer group",
         // Hover effects (only if motion is allowed)
         !reducedMotion && [
-          "transition-all duration-250 ease-smooth",
-          "hover:scale-105 hover:shadow-medium"
+          "transition-all duration-300 ease-smooth",
+          "hover:shadow-2xl hover:-rotate-1 hover:scale-[1.02]"
         ],
         // Focus styles for accessibility
-        "focus-within:ring-2 focus-within:ring-accent-gold focus-within:ring-offset-2",
+        "focus-within:ring-2 focus-within:ring-accent-gold focus-within:ring-offset-2 focus-within:outline-none",
         className
       )}
       onClick={handleClick}
@@ -87,32 +87,25 @@ const TeaserImage: React.FC<TeaserImageProps> = ({
       aria-label={`Xem hình ảnh: ${image.alt}`}
       {...props}
     >
-      {/* Image Container */}
-      <div className="aspect-[4/3] overflow-hidden">
+      {/* Image Container - Natural dimensions for masonry */}
+      <div className="relative overflow-hidden bg-base-dark/5">
         <ImageLoader
           image={image}
           size="medium"
           lazy={true}
           className={cn(
-            "w-full h-full object-cover",
+            "w-full h-auto block",
             // Subtle zoom effect on hover
             !reducedMotion && [
-              "transition-transform duration-250 ease-smooth",
-              "group-hover:scale-110"
+              "transition-transform duration-300 ease-smooth",
+              "group-hover:scale-105"
             ]
           )}
           alt={image.alt}
         />
+        {/* Subtle inner shadow for depth */}
+        <div className="absolute rounded-lg inset-0 shadow-[inset_0_0_4px_rgba(0,0,0,.3)]" />
       </div>
-
-      {/* Overlay for better hover indication */}
-      <div 
-        className={cn(
-          "absolute inset-0 bg-black/0 transition-colors duration-250",
-          !reducedMotion && "group-hover:bg-black/10"
-        )}
-        aria-hidden="true"
-      />
 
       {/* Optional: Image number indicator for accessibility */}
       <div className="sr-only">

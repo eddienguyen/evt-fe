@@ -2,7 +2,7 @@
  * Teaser Grid Component
  *
  * Grid layout component for displaying featured gallery images
- * with responsive design and scroll animations.
+ * with responsive masonry design and scroll animations.
  *
  * @module components/gallery/TeaserGrid
  */
@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils/cn";
 import { prefersReducedMotion } from "@/lib/a11y";
 import TeaserImage from "./TeaserImage";
 import type { GalleryImage } from "@/types/gallery";
-import CustomEase from "gsap/CustomEase";
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -31,10 +30,24 @@ export interface TeaserGridProps {
 }
 
 /**
+ * Generate random rotation class for polaroid effect
+ */
+const getRandomRotation = (index: number): string => {
+  const rotations = [
+    'rotate-[-2deg]',
+    'rotate-[-1deg]', 
+    'rotate-[0deg]',
+    'rotate-[1deg]',
+    'rotate-[2deg]',
+  ]
+  return rotations[index % rotations.length]
+}
+
+/**
  * Teaser Grid Component
  *
- * Displays featured gallery images in a responsive grid layout.
- * - Mobile: 1 column (shows first 3 images)
+ * Displays featured gallery images in a responsive masonry layout with polaroid styling.
+ * - Mobile: 1-2 columns (shows first 3 images)
  * - Desktop: 3 columns (shows all 6 images)
  *
  * @example
@@ -79,9 +92,7 @@ const TeaserGrid: React.FC<TeaserGridProps> = ({
         opacity: 1,
         y: 0,
         scale: 1,
-        // yoyo: true,
-        duration:  0.5,
-        // ease: CustomEase.create("custom", ".87, 0, .13, 1"),
+        duration: 0.5,
         ease: "sine.inOut",
         stagger: 0.07,
         scrollTrigger: {
@@ -116,12 +127,10 @@ const TeaserGrid: React.FC<TeaserGridProps> = ({
     <div
       ref={gridRef}
       className={cn(
-        // Base grid layout
-        "grid gap-6",
-        // Responsive columns: 1 on mobile, 3 on desktop
-        "grid-cols-1 md:grid-cols-3",
-        // Mobile: show only first 3 images
-        "md:grid-cols-3",
+        // Masonry layout using CSS columns
+        "columns-1 sm:columns-2 md:columns-3",
+        // Gap between columns and items
+        "gap-4 sm:gap-6",
         className
       )}
       role="grid"
@@ -131,8 +140,12 @@ const TeaserGrid: React.FC<TeaserGridProps> = ({
         <div
           key={image.id}
           className={cn(
+            // Break-inside-avoid for masonry effect
+            "break-inside-avoid mb-4 sm:mb-6",
             // Hide images beyond 3rd on mobile
-            index >= 3 && "hidden md:block"
+            index >= 3 && "hidden sm:block",
+            // Add random rotation for polaroid effect
+            getRandomRotation(index)
           )}
           role="gridcell"
         >
