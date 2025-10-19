@@ -1,0 +1,29 @@
+﻿2025-10-19T14:36:23.3918485Z Current runner version: '2.329.0'
+2025-10-19T14:36:23.3939987Z ##[group]Runner Image Provisioner
+2025-10-19T14:36:23.3940743Z Hosted Compute Agent
+2025-10-19T14:36:23.3941332Z Version: 20251013.424
+2025-10-19T14:36:23.3941924Z Commit: cfdd8bfed34d71a55b72df4d2e82343c3fc2bab3
+2025-10-19T14:36:23.3942533Z Build Date: 2025-10-13T20:22:23Z
+2025-10-19T14:36:23.3943113Z ##[endgroup]
+2025-10-19T14:36:23.3943724Z ##[group]Operating System
+2025-10-19T14:36:23.3944246Z Ubuntu
+2025-10-19T14:36:23.3944712Z 24.04.3
+2025-10-19T14:36:23.3945105Z LTS
+2025-10-19T14:36:23.3945527Z ##[endgroup]
+2025-10-19T14:36:23.3946004Z ##[group]Runner Image
+2025-10-19T14:36:23.3946490Z Image: ubuntu-24.04
+2025-10-19T14:36:23.3946962Z Version: 20251014.76.1
+2025-10-19T14:36:23.3947893Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251014.76/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-19T14:36:23.3949094Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251014.76
+2025-10-19T14:36:23.3950152Z ##[endgroup]
+2025-10-19T14:36:23.3951108Z ##[group]GITHUB_TOKEN Permissions
+2025-10-19T14:36:23.3952876Z Contents: read
+2025-10-19T14:36:23.3953601Z Metadata: read
+2025-10-19T14:36:23.3954204Z Packages: read
+2025-10-19T14:36:23.3954663Z ##[endgroup]
+2025-10-19T14:36:23.3956925Z Secret source: Actions
+2025-10-19T14:36:23.3957687Z Prepare workflow directory
+2025-10-19T14:36:23.4300498Z Prepare all required actions
+2025-10-19T14:36:23.4345695Z Getting action download info
+2025-10-19T14:36:23.7631308Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-19T14:36:23.9677259Z Complete job name: ping-database

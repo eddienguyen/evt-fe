@@ -38,6 +38,8 @@ export default {
       fontFamily: {
         heading: ['Playfair Display', 'serif'],
         body: ['Playfair Display', 'serif'],
+        rose: ['Red Rose', 'cursive'],
+        handwritten: ['Birthstone Bounce', 'cursive'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],      // 12px

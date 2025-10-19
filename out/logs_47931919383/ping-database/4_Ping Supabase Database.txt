@@ -1,0 +1,27 @@
+﻿2025-10-19T14:36:34.5538838Z ##[group]Run echo "🔄 Pinging Supabase database to keep it warm..."
+2025-10-19T14:36:34.5539316Z [36;1mecho "🔄 Pinging Supabase database to keep it warm..."[0m
+2025-10-19T14:36:34.5539610Z [36;1m[0m
+2025-10-19T14:36:34.5539806Z [36;1m# Execute a simple health check query[0m
+2025-10-19T14:36:34.5540108Z [36;1m# Using single transaction to work with pgbouncer[0m
+2025-10-19T14:36:34.5540383Z [36;1mpsql "$DATABASE_URL" <<EOF[0m
+2025-10-19T14:36:34.5540610Z [36;1m  SELECT [0m
+2025-10-19T14:36:34.5540801Z [36;1m    1 as health_check, [0m
+2025-10-19T14:36:34.5541016Z [36;1m    NOW() as timestamp,[0m
+2025-10-19T14:36:34.5541253Z [36;1m    current_database() as database;[0m
+2025-10-19T14:36:34.5541475Z [36;1m  [0m
+2025-10-19T14:36:34.5541638Z [36;1m  SELECT [0m
+2025-10-19T14:36:34.5541827Z [36;1m    COUNT(*) as total_guests,[0m
+2025-10-19T14:36:34.5542110Z [36;1m    COUNT(CASE WHEN venue = 'hue' THEN 1 END) as hue_guests,[0m
+2025-10-19T14:36:34.5542462Z [36;1m    COUNT(CASE WHEN venue = 'hanoi' THEN 1 END) as hanoi_guests[0m
+2025-10-19T14:36:34.5542800Z [36;1m  FROM "Guest";[0m
+2025-10-19T14:36:34.5542999Z [36;1mEOF[0m
+2025-10-19T14:36:34.5543163Z [36;1m[0m
+2025-10-19T14:36:34.5543667Z [36;1mecho "✅ Database is warm and responding"[0m
+2025-10-19T14:36:34.5544023Z [36;1mecho "📊 Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"[0m
+2025-10-19T14:36:34.5562637Z shell: /usr/bin/bash -e {0}
+2025-10-19T14:36:34.5562882Z env:
+2025-10-19T14:36:34.5563921Z   DATABASE_URL: ***
+2025-10-19T14:36:34.5564109Z ##[endgroup]
+2025-10-19T14:36:34.5598772Z 🔄 Pinging Supabase database to keep it warm...
+2025-10-19T14:36:34.9041596Z psql: error: invalid URI query parameter: "pgbouncer"
+2025-10-19T14:36:34.9059826Z ##[error]Process completed with exit code 2.

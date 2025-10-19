@@ -439,6 +439,7 @@ const ComponentShowcase: React.FC = () => {
                   <div className="text-text-light">Headings & Display</div>
                   <div className="font-body text-lg mt-4">Inter</div>
                   <div className="text-text-light">Body Text & UI</div>
+                  <div className='font-Red-Rose'>Red Rose</div>
                 </div>
               </div>
             </div>

@@ -5,13 +5,14 @@ import type { CoupleComponentProps } from "../../types/couple";
 
 /**
  * CouplePresentation Component
- * 
+ *
  * Main presentation section showing the bride and groom with their Vietnamese titles.
  * Features an asymmetric layout on desktop that adapts responsively to mobile.
  */
 export const CouplePresentation: React.FC<CoupleComponentProps> = ({
   enableAnimations = true,
   className = "",
+  eventID = ""
 }) => {
   return (
     <section
@@ -20,26 +21,28 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Asymmetric Diagonal Layout */}
-        <div className="relative">
-          {/* Groom Card - Top Left */}
-          <div className="w-full md:w-3/5 lg:w-1/2 md:ml-0 mb-8 md:mb-0">
+        <div className={`relative flex ${eventID === "hue" ? "flex-row-reverse" : "flex-row"} gap-8 md:gap-16`}>
+          <div className="w-1/2 ">
             <CoupleCard
-              title="Chú rể"
+              subTitle="Chú rể"
+              title={couple.husband}
               imageSrc={couple.husbandImage}
               imageAlt={`${couple.husband} - Chú rể`}
               enableAnimations={enableAnimations}
-              position="left"
+              position={eventID === "hue" ? "right" : "left"}
+              flow="normal"
             />
           </div>
 
-          {/* Bride Card - Bottom Right (overlapping slightly on larger screens) */}
-          <div className="w-full md:w-3/5 lg:w-1/2 md:ml-auto md:mt-12 lg:mt-16">
+          <div className="w-1/2 ">
             <CoupleCard
-              title="Cô dâu"
+              title={couple.wife}
+              subTitle="Cô dâu"
               imageSrc={couple.wifeImage}
               imageAlt={`${couple.wife} - Cô dâu`}
               enableAnimations={enableAnimations}
-              position="right"
+              position={eventID === "hue" ? "left" : "right"}
+              flow="reverse"
             />
           </div>
         </div>

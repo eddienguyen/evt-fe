@@ -2,6 +2,8 @@
  * Type definitions for Couple Presentation components
  */
 
+import type { EventDetails } from "@/config/events";
+
 export interface CoupleImage {
   src: string;
   alt: string;
@@ -26,12 +28,16 @@ export interface CoupleComponentProps {
   enableAnimations?: boolean;
   lazyLoad?: boolean;
   className?: string;
+  eventID?: EventDetails["id"];
 }
 
 export interface CoupleCardProps {
+  subTitle: string;
   title: string;
   imageSrc: string;
   imageAlt: string;
   enableAnimations?: boolean;
   position: 'left' | 'right';
+  flow: "normal" | "reverse";
+  
 }

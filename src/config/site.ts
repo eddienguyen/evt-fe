@@ -16,6 +16,10 @@ export interface SiteConfig {
     wife: string;          // "Ngọc"
     husbandImage: string;  // Path to husband's image
     wifeImage: string;     // Path to wife's image
+    husbandMom: string;    // Mother's name for Family Information Section
+    husbandDad: string;    // Father's name for Family Information Section
+    wifeMom: string;       // Mother's name for Family Information Section
+    wifeDad: string;       // Father's name for Family Information Section
   };
 
   // Event Information
@@ -53,10 +57,14 @@ export const siteConfig: SiteConfig = {
   couple: {
     full: "Ngọc & Quân",
     displayName: "Ngọc & Quân",
-    husband: "Quân",
-    wife: "Ngọc",
-    husbandImage: "/album/NAM_0721.jpg",
-    wifeImage: "/album/NAM_0376.jpg",
+    husband: "Hoàng Quân",
+    wife: "Kim Ngọc",
+    husbandImage: "/album/NAM_0059.jpeg",
+    wifeImage: "/album/NAM_9659.jpeg",
+    husbandMom: "bà fasdfijsdaf dsi",
+    husbandDad: "ông dsaf asdf iasdf ",
+    wifeMom: "bà Ngsd ",
+    wifeDad: "ô P"
   },
 
   events: {

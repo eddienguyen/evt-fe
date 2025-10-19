@@ -1,0 +1,7 @@
+﻿2025-10-19T14:36:34.9104687Z ##[group]Run echo "::error::Database keep-warm ping failed at $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+2025-10-19T14:36:34.9105259Z [36;1mecho "::error::Database keep-warm ping failed at $(date -u +"%Y-%m-%d %H:%M:%S UTC")"[0m
+2025-10-19T14:36:34.9105626Z [36;1mexit 1[0m
+2025-10-19T14:36:34.9122700Z shell: /usr/bin/bash -e {0}
+2025-10-19T14:36:34.9122949Z ##[endgroup]
+2025-10-19T14:36:34.9175697Z ##[error]Database keep-warm ping failed at 2025-10-19 14:36:34 UTC
+2025-10-19T14:36:34.9177346Z ##[error]Process completed with exit code 1.

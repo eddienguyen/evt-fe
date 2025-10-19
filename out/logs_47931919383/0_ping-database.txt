@@ -1,0 +1,238 @@
+﻿2025-10-19T14:36:23.3919119Z Current runner version: '2.329.0'
+2025-10-19T14:36:23.3940018Z ##[group]Runner Image Provisioner
+2025-10-19T14:36:23.3940748Z Hosted Compute Agent
+2025-10-19T14:36:23.3941357Z Version: 20251013.424
+2025-10-19T14:36:23.3941928Z Commit: cfdd8bfed34d71a55b72df4d2e82343c3fc2bab3
+2025-10-19T14:36:23.3942536Z Build Date: 2025-10-13T20:22:23Z
+2025-10-19T14:36:23.3943117Z ##[endgroup]
+2025-10-19T14:36:23.3943727Z ##[group]Operating System
+2025-10-19T14:36:23.3944249Z Ubuntu
+2025-10-19T14:36:23.3944715Z 24.04.3
+2025-10-19T14:36:23.3945107Z LTS
+2025-10-19T14:36:23.3945530Z ##[endgroup]
+2025-10-19T14:36:23.3946007Z ##[group]Runner Image
+2025-10-19T14:36:23.3946493Z Image: ubuntu-24.04
+2025-10-19T14:36:23.3946968Z Version: 20251014.76.1
+2025-10-19T14:36:23.3947898Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251014.76/images/ubuntu/Ubuntu2404-Readme.md
+2025-10-19T14:36:23.3949254Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251014.76
+2025-10-19T14:36:23.3950156Z ##[endgroup]
+2025-10-19T14:36:23.3951111Z ##[group]GITHUB_TOKEN Permissions
+2025-10-19T14:36:23.3952891Z Contents: read
+2025-10-19T14:36:23.3953605Z Metadata: read
+2025-10-19T14:36:23.3954209Z Packages: read
+2025-10-19T14:36:23.3954666Z ##[endgroup]
+2025-10-19T14:36:23.3956948Z Secret source: Actions
+2025-10-19T14:36:23.3957727Z Prepare workflow directory
+2025-10-19T14:36:23.4300531Z Prepare all required actions
+2025-10-19T14:36:23.4345726Z Getting action download info
+2025-10-19T14:36:23.7631341Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-10-19T14:36:23.9677280Z Complete job name: ping-database
+2025-10-19T14:36:24.0248450Z ##[group]Run actions/checkout@v4
+2025-10-19T14:36:24.0249235Z with:
+2025-10-19T14:36:24.0249750Z   repository: eddienguyen/la-wed-be
+2025-10-19T14:36:24.0250441Z   token: ***
+2025-10-19T14:36:24.0250831Z   ssh-strict: true
+2025-10-19T14:36:24.0251322Z   ssh-user: git
+2025-10-19T14:36:24.0251765Z   persist-credentials: true
+2025-10-19T14:36:24.0252230Z   clean: true
+2025-10-19T14:36:24.0252692Z   sparse-checkout-cone-mode: true
+2025-10-19T14:36:24.0253212Z   fetch-depth: 1
+2025-10-19T14:36:24.0253761Z   fetch-tags: false
+2025-10-19T14:36:24.0254262Z   show-progress: true
+2025-10-19T14:36:24.0254711Z   lfs: false
+2025-10-19T14:36:24.0255099Z   submodules: false
+2025-10-19T14:36:24.0255579Z   set-safe-directory: true
+2025-10-19T14:36:24.0256289Z ##[endgroup]
+2025-10-19T14:36:24.1260788Z Syncing repository: eddienguyen/la-wed-be
+2025-10-19T14:36:24.1262718Z ##[group]Getting Git version info
+2025-10-19T14:36:24.1263627Z Working directory is '/home/runner/work/la-wed-be/la-wed-be'
+2025-10-19T14:36:24.1264999Z [command]/usr/bin/git version
+2025-10-19T14:36:24.1307610Z git version 2.51.0
+2025-10-19T14:36:24.1330208Z ##[endgroup]
+2025-10-19T14:36:24.1343143Z Temporarily overriding HOME='/home/runner/work/_temp/6ecdabf9-d36b-4104-806f-e1f53064441c' before making global git config changes
+2025-10-19T14:36:24.1344813Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-19T14:36:24.1355393Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/la-wed-be/la-wed-be
+2025-10-19T14:36:24.1385378Z Deleting the contents of '/home/runner/work/la-wed-be/la-wed-be'
+2025-10-19T14:36:24.1388589Z ##[group]Initializing the repository
+2025-10-19T14:36:24.1391997Z [command]/usr/bin/git init /home/runner/work/la-wed-be/la-wed-be
+2025-10-19T14:36:24.1452326Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-10-19T14:36:24.1454173Z hint: is subject to change. To configure the initial branch name to use in all
+2025-10-19T14:36:24.1455764Z hint: of your new repositories, which will suppress this warning, call:
+2025-10-19T14:36:24.1456471Z hint:
+2025-10-19T14:36:24.1457225Z hint: 	git config --global init.defaultBranch <name>
+2025-10-19T14:36:24.1457787Z hint:
+2025-10-19T14:36:24.1458337Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-10-19T14:36:24.1459701Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-10-19T14:36:24.1460425Z hint:
+2025-10-19T14:36:24.1460837Z hint: 	git branch -m <name>
+2025-10-19T14:36:24.1461340Z hint:
+2025-10-19T14:36:24.1461945Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-10-19T14:36:24.1462887Z Initialized empty Git repository in /home/runner/work/la-wed-be/la-wed-be/.git/
+2025-10-19T14:36:24.1464746Z [command]/usr/bin/git remote add origin https://github.com/eddienguyen/la-wed-be
+2025-10-19T14:36:24.1493973Z ##[endgroup]
+2025-10-19T14:36:24.1494779Z ##[group]Disabling automatic garbage collection
+2025-10-19T14:36:24.1497462Z [command]/usr/bin/git config --local gc.auto 0
+2025-10-19T14:36:24.1519122Z ##[endgroup]
+2025-10-19T14:36:24.1519829Z ##[group]Setting up auth
+2025-10-19T14:36:24.1525419Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-19T14:36:24.1551465Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-19T14:36:24.1788895Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-19T14:36:24.1811162Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-19T14:36:24.1976032Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-10-19T14:36:24.2002030Z ##[endgroup]
+2025-10-19T14:36:24.2016973Z ##[group]Fetching the repository
+2025-10-19T14:36:24.2018222Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +673a3bba883b43be1c2e1822ec948924107ea970:refs/remotes/origin/main
+2025-10-19T14:36:24.6284180Z From https://github.com/eddienguyen/la-wed-be
+2025-10-19T14:36:24.6285334Z  * [new ref]         673a3bba883b43be1c2e1822ec948924107ea970 -> origin/main
+2025-10-19T14:36:24.6311311Z ##[endgroup]
+2025-10-19T14:36:24.6313055Z ##[group]Determining the checkout info
+2025-10-19T14:36:24.6315552Z ##[endgroup]
+2025-10-19T14:36:24.6320323Z [command]/usr/bin/git sparse-checkout disable
+2025-10-19T14:36:24.6360009Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-10-19T14:36:24.6382737Z ##[group]Checking out the ref
+2025-10-19T14:36:24.6386394Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-10-19T14:36:24.6456529Z Switched to a new branch 'main'
+2025-10-19T14:36:24.6457853Z branch 'main' set up to track 'origin/main'.
+2025-10-19T14:36:24.6462216Z ##[endgroup]
+2025-10-19T14:36:24.6489311Z [command]/usr/bin/git log -1 --format=%H
+2025-10-19T14:36:24.6506967Z 673a3bba883b43be1c2e1822ec948924107ea970
+2025-10-19T14:36:24.6676249Z ##[group]Run sudo apt-get update
+2025-10-19T14:36:24.6677138Z [36;1msudo apt-get update[0m
+2025-10-19T14:36:24.6677916Z [36;1msudo apt-get install -y postgresql-client[0m
+2025-10-19T14:36:24.6699441Z shell: /usr/bin/bash -e {0}
+2025-10-19T14:36:24.6700144Z ##[endgroup]
+2025-10-19T14:36:24.7334963Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2025-10-19T14:36:24.7588793Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2025-10-19T14:36:24.7606928Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2025-10-19T14:36:24.7625868Z Hit:6 https://packages.microsoft.com/repos/azure-cli noble InRelease
+2025-10-19T14:36:24.7678629Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2025-10-19T14:36:24.7680881Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2025-10-19T14:36:24.7706435Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2025-10-19T14:36:24.8855450Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1498 kB]
+2025-10-19T14:36:24.9066653Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+2025-10-19T14:36:24.9086362Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [15.3 kB]
+2025-10-19T14:36:24.9101180Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1496 kB]
+2025-10-19T14:36:24.9181412Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [301 kB]
+2025-10-19T14:36:24.9209757Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [378 kB]
+2025-10-19T14:36:24.9237579Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [31.3 kB]
+2025-10-19T14:36:24.9255868Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2090 kB]
+2025-10-19T14:36:24.9262673Z Get:23 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [45.3 kB]
+2025-10-19T14:36:24.9312576Z Get:24 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [10.9 kB]
+2025-10-19T14:36:24.9348840Z Get:25 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [62.8 kB]
+2025-10-19T14:36:24.9359377Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [470 kB]
+2025-10-19T14:36:24.9394962Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+2025-10-19T14:36:24.9843662Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 c-n-f Metadata [516 B]
+2025-10-19T14:36:24.9856213Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [30.3 kB]
+2025-10-19T14:36:24.9862188Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [5564 B]
+2025-10-19T14:36:24.9910333Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+2025-10-19T14:36:24.9921433Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 c-n-f Metadata [484 B]
+2025-10-19T14:36:24.9936794Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7140 B]
+2025-10-19T14:36:24.9945805Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [11.0 kB]
+2025-10-19T14:36:24.9978673Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+2025-10-19T14:36:24.9993946Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+2025-10-19T14:36:25.0167047Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1222 kB]
+2025-10-19T14:36:25.0247476Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [204 kB]
+2025-10-19T14:36:25.0282766Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+2025-10-19T14:36:25.0302621Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [8968 B]
+2025-10-19T14:36:25.0312997Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [892 kB]
+2025-10-19T14:36:25.0836034Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [197 kB]
+2025-10-19T14:36:25.0856938Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.3 kB]
+2025-10-19T14:36:25.0870558Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [18.3 kB]
+2025-10-19T14:36:25.0880963Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+2025-10-19T14:36:25.0892936Z Get:39 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+2025-10-19T14:36:29.7310267Z Fetched 9629 kB in 1s (8444 kB/s)
+2025-10-19T14:36:30.4930325Z Reading package lists...
+2025-10-19T14:36:30.5236704Z Reading package lists...
+2025-10-19T14:36:30.6887925Z Building dependency tree...
+2025-10-19T14:36:30.6895840Z Reading state information...
+2025-10-19T14:36:30.8720528Z The following NEW packages will be installed:
+2025-10-19T14:36:30.8721961Z   postgresql-client
+2025-10-19T14:36:30.8878620Z 0 upgraded, 1 newly installed, 0 to remove and 11 not upgraded.
+2025-10-19T14:36:30.9605906Z Need to get 11.6 kB of archives.
+2025-10-19T14:36:30.9606431Z After this operation, 17.4 kB of additional disk space will be used.
+2025-10-19T14:36:30.9606901Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2025-10-19T14:36:30.9607548Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 postgresql-client all 16+257build1.1 [11.6 kB]
+2025-10-19T14:36:31.1965711Z Fetched 11.6 kB in 0s (141 kB/s)
+2025-10-19T14:36:31.2160894Z Selecting previously unselected package postgresql-client.
+2025-10-19T14:36:31.2339945Z (Reading database ... 
+2025-10-19T14:36:31.2340453Z (Reading database ... 5%
+2025-10-19T14:36:31.2340857Z (Reading database ... 10%
+2025-10-19T14:36:31.2341200Z (Reading database ... 15%
+2025-10-19T14:36:31.2341641Z (Reading database ... 20%
+2025-10-19T14:36:31.2342016Z (Reading database ... 25%
+2025-10-19T14:36:31.2342393Z (Reading database ... 30%
+2025-10-19T14:36:31.2342720Z (Reading database ... 35%
+2025-10-19T14:36:31.2343063Z (Reading database ... 40%
+2025-10-19T14:36:31.2343381Z (Reading database ... 45%
+2025-10-19T14:36:31.2343849Z (Reading database ... 50%
+2025-10-19T14:36:31.2776389Z (Reading database ... 55%
+2025-10-19T14:36:31.4793240Z (Reading database ... 60%
+2025-10-19T14:36:31.6822692Z (Reading database ... 65%
+2025-10-19T14:36:31.9163248Z (Reading database ... 70%
+2025-10-19T14:36:32.0766730Z (Reading database ... 75%
+2025-10-19T14:36:32.3296201Z (Reading database ... 80%
+2025-10-19T14:36:32.5829148Z (Reading database ... 85%
+2025-10-19T14:36:32.8791044Z (Reading database ... 90%
+2025-10-19T14:36:33.0796464Z (Reading database ... 95%
+2025-10-19T14:36:33.0796927Z (Reading database ... 100%
+2025-10-19T14:36:33.0797370Z (Reading database ... 215760 files and directories currently installed.)
+2025-10-19T14:36:33.0843040Z Preparing to unpack .../postgresql-client_16+257build1.1_all.deb ...
+2025-10-19T14:36:33.0862504Z Unpacking postgresql-client (16+257build1.1) ...
+2025-10-19T14:36:33.1171575Z Setting up postgresql-client (16+257build1.1) ...
+2025-10-19T14:36:33.6995808Z 
+2025-10-19T14:36:33.6996367Z Running kernel seems to be up-to-date.
+2025-10-19T14:36:33.6996687Z 
+2025-10-19T14:36:33.6996829Z No services need to be restarted.
+2025-10-19T14:36:33.6997057Z 
+2025-10-19T14:36:33.6997199Z No containers need to be restarted.
+2025-10-19T14:36:33.6997460Z 
+2025-10-19T14:36:33.6997622Z No user sessions are running outdated binaries.
+2025-10-19T14:36:33.6997918Z 
+2025-10-19T14:36:33.6998227Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2025-10-19T14:36:34.5538856Z ##[group]Run echo "🔄 Pinging Supabase database to keep it warm..."
+2025-10-19T14:36:34.5539320Z [36;1mecho "🔄 Pinging Supabase database to keep it warm..."[0m
+2025-10-19T14:36:34.5539613Z [36;1m[0m
+2025-10-19T14:36:34.5539809Z [36;1m# Execute a simple health check query[0m
+2025-10-19T14:36:34.5540111Z [36;1m# Using single transaction to work with pgbouncer[0m
+2025-10-19T14:36:34.5540385Z [36;1mpsql "$DATABASE_URL" <<EOF[0m
+2025-10-19T14:36:34.5540613Z [36;1m  SELECT [0m
+2025-10-19T14:36:34.5540803Z [36;1m    1 as health_check, [0m
+2025-10-19T14:36:34.5541018Z [36;1m    NOW() as timestamp,[0m
+2025-10-19T14:36:34.5541255Z [36;1m    current_database() as database;[0m
+2025-10-19T14:36:34.5541478Z [36;1m  [0m
+2025-10-19T14:36:34.5541640Z [36;1m  SELECT [0m
+2025-10-19T14:36:34.5541829Z [36;1m    COUNT(*) as total_guests,[0m
+2025-10-19T14:36:34.5542113Z [36;1m    COUNT(CASE WHEN venue = 'hue' THEN 1 END) as hue_guests,[0m
+2025-10-19T14:36:34.5542516Z [36;1m    COUNT(CASE WHEN venue = 'hanoi' THEN 1 END) as hanoi_guests[0m
+2025-10-19T14:36:34.5542802Z [36;1m  FROM "Guest";[0m
+2025-10-19T14:36:34.5543001Z [36;1mEOF[0m
+2025-10-19T14:36:34.5543165Z [36;1m[0m
+2025-10-19T14:36:34.5543672Z [36;1mecho "✅ Database is warm and responding"[0m
+2025-10-19T14:36:34.5544027Z [36;1mecho "📊 Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"[0m
+2025-10-19T14:36:34.5562647Z shell: /usr/bin/bash -e {0}
+2025-10-19T14:36:34.5562885Z env:
+2025-10-19T14:36:34.5563926Z   DATABASE_URL: ***
+2025-10-19T14:36:34.5564111Z ##[endgroup]
+2025-10-19T14:36:34.5598787Z 🔄 Pinging Supabase database to keep it warm...
+2025-10-19T14:36:34.9041625Z psql: error: invalid URI query parameter: "pgbouncer"
+2025-10-19T14:36:34.9059843Z ##[error]Process completed with exit code 2.
+2025-10-19T14:36:34.9104699Z ##[group]Run echo "::error::Database keep-warm ping failed at $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+2025-10-19T14:36:34.9105262Z [36;1mecho "::error::Database keep-warm ping failed at $(date -u +"%Y-%m-%d %H:%M:%S UTC")"[0m
+2025-10-19T14:36:34.9105629Z [36;1mexit 1[0m
+2025-10-19T14:36:34.9122709Z shell: /usr/bin/bash -e {0}
+2025-10-19T14:36:34.9122951Z ##[endgroup]
+2025-10-19T14:36:34.9175715Z ##[error]Database keep-warm ping failed at 2025-10-19 14:36:34 UTC
+2025-10-19T14:36:34.9177352Z ##[error]Process completed with exit code 1.
+2025-10-19T14:36:34.9237546Z Post job cleanup.
+2025-10-19T14:36:35.0077440Z [command]/usr/bin/git version
+2025-10-19T14:36:35.0108905Z git version 2.51.0
+2025-10-19T14:36:35.0147358Z Temporarily overriding HOME='/home/runner/work/_temp/837dbf14-4bf3-483e-bed3-5177f4f9a003' before making global git config changes
+2025-10-19T14:36:35.0148587Z Adding repository directory to the temporary git global config as a safe directory
+2025-10-19T14:36:35.0153365Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/la-wed-be/la-wed-be
+2025-10-19T14:36:35.0184316Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-10-19T14:36:35.0211386Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-10-19T14:36:35.0383959Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-10-19T14:36:35.0400831Z http.https://github.com/.extraheader
+2025-10-19T14:36:35.0411341Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-10-19T14:36:35.0436238Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-10-19T14:36:35.0691374Z Cleaning up orphan processes

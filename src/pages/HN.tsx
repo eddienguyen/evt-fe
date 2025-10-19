@@ -5,6 +5,7 @@ import { StoryTimeline } from "../components/timeline";
 import { EventDetailsSection } from "../components/events";
 import { CountdownTimer } from "../components/countdown";
 import { CouplePresentation } from "../components/couple";
+import { FamilyInformation } from "../components/family";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
 import figure from "../public/HN-invitation.jpg";
@@ -39,7 +40,10 @@ const HN: React.FC = () => {
       {!isLoading && (
         <>
           {/* Couple Presentation Section */}
-          <CouplePresentation enableAnimations={true} />
+          <CouplePresentation enableAnimations={true} eventID="hanoi" />
+
+          {/* Family Information Section */}
+          {/* <FamilyInformation enableAnimations={true} /> */}
 
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
