@@ -22,7 +22,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Two-Column Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
+        <div className={`grid grid-cols-2 gap-1 md:gap-12 lg:gap-16 ${eventID === "hue" ? "md:flex-row-reverse" : ""}`}>
           {/* Husband's Family - Nhà trai */}
           <FamilyHouseCard
             houseTitle="Nhà trai"

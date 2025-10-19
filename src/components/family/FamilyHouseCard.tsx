@@ -22,13 +22,8 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
   return (
     <div
       className={`
-        bg-base-white 
-        shadow-soft 
-        hover:shadow-medium 
-        transition-shadow 
         duration-300
-        rounded-xl 
-        p-6 md:p-8 lg:p-10
+        p-2 md:p-8 lg:p-10
         text-center
         ${animationClass}
       `}
@@ -43,20 +38,20 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
       <div className="space-y-3 md:space-y-4">
         {/* Father */}
         <div className="flex flex-col items-center">
-          <span className="font-body text-lg md:text-xl text-text-light">
+          <span className="font-body text-md md:text-lg text-text-light">
             Ông
           </span>
-          <span className="font-body text-xl md:text-2xl font-medium text-text mt-1">
+          <span className="font-body text-md md:text-2xl font-medium text-text mt-1">
             {fatherName}
           </span>
         </div>
 
         {/* Mother */}
         <div className="flex flex-col items-center">
-          <span className="font-body text-lg md:text-xl text-text-light">
+          <span className="font-body text-md md:text-xl text-text-light">
             Bà
           </span>
-          <span className="font-body text-xl md:text-2xl font-medium text-text mt-1">
+          <span className="font-body text-md md:text-2xl font-medium text-text mt-1">
             {motherName}
           </span>
         </div>

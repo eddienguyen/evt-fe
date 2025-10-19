@@ -12,7 +12,7 @@ import type { CoupleComponentProps } from "../../types/couple";
 export const CouplePresentation: React.FC<CoupleComponentProps> = ({
   enableAnimations = true,
   className = "",
-  eventID = ""
+  eventID = "",
 }) => {
   return (
     <section
@@ -21,7 +21,9 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Asymmetric Diagonal Layout */}
-        <div className={`relative flex ${eventID === "hue" ? "flex-row-reverse" : "flex-row"} gap-8 md:gap-16`}>
+        <div
+          className={`relative flex gap-8 md:gap-16`}
+        >
           <div className="w-1/2 ">
             <CoupleCard
               subTitle="Chú rể"
@@ -29,7 +31,7 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
               imageSrc={couple.husbandImage}
               imageAlt={`${couple.husband} - Chú rể`}
               enableAnimations={enableAnimations}
-              position={eventID === "hue" ? "right" : "left"}
+              position="left"
               flow="normal"
             />
           </div>
@@ -41,7 +43,7 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
               imageSrc={couple.wifeImage}
               imageAlt={`${couple.wife} - Cô dâu`}
               enableAnimations={enableAnimations}
-              position={eventID === "hue" ? "left" : "right"}
+              position="right"
               flow="reverse"
             />
           </div>

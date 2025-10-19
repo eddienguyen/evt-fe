@@ -26,7 +26,7 @@ const Home: React.FC = () => {
       />
 
       {/* Story Timeline Section */}
-      <StoryTimeline enableAnimations={true} />
+      {/* <StoryTimeline enableAnimations={true} /> */}
 
       {/* Gallery Teaser Section */}
       <GalleryTeaser

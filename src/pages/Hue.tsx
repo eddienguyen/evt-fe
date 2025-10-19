@@ -44,7 +44,7 @@ const Hue: React.FC = () => {
           <CouplePresentation enableAnimations={true} eventID="hue"/>
 
           {/* Family Information Section */}
-          {/* <FamilyInformation enableAnimations={true} /> */}
+          <FamilyInformation enableAnimations={true} />
 
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
@@ -75,7 +75,7 @@ const Hue: React.FC = () => {
           />
 
           {/* Story Timeline Section */}
-          <StoryTimeline enableAnimations={true} />
+          {/* <StoryTimeline enableAnimations={true} /> */}
 
           {/* Placeholder: Location & Directions */}
           <section

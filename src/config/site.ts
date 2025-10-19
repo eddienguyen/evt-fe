@@ -61,10 +61,10 @@ export const siteConfig: SiteConfig = {
     wife: "Kim Ngọc",
     husbandImage: "/album/NAM_0059.jpeg",
     wifeImage: "/album/NAM_9659.jpeg",
-    husbandMom: "bà fasdfijsdaf dsi",
-    husbandDad: "ông dsaf asdf iasdf ",
-    wifeMom: "bà Ngsd ",
-    wifeDad: "ô P"
+    husbandMom: "Nguyễn Thanh Vân",
+    husbandDad: "Nguyễn Thanh Phú ",
+    wifeMom: "Lê Thị Kim Anh",
+    wifeDad: "Đinh Viết Phúc"
   },
 
   events: {
