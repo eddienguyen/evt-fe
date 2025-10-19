@@ -26,4 +26,4 @@ export interface FamilyHouseCardProps {
   motherName: string;
   enableAnimations?: boolean;
   animationDelay?: number;      // Stagger effect in milliseconds
-}
+  className?: string;

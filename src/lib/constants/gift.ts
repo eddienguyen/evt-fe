@@ -100,10 +100,10 @@ export const GIFT_MESSAGES = {
  * Note: This should only contain public, non-sensitive information
  */
 export const BANK_DETAILS: BankDetails = {
-  bankName: 'Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)',
-  accountNumber: '1234567890',
-  accountName: 'NGUYEN VAN A',
-  branch: 'Chi nhánh Hà Nội',
+  bankName: 'Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)',
+  accountNumber: '0962444357',
+  accountName: 'NGUYEN HOANG QUAN',
+  branch: 'Hà Nội',
   swiftCode: 'BFTVVNVX'
 }
 

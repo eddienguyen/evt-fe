@@ -10,6 +10,9 @@ import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
 import figure from "../public/Hue-invitation.jpg";
 import { events } from "@/config/site";
+import { GalleryTeaser } from "@/components/gallery";
+import HeroSection from "@/components/HeroSection";
+import BackgroundCanvas from "@/components/BackgroundCanvas";
 
 const Hue: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -27,6 +30,8 @@ const Hue: React.FC = () => {
   return (
     <>
       <SEOHead />
+      <HeroSection eventID="hue" />
+      <BackgroundCanvas />
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center min-h-screen bg-base">
@@ -44,7 +49,7 @@ const Hue: React.FC = () => {
           <CouplePresentation enableAnimations={true} eventID="hue"/>
 
           {/* Family Information Section */}
-          <FamilyInformation enableAnimations={true} />
+          <FamilyInformation enableAnimations={true} eventID="hue"/>
 
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
@@ -76,6 +81,9 @@ const Hue: React.FC = () => {
 
           {/* Story Timeline Section */}
           {/* <StoryTimeline enableAnimations={true} /> */}
+
+          <GalleryTeaser enableAnimations={true} />
+
 
           {/* Placeholder: Location & Directions */}
           <section

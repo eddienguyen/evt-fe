@@ -22,7 +22,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Two-Column Grid Layout */}
-        <div className={`grid grid-cols-2 gap-1 md:gap-12 lg:gap-16 ${eventID === "hue" ? "md:flex-row-reverse" : ""}`}>
+        <div className={`grid grid-cols-2 gap-1 md:gap-12 lg:gap-16 ${eventID === "hue" ? "flex-row-reverse" : ""}`}>
           {/* Husband's Family - Nhà trai */}
           <FamilyHouseCard
             houseTitle="Nhà trai"
@@ -30,6 +30,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
             motherName={couple.husbandMom}
             enableAnimations={enableAnimations}
             animationDelay={0}
+            className={eventID === "hanoi" ? "order-1" : "order-2"}
           />
 
           {/* Wife's Family - Nhà gái */}
@@ -39,6 +40,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
             motherName={couple.wifeMom}
             enableAnimations={enableAnimations}
             animationDelay={150}
+            className={eventID === "hue" ? "order-1" : "order-2"}
           />
         </div>
       </div>

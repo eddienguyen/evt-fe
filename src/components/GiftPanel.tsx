@@ -14,6 +14,7 @@ import { useClipboard } from '../hooks/useClipboard'
 import { GIFT_LABELS, GIFT_A11Y, BANK_DETAILS } from '../lib/constants/gift'
 import { generateBankQR, type QRResult } from '../lib/utils/qr'
 import { announceToScreenReader } from '../lib/a11y'
+import { siteConfig } from '@/config/site'
 
 /**
  * Gift Panel Props
@@ -216,7 +217,8 @@ const GiftPanel: React.FC<GiftPanelProps> = ({
                 
                 <div className="inline-block p-4 bg-white rounded-lg border border-base-medium shadow-soft">
                   <img
-                    src={qrResult.dataUrl}
+                    // src={qrResult.dataUrl}
+                    src={siteConfig.gift.qrCodeImageUrl}
                     alt="Mã QR chuyển khoản ngân hàng cho quà cưới N & Q"
                     className="w-64 h-64 mx-auto"
                     style={{ imageRendering: 'pixelated' }}

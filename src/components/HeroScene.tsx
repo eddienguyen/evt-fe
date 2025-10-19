@@ -16,8 +16,11 @@ interface AdaptiveStarsProps {
 
 /**
  * Adaptive Stars component with LOD based on device tier
+ * Updated with flowing animation and darker colors to contrast with white-to-gold gradient
  */
 const AdaptiveStars: React.FC<AdaptiveStarsProps> = React.memo(({ qualityLevel }) => {
+  const starsRef = useRef<any>(null)
+
   const starConfig = useMemo(() => {
     const config = (() => {
       switch (qualityLevel) {
@@ -37,16 +40,37 @@ const AdaptiveStars: React.FC<AdaptiveStarsProps> = React.memo(({ qualityLevel }
     return config
   }, [qualityLevel])
 
+  // Add flowing animation to stars
+  useFrame(({ clock }) => {
+    if (!starsRef.current) return
+    // Slow rotation for flowing effect
+    starsRef.current.rotation.x = clock.getElapsedTime() * 0.02
+    starsRef.current.rotation.y = clock.getElapsedTime() * 0.03
+    starsRef.current.rotation.z = clock.getElapsedTime() * 0.01
+  })
+
   return (
-    <Stars
-      radius={starConfig.radius}
-      depth={starConfig.depth}
-      count={starConfig.count}
-      factor={starConfig.factor}
-      saturation={0}
-      fade={true}
-      speed={10}
-    />
+    <group ref={starsRef}>
+      <Stars
+        radius={starConfig.radius}
+        depth={starConfig.depth}
+        count={starConfig.count}
+        factor={starConfig.factor}
+        saturation={0.8}
+        fade={true}
+        speed={1}
+      />
+      {/* Add a subtle gold tint material overlay */}
+      <mesh>
+        <sphereGeometry args={[starConfig.radius * 1.2, 32, 32]} />
+        <meshBasicMaterial
+          color="#B08D57"
+          transparent={true}
+          opacity={0.05}
+          side={THREE.BackSide}
+        />
+      </mesh>
+    </group>
   )
 })
 
@@ -150,10 +174,10 @@ const HeroScene: React.FC<HeroSceneProps> = ({ qualityLevel = 'mid' }) => {
   if (contextLost) {
     return (
       <>
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-hero-from via-hero-mid to-hero-to" aria-hidden="true" />
+        {/* Gradient background - White to Gold/Paper */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-base-light to-accent-gold-light" aria-hidden="true" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-white text-lg">Recovering 3D scene...</p>
+          <p className="text-accent-gold text-lg">Recovering 3D scene...</p>
         </div>
       </>
     )
@@ -161,8 +185,8 @@ const HeroScene: React.FC<HeroSceneProps> = ({ qualityLevel = 'mid' }) => {
 
   return (
     <>
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-hero-from via-hero-mid to-hero-to" aria-hidden="true" />
+      {/* Gradient background - White to Gold/Paper */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-base-light to-accent-gold-light" aria-hidden="true" />
       
       {/* 3D Canvas */}
       <Canvas

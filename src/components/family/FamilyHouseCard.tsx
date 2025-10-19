@@ -13,6 +13,7 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
   motherName,
   enableAnimations = true,
   animationDelay = 0,
+  className = "",
 }) => {
   const animationClass = enableAnimations ? "animate-fade-in-up" : "";
   const animationStyle = enableAnimations
@@ -25,7 +26,7 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
         duration-300
         p-2 md:p-8 lg:p-10
         text-center
-        ${animationClass}
+        ${animationClass} ${className}
       `}
       style={animationStyle}
     >

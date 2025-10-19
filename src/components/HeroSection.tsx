@@ -7,8 +7,16 @@
  * @module components/HeroSection
  */
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { couple, events } from '../config/site'
+import type { EventDetails } from '@/config/events'
+
+/**
+ * Props for the HeroSection component
+ */
+interface HeroSectionProps {
+  eventID?: EventDetails['id']
+}
 
 /**
  * Hero Section - Content Only
@@ -22,14 +30,53 @@ import { couple, events } from '../config/site'
  * <HeroSection />
  * ```
  */
-const HeroSection: React.FC = () => {
+const HeroSection: React.FC<HeroSectionProps> = ({
+  eventID = ""
+}) => {
+  const backgroundRef = useRef<HTMLDivElement>(null)
+
+  // Parallax scrolling effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!backgroundRef.current) return
+      const scrollY = window.scrollY
+      const parallaxSpeed = 0.5 // Adjust this value to control parallax intensity
+      backgroundRef.current.style.transform = `translateY(${scrollY * parallaxSpeed}px)`
+      backgroundRef.current.style.opacity = `${0.3 - scrollY / 1000}`
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <section 
-      className="relative h-screen w-full flex items-center justify-center z-content"
+      className="relative h-screen w-full flex items-center justify-center z-content overflow-hidden"
       aria-label="Hero section"
     >
+      {/* Parallax Background Image - Full Screen */}
+      <div 
+        ref={backgroundRef}
+        className="fixed inset-0 w-full h-screen z-[-1] opacity-30"
+        style={{
+          backgroundImage: `url(${couple.heroImage || '/album/NAM_0526.jpeg'})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center bottom',
+          backgroundRepeat: 'no-repeat',
+          willChange: 'transform'
+        }}
+      >
+        {/* <img
+          src={couple.heroImage || '/album/NAM_0526.jpeg'}
+          alt="Wedding background"
+          className="w-full h-full object-cover opacity-30"
+        /> */}
+        {/* Gradient overlay to ensure content readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
+      </div>
+
       {/* Hero Content */}
-      <div className="text-center text-accent-white px-4">
+      <div className="text-center text-accent-white px-4 relative z-10">
         {/* Couple Names - Positioned to align with 3D text */}
         <div className="mb-32">
           <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold mb-4 opacity-0">
@@ -38,24 +85,13 @@ const HeroSection: React.FC = () => {
           </h1>
         </div>
 
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src={couple.heroImage || '/album/NAM_0526.jpeg'}
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
         {/* Event Details */}
         <div className="space-y-4">
+
           <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
-            {events.hue.dateDisplay} • {events.hue.locationShort}
+            {eventID === "hanoi" ? events.hanoi.dateDisplay + " • " + events.hanoi.locationShort : events.hue.dateDisplay + " • " + events.hue.locationShort}
           </p>
           <div className="w-16 h-px bg-accent-gold mx-auto"></div>
-          <p className="text-sm md:text-base opacity-75">
-            {events.hanoi.dateDisplay} • {events.hanoi.locationShort}
-          </p>
         </div>
       </div>
     </section>

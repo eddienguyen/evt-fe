@@ -52,6 +52,10 @@ export interface SiteConfig {
     year: number;
     text: string;
   };
+
+  gift: {
+    qrCodeImageUrl: string;
+  }
 }
 
 export const siteConfig: SiteConfig = {
@@ -95,6 +99,10 @@ export const siteConfig: SiteConfig = {
     year: new Date().getFullYear(),
     text: "Ngọc & Quân marriage",
   },
+
+  gift: {
+    qrCodeImageUrl: '/qr-code.png'
+  }
 };
 
 // Convenience exports for common use cases

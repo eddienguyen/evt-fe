@@ -9,6 +9,10 @@ import { FamilyInformation } from "../components/family";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
 import figure from "../public/HN-invitation.jpg";
+import HeroSection from "@/components/HeroSection";
+import BackgroundCanvas from "@/components/BackgroundCanvas";
+import Gallery from "./Gallery";
+import { GalleryTeaser } from "@/components/gallery";
 
 const HN: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -26,6 +30,8 @@ const HN: React.FC = () => {
   return (
     <>
       <SEOHead />
+      <HeroSection eventID="hanoi" />
+      <BackgroundCanvas />
       {/* Loading State */}
       {isLoading && (
         <div className="flex items-center justify-center min-h-screen bg-base">
@@ -75,6 +81,8 @@ const HN: React.FC = () => {
 
           {/* Story Timeline Section */}
           <StoryTimeline enableAnimations={true} />
+
+          <GalleryTeaser enableAnimations={true} />
 
           {/* Placeholder: Location & Directions */}
           <section

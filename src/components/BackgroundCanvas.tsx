@@ -34,9 +34,9 @@ export interface BackgroundCanvasProps {
  */
 const BackgroundCanvasLoader: React.FC = () => {
   return (
-    <div className="fixed inset-0 z-canvas-bg bg-gradient-to-b from-hero-from to-hero-to">
+    <div className="fixed inset-0 z-canvas-bg bg-gradient-to-b from-white via-base-light to-accent-gold-light">
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center text-accent-white">
+        <div className="text-center text-accent-gold">
           <div className="animate-pulse">
             <p className="text-lg">Loading 3D scene...</p>
           </div>
