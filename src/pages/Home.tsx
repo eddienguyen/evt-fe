@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   return (
     <>
       <SEOHead />
-      {/* <HeroSection /> */}
+      <HeroSection />
       <BackgroundCanvas />
       {/* Event Details Section */}
       <EventDetailsSection enableAnimations={true} />

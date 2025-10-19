@@ -67,9 +67,13 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-lg bg-white shadow-md w-full h-auto',
-        'hover:shadow-lg transition-shadow duration-150',
+        'group relative bg-base-light w-full h-auto',
+        'p-3 pb-12 shadow-lg',
+        // Polaroid hover effect
+        'hover:shadow-2xl hover:-rotate-1 transition-all duration-300',
         onClick && 'cursor-pointer',
+        // Slightly rotate for natural polaroid look
+        'rotate-0',
         className
       )}
       onClick={onClick ? handleClick : undefined}
@@ -78,16 +82,17 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
       role={onClick ? 'button' : undefined}
       aria-label={`Xem ảnh: ${image.caption || image.alt}`}
     >
-      {/* Image */}
-      <div className="relative overflow-hidden">
+      {/* Image with polaroid border */}
+      <div className="relative overflow-hidden bg-gray-50">
         <ImageLoader
           image={image}
           lazy={lazy}
           size="medium"
-          className="w-full h-auto"
+          className="w-full h-auto block"
         />
+         <div className="absolute rounded-lg inset-0 shadow-[inset_0_0_4px_rgba(0,0,0,.3)]" />
 
-        {/* Metadata Overlay (Desktop only) */}
+        {/* Metadata Overlay (Desktop only) - Hidden in polaroid style */}
         {showMetadata && image.caption && (
           <div
             className={cn(
@@ -123,17 +128,15 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
         )}
       </div>
 
-      {/* Mobile metadata (always visible) */}
+      {/* Polaroid caption area - empty space at bottom for authentic look */}
+      <div className="h-8" aria-hidden="true" />
+
+      {/* Mobile metadata (always visible) - only if showMetadata is true */}
       {showMetadata && image.caption && (
-        <div className="p-3 md:hidden">
-          <p className="text-sm text-text font-medium line-clamp-2">
+        <div className="absolute bottom-2 left-3 right-3 md:hidden">
+          <p className="text-xs text-text-muted font-medium line-clamp-1 text-center">
             {image.caption}
           </p>
-          {image.metadata.location && (
-            <p className="text-xs text-text-muted mt-1">
-              {image.metadata.location}
-            </p>
-          )}
         </div>
       )}
 

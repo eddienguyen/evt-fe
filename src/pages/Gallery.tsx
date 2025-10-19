@@ -17,6 +17,11 @@ import { Gallery as GalleryComponent } from '@/components/gallery'
  * lazy loading, and full-screen lightbox viewer.
  */
 const Gallery: React.FC = () => {
+  // Scroll to top when the page loads
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
+
   return (
     <>
       <SEOHead />
@@ -24,10 +29,10 @@ const Gallery: React.FC = () => {
       <div className="container mx-auto px-4">
         {/* Page Header */}
         <header className="text-center mb-12">
-          <h1 className="font-serif text-4xl md:text-5xl text-warm-900 mb-4">
+          <h1 className="font-rose text-4xl md:text-5xl text-warm-900 mb-4">
             Khoảnh Khắc Đáng Nhớ
           </h1>
-          <p className="text-warm-600 text-lg max-w-2xl mx-auto">
+          <p className="text-warm-600 text-lg max-w-2xl mx-auto italic">
             Những kỷ niệm đẹp được lưu giữ trong từng khung hình
           </p>
         </header>

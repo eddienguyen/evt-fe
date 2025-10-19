@@ -37,7 +37,16 @@ const HeroSection: React.FC = () => {
             <span className="sr-only">{couple.displayName}'s Wedding</span>
           </h1>
         </div>
-        
+
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src={couple.heroImage || '/album/NAM_0526.jpeg'}
+            alt="Background"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
         {/* Event Details */}
         <div className="space-y-4">
           <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">

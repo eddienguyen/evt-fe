@@ -181,7 +181,7 @@ const Lightbox: React.FC<LightboxProps> = ({
         className={cn(
           'absolute inset-0 flex items-center justify-center',
           // Mobile: minimal horizontal padding (touch areas are only 64px wide)
-          'px-20 py-2 pt-16 pb-20',
+          'p-0',
           // Desktop: more generous padding
           'md:p-8 md:pt-20 md:pb-24'
         )}

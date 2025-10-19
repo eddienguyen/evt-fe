@@ -6,7 +6,7 @@
  * @module hooks/useGalleryData
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type { GalleryImage, GalleryState } from '@/types/gallery'
 import { ALBUM_IMAGES } from '@/config/album'
 
@@ -65,6 +65,9 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
     initialCategory = null,
     autoLoad = true,
   } = options
+
+  // Track if initial load has been completed to prevent double loading
+  const hasInitiallyLoaded = useRef(false)
 
   const [state, setState] = useState<Omit<GalleryState, 'lightboxOpen' | 'selectedImageIndex' | 'viewMode'>>({
     images: [],
@@ -131,7 +134,9 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
   }, [])
 
   useEffect(() => {
-    if (autoLoad) {
+    // Only load once on mount if autoLoad is true and we haven't loaded yet
+    if (autoLoad && !hasInitiallyLoaded.current) {
+      hasInitiallyLoaded.current = true
       loadImages(initialPage, false)
     }
   }, [autoLoad, initialPage, loadImages])

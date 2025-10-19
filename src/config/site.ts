@@ -20,6 +20,7 @@ export interface SiteConfig {
     husbandDad: string;    // Father's name for Family Information Section
     wifeMom: string;       // Mother's name for Family Information Section
     wifeDad: string;       // Father's name for Family Information Section
+    heroImage?: string;   // Optional hero image for couple section
   };
 
   // Event Information
@@ -59,6 +60,7 @@ export const siteConfig: SiteConfig = {
     displayName: "Ngọc & Quân",
     husband: "Hoàng Quân",
     wife: "Kim Ngọc",
+    heroImage: "/album/NAM_0526.jpeg",
     husbandImage: "/album/NAM_0059.jpeg",
     wifeImage: "/album/NAM_9659.jpeg",
     husbandMom: "Nguyễn Thanh Vân",

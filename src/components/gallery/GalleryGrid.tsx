@@ -113,13 +113,19 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
     )
   }
 
+  // Generate subtle random rotations for polaroid effect
+  const getRandomRotation = (index: number) => {
+    const rotations = ['-rotate-1', 'rotate-0', 'rotate-1', '-rotate-2', 'rotate-2']
+    return rotations[index % rotations.length]
+  }
+
   return (
     <div
       ref={gridRef}
       className={cn(
-        // Column-based masonry layout (Pinterest-style)
+        // Column-based masonry layout (Pinterest-style) with extra spacing for polaroid shadows
         'columns-2 sm:columns-3 lg:columns-4',
-        'gap-3 sm:gap-4',
+        'gap-4 sm:gap-6',
         className
       )}
       role="list"
@@ -132,7 +138,9 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
           className={cn(
             // Break-inside-avoid keeps items intact in columns
             'break-inside-avoid',
-            'mb-3 sm:mb-4'
+            'mb-4 sm:mb-6',
+            // Add random rotation for polaroid effect
+            getRandomRotation(index)
           )}
         >
           <GalleryItem

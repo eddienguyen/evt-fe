@@ -64,11 +64,31 @@ const Gallery: React.FC<GalleryProps> = ({
 
   // Infinite scroll - load more when reaching bottom
   const loadMoreRef = useRef<HTMLDivElement>(null)
+  const isInitialLoadComplete = useRef(false)
+
+  // Mark initial load as complete after first successful load
+  useEffect(() => {
+    if (images.length > 0 && !isInitialLoadComplete.current) {
+      // Wait a bit to ensure scroll position is reset and layout is stable
+      const timer = setTimeout(() => {
+        isInitialLoadComplete.current = true
+      }, 1000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [images.length])
 
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries
-      if (entry.isIntersecting && gallery.hasMore && !gallery.isLoading) {
+      
+      // Only trigger load more if initial load is complete
+      if (
+        entry.isIntersecting && 
+        gallery.hasMore && 
+        !gallery.isLoading &&
+        isInitialLoadComplete.current
+      ) {
         gallery.loadMore()
       }
     },
