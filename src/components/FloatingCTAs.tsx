@@ -139,27 +139,31 @@ const FloatingCTAs: React.FC<FloatingCTAsProps> = ({
 
   return (
     <>
-      {/* RSVP FAB */}
-      <FloatingCTAButton
-        label="RSVP Now"
-        icon={<Calendar className="w-full h-full" />}
-        onClick={() => openPanel('rsvp')}
-        variant="rsvp"
-        position="primary"
-        isActive={activePanel === 'rsvp'}
-        reducedMotion={shouldReduceMotion}
-      />
+      {/* RSVP FAB - Hidden on mobile (md:block = show on ≥768px) */}
+      <div className="hidden md:block">
+        <FloatingCTAButton
+          label="RSVP Now"
+          icon={<Calendar className="w-full h-full" />}
+          onClick={() => openPanel('rsvp')}
+          variant="rsvp"
+          position="primary"
+          isActive={activePanel === 'rsvp'}
+          reducedMotion={shouldReduceMotion}
+        />
+      </div>
 
-      {/* Gift FAB */}
-      <FloatingCTAButton
-        label="Wedding Gift"
-        icon={<Gift className="w-full h-full" />}
-        onClick={() => openPanel('gift')}
-        variant="gift"
-        position="secondary"
-        isActive={activePanel === 'gift'}
-        reducedMotion={shouldReduceMotion}
-      />
+      {/* Gift FAB - Hidden on mobile (md:block = show on ≥768px) */}
+      <div className="hidden md:block">
+        <FloatingCTAButton
+          label="Wedding Gift"
+          icon={<Gift className="w-full h-full" />}
+          onClick={() => openPanel('gift')}
+          variant="gift"
+          position="secondary"
+          isActive={activePanel === 'gift'}
+          reducedMotion={shouldReduceMotion}
+        />
+      </div>
 
       {/* Panel Backdrop and Container */}
       {activePanel && (

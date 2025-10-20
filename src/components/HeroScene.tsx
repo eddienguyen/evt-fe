@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Stars, Text, Center } from '@react-three/drei'
+import { Text, Center } from '@react-three/drei'
 import * as THREE from 'three'
 import { couple, events } from '../config/site'
 import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor'
@@ -19,57 +19,128 @@ interface AdaptiveStarsProps {
  * Updated with flowing animation and darker colors to contrast with white-to-gold gradient
  */
 const AdaptiveStars: React.FC<AdaptiveStarsProps> = React.memo(({ qualityLevel }) => {
-  const starsRef = useRef<any>(null)
+  const starsRef = useRef<THREE.Points>(null)
+  const groupRef = useRef<THREE.Group>(null)
 
   const starConfig = useMemo(() => {
     const config = (() => {
       switch (qualityLevel) {
         case 'high':
-          return { count: 500, radius: 200, depth: 100, factor: 12 } 
+          return { count: 500, radius: 200, depth: 100 } 
         case 'mid':
-          return { count: 300, radius: 150, depth: 70, factor: 9 } 
+          return { count: 300, radius: 150, depth: 70 } 
         case 'low':
-          return { count: 100, radius: 100, depth: 50, factor: 6 } 
+          return { count: 100, radius: 100, depth: 50 } 
       }
     })()
     
     if (import.meta.env.DEV) {
-      console.log('⭐ Rendering stars:', config.count, 'stars with quality:', qualityLevel, 'factor:', config.factor)
+      console.log('⭐ Rendering stars:', config.count, 'stars with quality:', qualityLevel)
     }
     
     return config
   }, [qualityLevel])
 
+  // Generate star positions
+  const positions = useMemo(() => {
+    const pos = new Float32Array(starConfig.count * 3)
+    for (let i = 0; i < starConfig.count; i++) {
+      const radius = starConfig.radius + Math.random() * starConfig.depth - starConfig.depth / 2
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(Math.random() * 2 - 1)
+      
+      pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+      pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+      pos[i * 3 + 2] = radius * Math.cos(phi)
+    }
+    return pos
+  }, [starConfig])
+
+  // Generate colors for stars (darker taupe/gold colors)
+  const colors = useMemo(() => {
+    const cols = new Float32Array(starConfig.count * 3)
+    const colorPalette = [
+      new THREE.Color('#7A6C5D'), // Dark taupe
+      new THREE.Color('#B08D57'), // Gold
+      new THREE.Color('#8F7245'), // Dark gold
+      new THREE.Color('#9A8C7D'), // Light taupe
+    ]
+    
+    for (let i = 0; i < starConfig.count; i++) {
+      const color = colorPalette[Math.floor(Math.random() * colorPalette.length)]
+      cols[i * 3] = color.r
+      cols[i * 3 + 1] = color.g
+      cols[i * 3 + 2] = color.b
+    }
+    return cols
+  }, [starConfig])
+
   // Add flowing animation to stars
   useFrame(({ clock }) => {
-    if (!starsRef.current) return
+    if (!groupRef.current) return
     // Slow rotation for flowing effect
-    starsRef.current.rotation.x = clock.getElapsedTime() * 0.02
-    starsRef.current.rotation.y = clock.getElapsedTime() * 0.03
-    starsRef.current.rotation.z = clock.getElapsedTime() * 0.01
+    groupRef.current.rotation.x = clock.getElapsedTime() * 0.02
+    groupRef.current.rotation.y = clock.getElapsedTime() * 0.03
+    groupRef.current.rotation.z = clock.getElapsedTime() * 0.01
   })
 
+  // Create Three.js Points object directly
+  const pointsObject = useMemo(() => {
+    const geom = new THREE.BufferGeometry()
+    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geom.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    
+    // Create a canvas texture for star shape
+    const canvas = document.createElement('canvas')
+    canvas.width = 64
+    canvas.height = 64
+    const ctx = canvas.getContext('2d')!
+    
+    // Draw a star shape
+    ctx.clearRect(0, 0, 64, 64)
+    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)')
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)')
+    gradient.addColorStop(0.4, 'rgba(255, 255, 255, 0.4)')
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, 64, 64)
+    
+    // Add sparkle effect
+    ctx.fillStyle = 'white'
+    ctx.fillRect(31, 16, 2, 32)  // Vertical line
+    ctx.fillRect(16, 31, 32, 2)  // Horizontal line
+    ctx.fillRect(22, 22, 20, 20) // Center glow
+    
+    const texture = new THREE.CanvasTexture(canvas)
+    
+    const mat = new THREE.PointsMaterial({
+      size: 3.5,
+      sizeAttenuation: true,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.9,
+      depthWrite: false,
+      map: texture,              // ✅ Apply star texture
+      blending: THREE.AdditiveBlending, // ✅ Make stars glow
+    })
+    
+    return new THREE.Points(geom, mat)
+  }, [positions, colors])
+
+  // Apply rotation animation via ref
+  useEffect(() => {
+    if (starsRef.current && pointsObject) {
+      starsRef.current.add(pointsObject)
+      return () => {
+        starsRef.current?.remove(pointsObject)
+      }
+    }
+  }, [pointsObject])
+
   return (
-    <group ref={starsRef}>
-      <Stars
-        radius={starConfig.radius}
-        depth={starConfig.depth}
-        count={starConfig.count}
-        factor={starConfig.factor}
-        saturation={0.8}
-        fade={true}
-        speed={1}
-      />
-      {/* Add a subtle gold tint material overlay */}
-      <mesh>
-        <sphereGeometry args={[starConfig.radius * 1.2, 32, 32]} />
-        <meshBasicMaterial
-          color="#B08D57"
-          transparent={true}
-          opacity={0.05}
-          side={THREE.BackSide}
-        />
-      </mesh>
+    <group ref={groupRef}>
+      <primitive object={pointsObject} ref={starsRef} />
     </group>
   )
 })

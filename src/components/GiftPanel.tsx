@@ -24,6 +24,8 @@ export interface GiftPanelProps {
   isOpen: boolean
   /** Close panel handler */
   onClose: () => void
+  /** Inline mode (no close button, always visible) - for mobile sections */
+  inline?: boolean
 }
 
 /**
@@ -47,7 +49,8 @@ type PanelState = 'loading' | 'ready' | 'error'
  */
 const GiftPanel: React.FC<GiftPanelProps> = ({
   isOpen,
-  onClose
+  onClose,
+  inline = false
 }) => {
   // State management
   const [panelState, setPanelState] = useState<PanelState>('loading')
@@ -165,14 +168,17 @@ const GiftPanel: React.FC<GiftPanelProps> = ({
           </p>
         </div>
         
-        <Button
-          variant="icon"
-          onClick={handleClose}
-          aria-label={GIFT_LABELS.close}
-          className="ml-4 shrink-0"
-        >
-          <X className="w-6 h-6" />
-        </Button>
+        {/* Close button - hidden in inline mode */}
+        {!inline && (
+          <Button
+            variant="icon"
+            onClick={handleClose}
+            aria-label={GIFT_LABELS.close}
+            className="ml-4 shrink-0"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        )}
       </div>
 
       {/* Panel Content */}

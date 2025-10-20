@@ -34,7 +34,7 @@ export interface BackgroundCanvasProps {
  */
 const BackgroundCanvasLoader: React.FC = () => {
   return (
-    <div className="fixed inset-0 z-canvas-bg bg-gradient-to-b from-white via-base-light to-accent-gold-light">
+    <div className="BackgroundCanvasLoader fixed inset-0 z-canvas-bg bg-gradient-to-b from-white via-base-light to-accent-gold-light">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center text-accent-gold">
           <div className="animate-pulse">
@@ -96,7 +96,7 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
   // Show fallback during detection
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-canvas-bg">
+      <div className="FallbackHero fixed inset-0 z-canvas-bg">
         <FallbackHero />
       </div>
     )
@@ -105,7 +105,7 @@ const BackgroundCanvas: React.FC<BackgroundCanvasProps> = ({
   // Show 3D scene for capable devices
   if (shouldLoad3D && finalQuality !== 'fallback') {
     return (
-      <div className="fixed inset-0 z-canvas-bg" key="3d-canvas-container">
+      <div className="LazyHeroScene fixed inset-0 z-canvas-bg -z-10" key="3d-canvas-container">
         <Suspense fallback={<BackgroundCanvasLoader />}>
           <LazyHeroScene key="hero-scene-stable" qualityLevel={finalQuality as 'high' | 'mid' | 'low'} />
         </Suspense>

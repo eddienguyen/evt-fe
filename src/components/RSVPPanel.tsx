@@ -37,6 +37,8 @@ export interface RSVPPanelProps {
   isOpen: boolean
   /** Close panel handler */
   onClose: () => void
+  /** Inline mode (no close button, always visible) - for mobile sections */
+  inline?: boolean
 }
 
 /**
@@ -88,7 +90,8 @@ const submitRSVP = async (
  */
 const RSVPPanel: React.FC<RSVPPanelProps> = ({
   isOpen,
-  onClose
+  onClose,
+  inline = false
 }) => {
   const location = useLocation()
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
@@ -206,16 +209,19 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
           {RSVP_LABELS.title}
         </h2>
         
-        <Button
-          ref={closeButtonRef}
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          aria-label={RSVP_A11Y.closeButton}
-          className="w-10 h-10 p-0"
-        >
-          <X className="w-5 h-5" />
-        </Button>
+        {/* Close button - hidden in inline mode */}
+        {!inline && (
+          <Button
+            ref={closeButtonRef}
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            aria-label={RSVP_A11Y.closeButton}
+            className="w-10 h-10 p-0"
+          >
+            <X className="w-5 h-5" />
+          </Button>
+        )}
       </div>
 
       {/* Description */}

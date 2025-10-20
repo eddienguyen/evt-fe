@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SEOHead } from "../components/SEO";
 import { StoryTimeline } from "../components/timeline";
@@ -13,10 +13,13 @@ import HeroSection from "@/components/HeroSection";
 import BackgroundCanvas from "@/components/BackgroundCanvas";
 import Gallery from "./Gallery";
 import { GalleryTeaser } from "@/components/gallery";
+import MobileRSVPSection from "@/components/MobileRSVPSection";
+import GiftPanel from "@/components/GiftPanel";
 
 const HN: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
   const { guest, isLoading, error, fetchGuest } = useGuest();
+  const [showGiftPanel, setShowGiftPanel] = useState(false);
 
   useEffect(() => {
     if (guestId) {
@@ -54,7 +57,7 @@ const HN: React.FC = () => {
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
             {guest && (
-              <div className="bg-gradient-to-r from-primary/10 to-secondary/10 py-4 text-center">
+              <div className="relative z-10 py-4 text-center">
                 <p className="text-lg md:text-xl font-medium text-text">
                   Kính mời{" "}
                   <span className="font-bold text-primary">{guest.name}</span>
@@ -84,8 +87,11 @@ const HN: React.FC = () => {
 
           <GalleryTeaser enableAnimations={true} />
 
+          {/* Mobile-only RSVP section with gift trigger button */}
+          <MobileRSVPSection onOpenGift={() => setShowGiftPanel(true)} />
+
           {/* Placeholder: Location & Directions */}
-          <section
+          {/* <section
             className="container mx-auto px-4 py-16 bg-base-light"
             aria-labelledby="hanoi-location-heading"
           >
@@ -108,7 +114,7 @@ const HN: React.FC = () => {
                 </p>
               </div>
             </div>
-          </section>
+          </section> */}
         </>
       )}
 
@@ -137,11 +143,33 @@ const HN: React.FC = () => {
           </div>
         </div>
       ) : (
-        <img
-          src={invitationImage}
-          alt="Wedding invitation card for Ngọc & Quân's ceremony in Hanoi, Vietnam on November 8th, 2025"
-          className="w-full h-auto"
-        />
+        <></>
+        // <img
+        //   src={invitationImage}
+        //   alt="Wedding invitation card for Ngọc & Quân's ceremony in Hanoi, Vietnam on November 8th, 2025"
+        //   className="w-full h-auto relative z-1"
+        // />
+      )}
+
+      {/* Gift Panel - Slide-over on mobile (triggered by button) */}
+      {showGiftPanel && (
+        <div className="md:hidden fixed inset-0 z-modal">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowGiftPanel(false)}
+            aria-hidden="true"
+          />
+          
+          {/* Panel */}
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
+            <GiftPanel
+              isOpen={true}
+              onClose={() => setShowGiftPanel(false)}
+              inline={false}
+            />
+          </div>
+        </div>
       )}
     </>
   );
