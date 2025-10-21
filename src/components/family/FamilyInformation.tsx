@@ -31,6 +31,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
             enableAnimations={enableAnimations}
             animationDelay={0}
             className={eventID === "hanoi" ? "order-1" : "order-2"}
+            address={couple.husbandAddress}
           />
           
           {/* Vertical Divider Line */}
@@ -44,6 +45,7 @@ export const FamilyInformation: React.FC<FamilyInformationProps> = ({
             enableAnimations={enableAnimations}
             animationDelay={150}
             className={eventID === "hue" ? "order-1" : "order-2"}
+            address={couple.wifeAddress}
           />
         </div>
       </div>

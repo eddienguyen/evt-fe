@@ -134,11 +134,11 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
               </span>
             </div>
             
-            {/* {item.description && (
+            {item.description && (
               <p className="font-body text-sm text-text-secondary mt-1">
                 {item.description}
               </p>
-            )} */}
+            )}
           </div>
         </div>
       ))}

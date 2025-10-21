@@ -3,7 +3,7 @@ import type { FamilyHouseCardProps } from "../../types/family";
 
 /**
  * FamilyHouseCard Component
- * 
+ *
  * Displays family information for one household (Nhà trai or Nhà gái)
  * with parent names and honorifics in Vietnamese tradition.
  */
@@ -14,6 +14,7 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
   enableAnimations = true,
   animationDelay = 0,
   className = "",
+  address = "",
 }) => {
   const animationClass = enableAnimations ? "animate-fade-in-up" : "";
   const animationStyle = enableAnimations
@@ -23,9 +24,7 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
   return (
     <div
       className={`
-        duration-300
-        p-2 md:p-8 lg:p-10
-        text-center
+        duration-300 p-1 md:p-8 lg:p-10 text-center 
         ${animationClass} ${className}
       `}
       style={animationStyle}
@@ -56,6 +55,18 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
             {motherName}
           </span>
         </div>
+
+        {/* Address */}
+        {address && (
+          <div className="mt-4 flex flex-col items-center">
+            <span className="font-body text-md md:text-lg text-text-light">
+              Địa chỉ:
+            </span>
+            <span className="font-body text-md md:text-lg font-medium text-text mt-1">
+              {address}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

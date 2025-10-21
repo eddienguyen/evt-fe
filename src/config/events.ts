@@ -92,17 +92,17 @@ export const eventsConfig: EventsConfig = {
       {
         time: '7:00 AM',
         title: 'Ăn hỏi',
-        description: 'Engagement ceremony'
+        description: '(tại Tư gia nhà gái)'
       },
       {
         time: '9:00 AM',
         title: 'Rước dâu',
-        description: 'Bride procession'
+        description: ''
       },
       {
         time: '11:00 AM',
         title: 'Tiệc cưới',
-        description: 'Guest reception',
+        description: '',
         hightlight: true,
       },
     ],
@@ -130,12 +130,12 @@ export const eventsConfig: EventsConfig = {
       {
         time: '5:30 PM',
         title: 'Đón khách',
-        description: 'Guest reception'
+        description: ''
       },
       {
         time: '6:00 PM',
         title: 'Tiệc cưới',
-        description: 'Wedding banquet',
+        description: '',
         hightlight: true
       }
     ],

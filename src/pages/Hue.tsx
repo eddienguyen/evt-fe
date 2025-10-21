@@ -16,6 +16,7 @@ import BackgroundCanvas from "@/components/BackgroundCanvas";
 import MobileRSVPSection from "@/components/MobileRSVPSection";
 import GiftPanel from "@/components/GiftPanel";
 import { BANK_DETAILS_LIST } from "@/lib/constants/gift";
+import { WishesSection } from "@/components/wishes";
 
 const Hue: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -110,6 +111,16 @@ const Hue: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Latest Wishes Section */}
+          {/* <section className="container mx-auto px-4 py-16 bg-base-light">
+            <WishesSection 
+              venue="hue"
+              limit={9}
+              animationMode="stacked"
+              className=""
+            />
+          </section> */}
 
           <GalleryTeaser enableAnimations={true} />
 

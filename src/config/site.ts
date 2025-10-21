@@ -21,6 +21,8 @@ export interface SiteConfig {
     wifeMom: string;       // Mother's name for Family Information Section
     wifeDad: string;       // Father's name for Family Information Section
     heroImage?: string;   // Optional hero image for couple section
+    wifeAddress: string;   // Wife's address
+    husbandAddress: string; // Husband's address
   };
 
   // Event Information
@@ -70,7 +72,9 @@ export const siteConfig: SiteConfig = {
     husbandMom: "Nguyễn Thanh Vân",
     husbandDad: "Nguyễn Thanh Phú ",
     wifeMom: "Lê Thị Kim Anh",
-    wifeDad: "Đinh Viết Phúc"
+    wifeDad: "Đinh Viết Phúc",
+    wifeAddress: "10/47 Ưng Bình, phường Vỹ Dạ, Thành phố Huế",
+    husbandAddress: "640 Nguyễn Văn Cừ, phường Bồ Đề, Hà Nội",
   },
 
   events: {

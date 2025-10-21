@@ -78,7 +78,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Hero Content */}
       <div className="text-center text-accent-white px-4 relative z-10">
         {/* Couple Names - Positioned to align with 3D text */}
-        <div className="mb-32">
+        <div className="mb-0">
           <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold mb-4 opacity-0">
             {/* Hidden but present for SEO and accessibility */}
             <span className="sr-only">{couple.displayName}'s Wedding</span>
@@ -87,12 +87,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Event Details */}
         <div className="space-y-4">
-          <h2 className="font-handwritten  text-8xl md:text-4xl lg:text-5xl font-bold mb-2">
+          <h2 className="font-handwritten  text-8xl md:text-10xl font-bold mb-2">
             {couple.displayName}
             </h2>
-          <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
+          {/* <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
             {eventID === "hanoi" ? events.hanoi.dateDisplay + " • " + events.hanoi.locationShort : events.hue.dateDisplay + " • " + events.hue.locationShort}
-          </p>
+          </p> */}
           <div className="w-16 h-px bg-accent-gold mx-auto"></div>
         </div>
       </div>
