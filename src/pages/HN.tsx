@@ -15,6 +15,7 @@ import Gallery from "./Gallery";
 import { GalleryTeaser } from "@/components/gallery";
 import MobileRSVPSection from "@/components/MobileRSVPSection";
 import GiftPanel from "@/components/GiftPanel";
+import { BANK_DETAILS_LIST } from "@/lib/constants/gift";
 
 const HN: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -28,7 +29,7 @@ const HN: React.FC = () => {
   }, [guestId, fetchGuest]);
 
   // Determine which image to use: guest's custom image or default
-  const invitationImage = guest?.invitationImageMainUrl || figure;
+  // const invitationImage = guest?.invitationImageMainUrl || figure;
 
   return (
     <>
@@ -52,7 +53,7 @@ const HN: React.FC = () => {
           <CouplePresentation enableAnimations={true} eventID="hanoi" />
 
           {/* Family Information Section */}
-          {/* <FamilyInformation enableAnimations={true} /> */}
+          <FamilyInformation enableAnimations={true} eventID="hanoi"/>
 
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
@@ -83,12 +84,34 @@ const HN: React.FC = () => {
           />
 
           {/* Story Timeline Section */}
-          <StoryTimeline enableAnimations={true} />
-
-          <GalleryTeaser enableAnimations={true} />
+          {/* <StoryTimeline enableAnimations={true} /> */}
 
           {/* Mobile-only RSVP section with gift trigger button */}
           <MobileRSVPSection onOpenGift={() => setShowGiftPanel(true)} />
+
+          {/* Gift Panel - Slide-over on mobile (triggered by button) */}
+          {showGiftPanel && (
+            <div className="md:hidden fixed inset-0 z-modal">
+              {/* Backdrop */}
+              <div
+                className="absolute inset-0 bg-black/50"
+                onClick={() => setShowGiftPanel(false)}
+                aria-hidden="true"
+              />
+
+              {/* Panel */}
+              <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
+                <GiftPanel
+                  isOpen={true}
+                  onClose={() => setShowGiftPanel(false)}
+                  inline={false}
+                  bankAccounts={[BANK_DETAILS_LIST[0]]}
+                />
+              </div>
+            </div>
+          )}
+
+          <GalleryTeaser enableAnimations={true} />
 
           {/* Placeholder: Location & Directions */}
           {/* <section
@@ -149,27 +172,6 @@ const HN: React.FC = () => {
         //   alt="Wedding invitation card for Ngọc & Quân's ceremony in Hanoi, Vietnam on November 8th, 2025"
         //   className="w-full h-auto relative z-1"
         // />
-      )}
-
-      {/* Gift Panel - Slide-over on mobile (triggered by button) */}
-      {showGiftPanel && (
-        <div className="md:hidden fixed inset-0 z-modal">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowGiftPanel(false)}
-            aria-hidden="true"
-          />
-          
-          {/* Panel */}
-          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
-            <GiftPanel
-              isOpen={true}
-              onClose={() => setShowGiftPanel(false)}
-              inline={false}
-            />
-          </div>
-        </div>
       )}
     </>
   );

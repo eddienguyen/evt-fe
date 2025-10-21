@@ -47,7 +47,7 @@ export const CoupleCard: React.FC<CoupleCardProps> = ({
 
         {/* Title - Now below the image */}
         <div className={`text-center ${flow === "reverse" ? "mb-6 md:mb-10" : "mt-6 md:mt-10"}`}>
-          <h3 className="font-heading text-md md:text-4xl font-rose text-text font-light">
+          <h3 className="font-heading text-xl md:text-4xl font-rose text-text font-light">
             {subTitle}
           </h3>
         </div>

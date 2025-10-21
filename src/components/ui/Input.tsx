@@ -175,7 +175,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn("block text-sm font-medium text-text", labelClassName)}
           >
             {label}
-            {required && <span className="text-error ml-1" aria-label="required">*</span>}
+            {/* {required && <span className="text-error ml-1" aria-label="required">*</span>} */}
           </label>
         )}
 

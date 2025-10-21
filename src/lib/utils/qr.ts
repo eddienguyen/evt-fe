@@ -18,6 +18,7 @@ export interface BankDetails {
   accountName: string
   branch?: string
   swiftCode?: string
+  qrCodeImageUrl?: string
 }
 
 /**

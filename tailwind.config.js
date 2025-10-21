@@ -86,7 +86,7 @@ export default {
       },
       zIndex: {
         'background': '-10',
-        'canvas-bg': '0',
+        'canvas-bg': '-1',
         'content': '10',
         'fab': '40',
         'nav': '50',

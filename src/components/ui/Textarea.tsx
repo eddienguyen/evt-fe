@@ -175,7 +175,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               className="block text-sm font-medium text-text"
             >
               {label}
-              {required && <span className="text-error ml-1" aria-label="required">*</span>}
+              {/* {required && <span className="text-error ml-1" aria-label="required">*</span>} */}
             </label>
           )}
           

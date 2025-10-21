@@ -39,7 +39,7 @@ export const FamilyHouseCard: React.FC<FamilyHouseCardProps> = ({
       <div className="space-y-3 md:space-y-4">
         {/* Father */}
         <div className="flex flex-col items-center">
-          <span className="font-body text-md md:text-lg text-text-light">
+          <span className="font-rose text-md md:text-lg text-text-light">
             Ông
           </span>
           <span className="font-body text-md md:text-2xl font-medium text-text mt-1">

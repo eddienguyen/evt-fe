@@ -68,7 +68,7 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
     <article
       className={cn(
         'group relative bg-base-light w-full h-auto',
-        'p-3 pb-12 shadow-lg',
+        'p-3 pb-10 shadow-lg',
         // Polaroid hover effect
         'hover:shadow-2xl hover:-rotate-1 transition-all duration-300',
         onClick && 'cursor-pointer',
@@ -129,7 +129,7 @@ const GalleryItem: React.FC<GalleryItemProps> = ({
       </div>
 
       {/* Polaroid caption area - empty space at bottom for authentic look */}
-      <div className="h-8" aria-hidden="true" />
+      <div className="h-2" aria-hidden="true" />
 
       {/* Mobile metadata (always visible) - only if showMetadata is true */}
       {showMetadata && image.caption && (

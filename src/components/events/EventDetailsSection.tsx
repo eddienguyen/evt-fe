@@ -98,7 +98,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
           Thông tin sự kiện
         </h2> */}
         <p className="font-body text-lg text-text-secondary">
-          Trân trọng kính mời đến dự buổi lễ của
+          Trân trọng kính mời đến dự buổi lễ
         </p>
       </header>
 

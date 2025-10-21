@@ -89,7 +89,7 @@ const GuestCountInput: React.FC<GuestCountInputProps> = ({
         htmlFor={inputId}
         className="block text-sm font-medium text-text"
       >
-        {RSVP_LABELS.guestCount} <span className="text-error">*</span>
+        {RSVP_LABELS.guestCount}
       </label>
       
       <div className="flex items-center space-x-2">
@@ -242,7 +242,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
         label={RSVP_LABELS.name}
         placeholder={RSVP_PLACEHOLDERS.name}
         error={errors.name?.message}
-        helperText={guest ? 'Tên được lấy từ thiệp mời cá nhân' : RSVP_HELP_TEXT.name}
+        // helperText={guest ? 'Tên được lấy từ thiệp mời cá nhân' : RSVP_HELP_TEXT.name}
         required
         disabled={isNameDisabled}
         autoComplete="name"
@@ -259,7 +259,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
       {/* Venue Field (Dropdown) */}
       <div className="space-y-2">
         <label htmlFor="venue-select" className="block text-sm font-medium text-text">
-          {RSVP_LABELS.venue} <span className="text-error">*</span>
+          {RSVP_LABELS.venue}
         </label>
         <select
           id="venue-select"
@@ -278,9 +278,9 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
         {errors.venue?.message && (
           <p className="text-sm text-error">{errors.venue.message}</p>
         )}
-        <p className="text-xs text-text-light">
+        {/* <p className="text-xs text-text-light">
           {guest ? 'Địa điểm được lấy từ thiệp mời cá nhân' : RSVP_HELP_TEXT.venue}
-        </p>
+        </p> */}
       </div>
 
       {/* Wishes Field */}
@@ -289,7 +289,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
         label={RSVP_LABELS.wishes}
         placeholder={RSVP_PLACEHOLDERS.wishes}
         error={errors.wishes?.message}
-        helperText={RSVP_HELP_TEXT.wishes}
+        // helperText={RSVP_HELP_TEXT.wishes}
         required
         rows={4}
         maxLength={500}

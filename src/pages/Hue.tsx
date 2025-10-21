@@ -15,6 +15,7 @@ import HeroSection from "@/components/HeroSection";
 import BackgroundCanvas from "@/components/BackgroundCanvas";
 import MobileRSVPSection from "@/components/MobileRSVPSection";
 import GiftPanel from "@/components/GiftPanel";
+import { BANK_DETAILS_LIST } from "@/lib/constants/gift";
 
 const Hue: React.FC = () => {
   const { guestId } = useParams<{ guestId?: string }>();
@@ -28,7 +29,7 @@ const Hue: React.FC = () => {
   }, [guestId, fetchGuest]);
 
   // Determine which image to use: guest's custom image or default
-  const invitationImage = guest?.invitationImageMainUrl || figure;
+  // const invitationImage = guest?.invitationImageMainUrl || figure;
 
   return (
     <>
@@ -49,10 +50,10 @@ const Hue: React.FC = () => {
       {!isLoading && (
         <>
           {/* Couple Presentation Section */}
-          <CouplePresentation enableAnimations={true} eventID="hue"/>
+          <CouplePresentation enableAnimations={true} eventID="hue" />
 
           {/* Family Information Section */}
-          <FamilyInformation enableAnimations={true} eventID="hue"/>
+          <FamilyInformation enableAnimations={true} eventID="hue" />
 
           {/* Wedding Invitation Banner - Personalized if guest data available */}
           <section aria-label="Wedding invitation" className="bg-base">
@@ -85,10 +86,32 @@ const Hue: React.FC = () => {
           {/* Story Timeline Section */}
           {/* <StoryTimeline enableAnimations={true} /> */}
 
-          <GalleryTeaser enableAnimations={true} />
-
           {/* Mobile-only RSVP section with gift trigger button */}
           <MobileRSVPSection onOpenGift={() => setShowGiftPanel(true)} />
+
+          {/* Gift Panel - Slide-over on mobile (triggered by button) */}
+          {showGiftPanel && (
+            <div className="md:hidden fixed inset-0 z-modal">
+              {/* Backdrop */}
+              <div
+                className="absolute inset-0 bg-black/50"
+                onClick={() => setShowGiftPanel(false)}
+                aria-hidden="true"
+              />
+
+              {/* Panel */}
+              <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
+                <GiftPanel
+                  isOpen={true}
+                  onClose={() => setShowGiftPanel(false)}
+                  inline={false}
+                  bankAccounts={[BANK_DETAILS_LIST[1]]}
+                />
+              </div>
+            </div>
+          )}
+
+          <GalleryTeaser enableAnimations={true} />
 
           {/* Placeholder: Location & Directions */}
           {/* <section
@@ -119,7 +142,7 @@ const Hue: React.FC = () => {
       )}
 
       {/* Error State - Still show page but without personalization */}
-      {(error && !isLoading) ? (
+      {error && !isLoading ? (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -150,27 +173,6 @@ const Hue: React.FC = () => {
         //   alt="Wedding invitation card for Ngọc & Quân's ceremony in Hue, Vietnam on November 1st, 2025"
         //   className="w-full h-auto relative z-1"
         // />
-      )}
-
-      {/* Gift Panel - Slide-over on mobile (triggered by button) */}
-      {showGiftPanel && (
-        <div className="md:hidden fixed inset-0 z-modal">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowGiftPanel(false)}
-            aria-hidden="true"
-          />
-          
-          {/* Panel */}
-          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
-            <GiftPanel
-              isOpen={true}
-              onClose={() => setShowGiftPanel(false)}
-              inline={false}
-            />
-          </div>
-        </div>
       )}
     </>
   );

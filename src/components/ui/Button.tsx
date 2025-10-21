@@ -146,7 +146,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // Size-specific styles
     const sizeStyles = {
       sm: variant === 'icon' ? 'p-1.5' : 'px-4 py-2 text-sm rounded-md gap-2',
-      md: variant === 'icon' ? 'p-2' : 'px-6 py-3 text-base rounded-lg gap-2',
+      md: variant === 'icon' ? 'p-2' : 'px-6 py-3  rounded-lg gap-2',
       lg: variant === 'icon' ? 'p-3' : 'px-8 py-4 text-lg rounded-xl gap-3',
     }
 

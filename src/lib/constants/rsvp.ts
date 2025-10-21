@@ -13,14 +13,14 @@
 export const RSVP_LABELS = {
   // Form title and description
   title: 'Xác nhận tham dự',
-  description: 'Vui lòng điền thông tin để xác nhận tham dự đám cưới của chúng tôi',
+  description: 'Vui lòng điền thông tin để xác nhận tham dự đám cưới của Ngọc & Quân',
   
   // Form fields
-  name: 'Họ và tên',
-  guestCount: 'Số lượng khách',
+  name: 'Tên của tôi',
+  guestCount: 'Tôi sẽ đi tổng cộng',
   willAttend: 'Xác nhận tham dự',
   venue: 'Địa điểm',
-  wishes: 'Lời chúc',
+  wishes: 'Tôi muốn chúc cô dâu chú rể: ',
   
   // Attendance options
   attendingYes: 'Có, tôi sẽ tham dự',
@@ -39,7 +39,7 @@ export const RSVP_LABELS = {
  * Form field placeholders
  */
 export const RSVP_PLACEHOLDERS = {
-  name: 'Nhập họ và tên của bạn',
+  name: 'Bạn tên là gì?',
   wishes: 'Gửi lời chúc đến cô dâu, chú rể...',
 } as const
 
@@ -48,7 +48,7 @@ export const RSVP_PLACEHOLDERS = {
  */
 export const RSVP_HELP_TEXT = {
   name: 'Họ và tên đầy đủ của bạn',
-  guestCount: 'Tổng số người tham dự (bao gồm cả bạn)',
+  guestCount: 'người',
   willAttend: 'Vui lòng cho chúng tôi biết bạn có thể tham dự không',
   venue: 'Chọn địa điểm bạn muốn tham dự',
   wishes: 'Lời chúc, lời nhắn gửi đến cô dâu chú rể',

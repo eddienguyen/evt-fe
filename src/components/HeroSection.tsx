@@ -87,7 +87,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Event Details */}
         <div className="space-y-4">
-
+          <h2 className="font-handwritten  text-8xl md:text-4xl lg:text-5xl font-bold mb-2">
+            {couple.displayName}
+            </h2>
           <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
             {eventID === "hanoi" ? events.hanoi.dateDisplay + " • " + events.hanoi.locationShort : events.hue.dateDisplay + " • " + events.hue.locationShort}
           </p>
