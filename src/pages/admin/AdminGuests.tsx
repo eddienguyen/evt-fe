@@ -109,9 +109,9 @@ const AdminGuests: React.FC = () => {
         <div className="flex items-center gap-3">
           <Users className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Guest Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Quản lý khách mời</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {totalItems > 0 ? `${totalItems} total guests` : 'No guests yet'}
+              {totalItems > 0 ? `${totalItems} khách mời` : 'Chưa có khách mời'}
             </p>
           </div>
         </div>
@@ -121,7 +121,7 @@ const AdminGuests: React.FC = () => {
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           <Plus className="h-5 w-5" />
-          Create New Guest
+          Tạo thiệp mời
         </Link>
       </div>
 
@@ -151,7 +151,7 @@ const AdminGuests: React.FC = () => {
                 onClick={refreshData}
                 className="mt-2 text-sm font-medium text-red-800 hover:text-red-900 underline"
               >
-                Try again
+                Xin thử lại
               </button>
             </div>
           </div>

@@ -10,6 +10,7 @@ import BackgroundCanvas from "@/components/BackgroundCanvas";
 import MobileRSVPSection from "@/components/MobileRSVPSection";
 import GiftPanel from "@/components/GiftPanel";
 import { BANK_DETAILS_LIST } from "@/lib/constants/gift";
+import { CouplePresentation } from "@/components/couple/CouplePresentation";
 
 const Home: React.FC = () => {
   const [showGiftPanel, setShowGiftPanel] = useState(false);
@@ -19,6 +20,9 @@ const Home: React.FC = () => {
       <SEOHead />
       <HeroSection />
       <BackgroundCanvas />
+
+      <CouplePresentation enableAnimations={true} eventID="hue" />
+
       {/* Event Details Section */}
       <EventDetailsSection enableAnimations={true} />
 

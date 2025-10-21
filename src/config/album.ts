@@ -16,6 +16,48 @@ import type { GalleryImage } from '@/types/gallery'
  */
 export const ALBUM_IMAGES: GalleryImage[] = [
   {
+    id: 'nam-0327',
+    filename: 'NAM_0327_(2) Large.jpeg',
+    alt: 'Cô dâu chú rể trong ngày trọng đại',
+    caption: 'Khoảnh khắc vàng',
+    date: '2024-11-01',
+    category: 'ceremony',
+    sizes: {
+      thumbnail: {
+        url: '/album/NAM_0327_(2) Large.jpeg',
+        width: 400,
+        height: 533,
+        format: 'jpeg',
+      },
+      medium: {
+        url: '/album/NAM_0327_(2) Large.jpeg',
+        width: 800,
+        height: 1067,
+        format: 'jpeg',
+      },
+      large: {
+        url: '/album/NAM_0327_(2) Large.jpeg',
+        width: 1200,
+        height: 1600,
+        format: 'jpeg',
+      },
+      original: {
+        url: '/album/NAM_0327_(2) Large.jpeg',
+        width: 2400,
+        height: 3200,
+        format: 'jpeg',
+      },
+    },
+    metadata: {
+      width: 2400,
+      height: 3200,
+      format: 'jpeg',
+      location: 'Huế',
+      photographer: 'Studio NAM',
+      dateTaken: new Date('2024-11-01'),
+    },
+  },
+  {
     id: 'nam-0012',
     filename: 'NAM_0012_(2) Large.jpeg',
     alt: 'Cô dâu chú rể trong lễ cưới',
@@ -379,48 +421,6 @@ export const ALBUM_IMAGES: GalleryImage[] = [
       },
       original: {
         url: '/album/NAM_0319_(2) Large.jpeg',
-        width: 2400,
-        height: 3200,
-        format: 'jpeg',
-      },
-    },
-    metadata: {
-      width: 2400,
-      height: 3200,
-      format: 'jpeg',
-      location: 'Huế',
-      photographer: 'Studio NAM',
-      dateTaken: new Date('2024-11-01'),
-    },
-  },
-  {
-    id: 'nam-0327',
-    filename: 'NAM_0327_(2) Large.jpeg',
-    alt: 'Cô dâu chú rể trong ngày trọng đại',
-    caption: 'Khoảnh khắc vàng',
-    date: '2024-11-01',
-    category: 'ceremony',
-    sizes: {
-      thumbnail: {
-        url: '/album/NAM_0327_(2) Large.jpeg',
-        width: 400,
-        height: 533,
-        format: 'jpeg',
-      },
-      medium: {
-        url: '/album/NAM_0327_(2) Large.jpeg',
-        width: 800,
-        height: 1067,
-        format: 'jpeg',
-      },
-      large: {
-        url: '/album/NAM_0327_(2) Large.jpeg',
-        width: 1200,
-        height: 1600,
-        format: 'jpeg',
-      },
-      original: {
-        url: '/album/NAM_0327_(2) Large.jpeg',
         width: 2400,
         height: 3200,
         format: 'jpeg',
@@ -1536,11 +1536,11 @@ export const ALBUM_IMAGES: GalleryImage[] = [
  * Selected to showcase diverse categories and best visual appeal.
  */
 export const FEATURED_IMAGE_IDS = [
+  'nam-0327', // ceremony - wedding details
   'nam-0012', // ceremony - main couple shot
   'nam-0063', // portrait - romantic couple
   'nam-0124', // ceremony - traditional elements
   'nam-0204', // portrait - happy moment
-  'nam-0221', // ceremony - wedding details
   'nam-0255', // portrait - intimate shot
 ] as const
 

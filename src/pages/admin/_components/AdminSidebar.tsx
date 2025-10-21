@@ -41,7 +41,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
   const navigationItems: NavigationItem[] = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
+      label: 'Tổng quan',
       href: '/admin',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
     },
     {
       id: 'guests',
-      label: 'Guest Management',
+      label: 'Quản lý khách mời',
       href: '/admin/guests',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
     },
     {
       id: 'rsvps',
-      label: 'RSVP Management',
+      label: 'Quản lý đơn tham dự',
       href: '/admin/rsvps',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to Website
+            Về trang thiệp mời online
           </Link>
         </div>
       </aside>
