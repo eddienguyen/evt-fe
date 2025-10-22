@@ -90,7 +90,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
             to="/"
             className="text-sm text-text-light hover:text-text transition-colors"
           >
-            View Site
+            Trang thiệp cưới
           </Link>
         </div>
       </div>

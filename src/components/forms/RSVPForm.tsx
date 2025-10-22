@@ -225,7 +225,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
   const isFormDisabled = disabled || isSubmitting
   // Disable name and venue if guest is present (personalized invitation)
   const isNameDisabled = isFormDisabled || !!guest
-  const isVenueDisabled = isFormDisabled || !!guest
+  // const isVenueDisabled = isFormDisabled || !!guest
 
   return (
     <div className="space-y-6">
@@ -264,7 +264,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
         <select
           id="venue-select"
           {...register('venue')}
-          disabled={isVenueDisabled}
+          disabled={false}
           className={cn(
             'w-full rounded-lg border border-gray-300 px-3 py-2',
             'focus:ring-2 focus:ring-accent-gold focus:border-accent-gold',

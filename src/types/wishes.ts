@@ -24,6 +24,18 @@ export interface WishItem {
 }
 
 /**
+ * Pagination Metadata
+ */
+export interface PaginationMetadata {
+  currentPage: number
+  totalPages: number
+  totalCount: number
+  limit: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+}
+
+/**
  * Wishes API Response
  */
 export interface WishesResponse {
@@ -31,6 +43,7 @@ export interface WishesResponse {
   data: {
     wishes: WishItem[]
     total: number
+    pagination?: PaginationMetadata
   }
   message?: string
 }
@@ -70,6 +83,8 @@ export interface WishesServiceOptions {
   limit?: number
   /** Venue filter */
   venue?: 'hue' | 'hanoi'
+  /** Page number for pagination */
+  page?: number
 }
 
 /**

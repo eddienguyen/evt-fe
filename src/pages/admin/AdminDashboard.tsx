@@ -29,9 +29,9 @@ export const AdminDashboard: React.FC = () => {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-text">Dashboard</h1>
+          <h1 className="text-2xl font-semibold text-text">Tổng quan</h1>
           <p className="text-text-light mt-1">
-            Wedding management overview and statistics
+            Tổng quan về quản lý đám cưới và thống kê
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export const AdminDashboard: React.FC = () => {
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Create Guest
+          Tạo thiệp mời
         </Link>
       </div>
 
@@ -60,7 +60,7 @@ export const AdminDashboard: React.FC = () => {
               onClick={refetch}
               className="text-sm text-red-600 hover:text-red-800 font-medium"
             >
-              Retry
+              Thử lại
             </button>
           </div>
         </div>
@@ -73,9 +73,9 @@ export const AdminDashboard: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Total Guests */}
           <StatsCard
-            title="Total Guests"
+            title="Tổng số khách"
             value={stats.totalGuests}
-            subtitle="All venues"
+            subtitle="Huế và HN"
             href="/admin/guests"
             icon={
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,9 +86,9 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Total RSVPs */}
           <StatsCard
-            title="Total RSVPs"
+            title="Tổng số đơn tham dự"
             value={stats.totalRsvps}
-            subtitle={`${stats.responseRate.toFixed(1)}% response rate`}
+            subtitle={`${stats.responseRate.toFixed(1)}% tỷ lệ trả lời`}
             href="/admin/rsvps"
             icon={
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,8 +138,8 @@ export const AdminDashboard: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
             <div>
-              <h3 className="font-medium text-text">Manage Guests</h3>
-              <p className="text-sm text-text-light">View and edit guest list</p>
+              <h3 className="font-medium text-text">Quản lý khách mời</h3>
+              <p className="text-sm text-text-light">Xem và chỉnh sửa danh sách khách mời</p>
             </div>
           </Link>
 
@@ -151,8 +151,8 @@ export const AdminDashboard: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <div>
-              <h3 className="font-medium text-text">View RSVPs</h3>
-              <p className="text-sm text-text-light">Check guest responses</p>
+              <h3 className="font-medium text-text">Quản lý đơn tham dự</h3>
+              <p className="text-sm text-text-light">Xem phản hồi của khách mời</p>
             </div>
           </Link>
 
@@ -164,8 +164,8 @@ export const AdminDashboard: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
             </svg>
             <div>
-              <h3 className="font-medium text-text">View Website</h3>
-              <p className="text-sm text-text-light">Preview guest experience</p>
+              <h3 className="font-medium text-text">Xem trang thiệp mời</h3>
+              <p className="text-sm text-text-light">Xem trước trải nghiệm của khách mời</p>
             </div>
           </Link>
         </div>
@@ -174,7 +174,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Last Updated */}
       {stats && (
         <div className="text-center text-sm text-text-light">
-          Last updated: {new Date(stats.lastUpdated).toLocaleString('vi-VN')}
+          Cập nhật lần cuối: {new Date(stats.lastUpdated).toLocaleString('vi-VN')}
         </div>
       )}
     </div>

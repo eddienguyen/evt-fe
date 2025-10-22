@@ -14,6 +14,8 @@ export interface SiteConfig {
     displayName: string;    // For headings/titles
     husband: string;        // "Quân"
     wife: string;          // "Ngọc"
+    husbandShortName: string; // Short name for husband
+    wifeShortName: string;    // Short name for wife
     husbandImage: string;  // Path to husband's image
     wifeImage: string;     // Path to wife's image
     husbandMom: string;    // Mother's name for Family Information Section
@@ -66,6 +68,8 @@ export const siteConfig: SiteConfig = {
     displayName: "Ngọc & Quân",
     husband: "Hoàng Quân",
     wife: "Kim Ngọc",
+    husbandShortName: "Quân",
+    wifeShortName: "Ngọc",
     heroImage: "/album/NAM_0526.jpeg",
     husbandImage: "/album/NAM_0059.jpeg",
     wifeImage: "/album/NAM_9659.jpeg",

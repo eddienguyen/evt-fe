@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { copyright } from '../config/site'
 import FloatingCTAs from './FloatingCTAs'
+import ScrollToTop from './ScrollToTop'
 import { versionInfo } from '@/version'
 
 const RootLayout: React.FC = () => {
@@ -34,6 +35,9 @@ const RootLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative z-1">
+      {/* Scroll to top on route change */}
+      <ScrollToTop />
+      
       {/* Skip to Content Link for Keyboard Navigation */}
       {/* <a
         href="#main-content"
