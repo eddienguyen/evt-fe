@@ -306,7 +306,7 @@ const RSVPForm: React.FC<RSVPFormProps> = ({
           id={honeypotId}
           {...register('honeypot')}
           type="text"
-          tabIndex={-1}
+          // tabIndex={-1}
           autoComplete="off"
           aria-hidden="true"
         />

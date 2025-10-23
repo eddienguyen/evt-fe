@@ -204,7 +204,7 @@ const RSVPPanel: React.FC<RSVPPanelProps> = ({
           ref={titleRef}
           id="rsvp-panel-title" 
           className="text-2xl font-heading font-bold text-text"
-          tabIndex={-1}
+          // tabIndex={-1}
         >
           {RSVP_LABELS.title}
         </h2>

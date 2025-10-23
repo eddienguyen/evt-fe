@@ -2,7 +2,7 @@
  * Wishes Type Definitions
  * 
  * Type definitions for wishes display feature including
- * wish items, API responses, and component states.
+ * wish items, API responses, component states, and caching.
  * 
  * @module types/wishes
  */
@@ -46,6 +46,17 @@ export interface WishesResponse {
     pagination?: PaginationMetadata
   }
   message?: string
+  /** Cache metadata (added by service layer) */
+  cache?: {
+    /** Whether data came from cache */
+    isCached: boolean
+    /** Cache age in milliseconds */
+    cacheAge?: number
+    /** Cache status */
+    status?: 'fresh' | 'stale' | 'expired' | 'missing'
+    /** When data was last fetched */
+    lastFetch?: Date
+  }
 }
 
 /**
@@ -63,16 +74,34 @@ export interface WishesError {
 export interface WishesState {
   /** Array of wish items */
   wishes: WishItem[]
+  /** Pagination metadata */
+  pagination: PaginationMetadata | null
+  /** Total count of wishes */
+  total: number
   /** Loading state */
   isLoading: boolean
+  /** Refetching state (background refresh) */
+  isRefetching: boolean
+  /** Loading more state (pagination) */
+  isLoadingMore: boolean
   /** Error message if any */
   error: string | null
+  /** Last error object */
+  lastError: Error | null
   /** Whether data has been loaded */
   hasData: boolean
   /** Whether currently retrying after error */
   isRetrying: boolean
   /** Number of retry attempts */
   retryCount: number
+  /** Maximum retry attempts */
+  maxRetries: number
+  /** Whether data came from cache */
+  isCached: boolean
+  /** Cache age in milliseconds */
+  cacheAge: number
+  /** When data was last fetched */
+  lastFetch: Date | null
 }
 
 /**
@@ -85,6 +114,8 @@ export interface WishesServiceOptions {
   venue?: 'hue' | 'hanoi'
   /** Page number for pagination */
   page?: number
+  /** Bypass cache and force fresh fetch */
+  bypassCache?: boolean
 }
 
 /**

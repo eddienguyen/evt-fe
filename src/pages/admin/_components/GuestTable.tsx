@@ -1,15 +1,20 @@
 /**
  * Guest Table
- * 
+ *
  * Main table component for guest management.
  * Displays guest list with sorting, filtering, and pagination.
- * 
+ *
  * @module pages/admin/_components/GuestTable
  */
 
-import type { GuestRecord, GuestSortField, SortDirection } from '../../../types/admin';
-import { GuestTableRow } from './GuestTableRow';
-import { getSortIcon } from './guestTableUtils';
+import { Button } from "@/components/ui";
+import type {
+  GuestRecord,
+  GuestSortField,
+  SortDirection,
+} from "../../../types/admin";
+import { GuestTableRow } from "./GuestTableRow";
+import { getSortIcon } from "./guestTableUtils";
 
 interface GuestTableProps {
   guests: GuestRecord[];
@@ -36,7 +41,7 @@ export const GuestTable: React.FC<GuestTableProps> = ({
 }) => {
   // Safety check: ensure guests is an array
   const safeGuests = Array.isArray(guests) ? guests : [];
-  
+
   if (safeGuests.length === 0 && !isLoading) {
     return (
       <div className="text-center py-12">
@@ -64,27 +69,26 @@ export const GuestTable: React.FC<GuestTableProps> = ({
   return (
     <div className="space-y-2">
       {/* Desktop Table Header */}
-      <div className="hidden md:grid md:grid-cols-6 gap-4 p-4 bg-base-light/30 dark:bg-base-light/10 rounded-lg">
-        <button
-          onClick={() => onSort('name')}
-          className="text-sm font-medium text-text-light uppercase tracking-wide
-                   hover:text-accent-gold transition-colors text-left
-                   flex items-center gap-1"
-        >
-          Tên khách
-          {' '}
-          <span className="text-xs">{getSortIcon('name', sortField, sortDirection)}</span>
-        </button>
+      <div className="hidden md:grid md:grid-cols-6 gap-4 p-4 bg-base-light/30 dark:bg-base-light/10 rounded-lg items-center">
+        <Button onClick={() => onSort("name")} className="">
+          <div className="flex items-center gap-2 text-left">
+            <span className="text-nowrap">Tên khách </span>
+            <span className="text-xs">
+              {getSortIcon("name", sortField, sortDirection)}
+            </span>
+          </div>
+        </Button>
 
         <button
-          onClick={() => onSort('venue')}
+          onClick={() => onSort("venue")}
           className="text-sm font-medium text-text-light uppercase tracking-wide
                    hover:text-accent-gold transition-colors text-left
                    flex items-center gap-1"
         >
-          Địa điểm
-          {' '}
-          <span className="text-xs">{getSortIcon('venue', sortField, sortDirection)}</span>
+          Địa điểm{" "}
+          <span className="text-xs">
+            {getSortIcon("venue", sortField, sortDirection)}
+          </span>
         </button>
 
         <div className="text-sm font-medium text-text-light uppercase tracking-wide text-left">
@@ -96,14 +100,15 @@ export const GuestTable: React.FC<GuestTableProps> = ({
         </div>
 
         <button
-          onClick={() => onSort('createdAt')}
+          onClick={() => onSort("createdAt")}
           className="text-sm font-medium text-text-light uppercase tracking-wide
                    hover:text-accent-gold transition-colors text-left
                    flex items-center gap-1"
         >
-          Ngày tạo
-          {' '}
-          <span className="text-xs">{getSortIcon('createdAt', sortField, sortDirection)}</span>
+          Ngày tạo{" "}
+          <span className="text-xs">
+            {getSortIcon("createdAt", sortField, sortDirection)}
+          </span>
         </button>
 
         <div className="text-sm font-medium text-text-light uppercase tracking-wide text-right">
