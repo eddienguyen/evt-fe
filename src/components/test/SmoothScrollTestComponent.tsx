@@ -37,7 +37,6 @@ export const SmoothScrollTestComponent: React.FC = () => {
             start: "top 80%",
             end: "bottom 20%",
             toggleActions: "play none none reverse",
-            markers: false, // Set to true for debugging
             refreshPriority: -1, // Ensure it works with Lenis
           }
         }

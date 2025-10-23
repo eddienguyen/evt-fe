@@ -67,9 +67,9 @@ const Home: React.FC = () => {
       )}
 
       {/* Latest Wishes Section */}
-      {/* <section className="container mx-auto px-4 py-16 bg-base-light">
+      <section className="container mx-auto px-4 py-16 bg-base-light">
         <WishesSection limit={9} animationMode="stacked" className="" />
-      </section> */}
+      </section>
 
       {/* Gallery Teaser Section */}
       <GalleryTeaser imageCount={6} enableAnimations={true} />

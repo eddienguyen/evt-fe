@@ -19,6 +19,7 @@ const LazyAdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const LazyAdminGuests = lazy(() => import('./pages/admin/AdminGuests'))
 const LazyAdminGuestCreate = lazy(() => import('./pages/admin/AdminGuestCreate'))
 const LazyAdminRSVPs = lazy(() => import('./pages/admin/AdminRSVPs'))
+const LazyAdminGallery = lazy(() => import('./pages/admin/gallery/page').then(m => ({ default: m.default })))
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: 'rsvps',
         element: <Suspense fallback={<div>Loading...</div>}><LazyAdminRSVPs /></Suspense>,
+      },
+      {
+        path: 'gallery',
+        element: <Suspense fallback={<div>Loading...</div>}><LazyAdminGallery /></Suspense>,
       },
     ],
   },

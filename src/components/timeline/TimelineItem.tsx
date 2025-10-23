@@ -100,8 +100,6 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           });
         },
         once: true,
-        // Enable markers for debugging (remove in production)
-        markers: false,
       });
     } else {
       if (image && content) {
@@ -162,7 +160,6 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
               ); // Overlap with previous animation
           },
           once: false,
-          markers: false,
         });
       }
     }

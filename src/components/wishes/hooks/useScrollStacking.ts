@@ -3,6 +3,13 @@
  *
  * Manages scroll-triggered stacking animation for wish cards using GSAP ScrollTrigger.
  * Handles animation initialization, progress tracking, and cleanup.
+ * 
+ * IMPORTANT IMPLEMENTATION NOTES (Oct 23, 2025):
+ * - Each card is pinned individually when it reaches 25% from viewport top
+ * - All cards end their pin when the wishes section container bottom hits viewport bottom
+ * - This ensures animations complete within the wishes section boundaries
+ * - The last card receives the same treatment as other cards (no special case needed)
+ * - End point calculation is dynamic to handle responsive layout changes
  *
  * @module components/wishes/hooks/useScrollStacking
  */
@@ -122,19 +129,19 @@ export function useScrollStacking(
       sectionScrollTriggerRef.current.kill();
       sectionScrollTriggerRef.current = null;
     }
-    
+
     // Kill all card-level ScrollTriggers
     for (const trigger of cardScrollTriggersRef.current) {
       trigger.kill();
     }
     cardScrollTriggersRef.current = [];
-    
+
     // Kill main ScrollTrigger (if any)
     if (scrollTriggerRef.current) {
       scrollTriggerRef.current.kill();
       scrollTriggerRef.current = null;
     }
-    
+
     setState({
       isInitialized: false,
       activeCardIndex: 0,
@@ -158,27 +165,6 @@ export function useScrollStacking(
     // Clear previous card triggers
     cardScrollTriggersRef.current = [];
 
-    // // Pin the entire section (including title) when it reaches the top
-    // sectionScrollTriggerRef.current = ScrollTrigger.create({
-    //   trigger: container,
-    //   markers: true,
-    //   start: "top 25%",
-    //   end: () => {
-    //     // Calculate total scroll distance needed for all cards to stack
-    //     const lastCard = cardRefsArray.current[wishes.length - 1]?.current;
-    //     if (!lastCard) return "+=1000";
-        
-    //     const lastCardRect = lastCard.getBoundingClientRect();
-    //     const containerRect = container.getBoundingClientRect();
-    //     const distanceToLastCard = lastCardRect.bottom - containerRect.top;
-        
-    //     // Add extra space for the stacking effect
-    //     return `+=${distanceToLastCard + (wishes.length * cardSpacing)}`;
-    //   },
-    //   pin: true,
-    //   pinSpacing: true,
-    // });
-
     // Setup initial z-index for proper stacking order
     for (let index = 0; index < cardRefsArray.current.length; index++) {
       const ref = cardRefsArray.current[index];
@@ -189,25 +175,40 @@ export function useScrollStacking(
       }
     }
 
-    // Create reference point for the last card
-    const lastCardST = ScrollTrigger.create({
-      trigger: cardRefsArray.current[wishes.length - 1].current,
-      start: "bottom bottom",
-    });
-
-    // Pin each card individually as it reaches center of viewport (within the pinned section)
+    // Pin each card individually as it reaches center of viewport
+    // All cards end when the bottom of the wishes section container reaches viewport bottom
     for (let index = 0; index < cardRefsArray.current.length; index++) {
       const ref = cardRefsArray.current[index];
       if (ref?.current) {
         const cardTrigger = ScrollTrigger.create({
           trigger: ref.current,
           start: "top 25%",
-          end: () => lastCardST.start + index * cardSpacing,
+          end: () => {
+            // Calculate end point dynamically: when container bottom hits viewport bottom
+            // This ensures all animations complete within the wishes section
+            const containerRect = container.getBoundingClientRect();
+            const cardRect = ref.current!.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            // Current scroll position
+            const currentScroll = window.scrollY;
+            
+            // Where the card pins (25% from top of viewport)
+            const pinPosition = cardRect.top + currentScroll - (viewportHeight * 0.25);
+            
+            // Where container bottom should be (at viewport bottom)
+            const containerBottom = containerRect.bottom + currentScroll;
+            
+            // Calculate scroll distance from pin point to container end
+            const scrollDistance = containerBottom - pinPosition - viewportHeight;
+            
+            // Ensure minimum scroll distance for smooth animation
+            return `+=${Math.max(scrollDistance, 100)}`;
+          },
           pin: true,
           pinSpacing: false,
           toggleActions: "restart none none reverse",
           onUpdate: () => {
-            // Once this card is scrolled to top, update opacity of previous cards to 0
             setState((prev) => ({
               ...prev,
               activeCardIndex: index,
@@ -217,7 +218,7 @@ export function useScrollStacking(
               const prevRef = cardRefsArray.current[j];
               if (prevRef?.current) {
                 gsap.to(prevRef.current, {
-                  opacity: 0,
+                  opacity: 0, // once pinned, fade out previous cards
                   duration: 0.3,
                   ease: "power1.out",
                 });
@@ -234,13 +235,14 @@ export function useScrollStacking(
                 });
               }
             }
-          }
+          },
         });
         cardScrollTriggersRef.current.push(cardTrigger);
       }
     }
 
     setState((prev) => ({ ...prev, isInitialized: true }));
+    console.log("cardScrollTriggersRef", cardScrollTriggersRef.current);
   }, [wishes.length, enabled, reducedMotion, cardSpacing, cleanup]);
 
   // Initialize animation on mount and when dependencies change
@@ -254,7 +256,14 @@ export function useScrollStacking(
       };
     }
     return cleanup;
-  }, [enabled, reducedMotion, cardSpacing, wishes.length, initializeStacking, cleanup]);
+  }, [
+    enabled,
+    reducedMotion,
+    cardSpacing,
+    wishes.length,
+    initializeStacking,
+    cleanup,
+  ]);
 
   return {
     state,

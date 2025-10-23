@@ -11,7 +11,6 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AdminSidebar } from './_components/AdminSidebar';
 import { AdminHeader } from './_components/AdminHeader';
-import ScrollToTop from '../../components/ScrollToTop';
 import type { BreadcrumbItem } from '../../types/admin';
 
 /**
@@ -78,9 +77,6 @@ export const AdminLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-base">
-      {/* Scroll to top on route change */}
-      <ScrollToTop />
-      
       {/* Sidebar Navigation */}
       <AdminSidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
