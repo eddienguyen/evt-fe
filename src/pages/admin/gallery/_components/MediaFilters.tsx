@@ -40,20 +40,19 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
   // Category options
   const categories: Array<{ value: MediaCategory | 'all'; label: string }> = [
     { value: 'all', label: 'All Categories' },
+    { value: 'wedding', label: 'Wedding' },
+    { value: 'engagement', label: 'Engagement' },
+    { value: 'pre-wedding', label: 'Pre-Wedding' },
     { value: 'ceremony', label: 'Ceremony' },
     { value: 'reception', label: 'Reception' },
-    { value: 'portraits', label: 'Portraits' },
-    { value: 'candid', label: 'Candid' },
-    { value: 'details', label: 'Details' },
-    { value: 'venue', label: 'Venue' },
-    { value: 'general', label: 'General' },
+    { value: 'other', label: 'Other' },
   ];
 
-  // Sort options
+  // Sort options - must match backend validation
   const sortOptions: Array<{ value: MediaSortBy; label: string }> = [
-    { value: 'date', label: 'Date Added' },
-    { value: 'name', label: 'Name' },
-    { value: 'size', label: 'File Size' },
+    { value: 'createdAt', label: 'Date Added' },
+    { value: 'dateTaken', label: 'Date Taken' },
+    { value: 'updatedAt', label: 'Last Modified' },
     { value: 'displayOrder', label: 'Display Order' },
   ];
 

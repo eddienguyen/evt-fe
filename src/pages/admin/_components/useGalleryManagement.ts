@@ -103,7 +103,7 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
     // Filter/search states
     searchQuery: '',
     categoryFilter: 'all',
-    sortBy: 'date',
+    sortBy: 'createdAt',
     currentPage: 1,
     totalPages: 0,
     totalItems: 0,
@@ -177,7 +177,7 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
       try {
         // Create form data
         const formData = createUploadFormData(file, {
-          category: state.categoryFilter === 'all' ? 'general' : state.categoryFilter,
+          category: state.categoryFilter === 'all' ? 'other' : state.categoryFilter,
         });
         
         // Upload with progress tracking
@@ -410,7 +410,8 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
         bulkActionMode: false,
       }));
     } catch (error) {
-      // Error already handled in deleteMedia
+      const message = error instanceof Error ? error.message : 'Bulk delete failed';
+      setState(prev => ({ ...prev, error: message }));
       throw error;
     }
   }, [deleteMedia]);

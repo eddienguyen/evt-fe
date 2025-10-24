@@ -54,40 +54,81 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null)
   const reducedMotion = prefersReducedMotion()
+  const previousImageCount = useRef<number>(0)
+  const animatedIds = useRef<Set<string>>(new Set())
 
-  // ScrollTrigger animations for gallery items
+  // ScrollTrigger animations for gallery items - only animate NEW items
   useEffect(() => {
     if (reducedMotion || !gridRef.current || images.length === 0) return
 
     const grid = gridRef.current
-    const items = grid.querySelectorAll('[role="listitem"]')
+    const allItems = grid.querySelectorAll('[role="listitem"]')
     
-    // Stagger animation for grid items
-    gsap.fromTo(
-      items,
-      {
-        opacity: 0,
-        y: 50,
-        scale: 0.95,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out',
-        stagger: {
-          amount: 0.4,
-          from: 'start',
-        },
-        scrollTrigger: {
-          trigger: grid,
-          start: 'top bottom-=100',
-          end: 'bottom center',
-          toggleActions: 'play none none none',
-        },
+    // Filter out items that have already been animated
+    const newItems = Array.from(allItems).filter((item) => {
+      const itemId = (item as HTMLElement).dataset.imageId
+      if (!itemId) return false
+      
+      const isNew = !animatedIds.current.has(itemId)
+      if (isNew) {
+        animatedIds.current.add(itemId)
       }
-    )
+      return isNew
+    })
+
+    // Only animate if there are new items
+    if (newItems.length === 0) return
+
+    // For initial load, animate all items with stagger
+    // For infinite scroll loads, animate only new items with simpler animation
+    const isInitialLoad = previousImageCount.current === 0
+    
+    if (isInitialLoad) {
+      // Initial load: full stagger animation
+      gsap.fromTo(
+        newItems,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.95,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: {
+            amount: 0.4,
+            from: 'start',
+          },
+          scrollTrigger: {
+            trigger: grid,
+            start: 'top bottom-=100',
+            end: 'bottom center',
+            toggleActions: 'play none none none',
+          },
+        }
+      )
+    } else {
+      // Infinite scroll: simple fade-in for new items only (no y-translation to prevent jump)
+      gsap.fromTo(
+        newItems,
+        {
+          opacity: 0,
+          scale: 0.98,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+          stagger: 0.05, // Quick stagger for smooth appearance
+        }
+      )
+    }
+
+    previousImageCount.current = images.length
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
@@ -96,7 +137,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
         }
       })
     }
-  }, [images, reducedMotion])
+  }, [images.length, reducedMotion]) // Only depend on images.length, not images array
 
   if (images.length === 0) {
     return (
@@ -123,9 +164,12 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
     <div
       ref={gridRef}
       className={cn(
-        // Column-based masonry layout (Pinterest-style) with extra spacing for polaroid shadows
-        'columns-2 sm:columns-3 lg:columns-4',
+        // CSS Grid layout - fills left-to-right, row-by-row
+        // Mobile: 2 columns, Tablet: 3 columns, Desktop: 4 columns
+        'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
         'gap-4 sm:gap-6',
+        // Auto-fit rows with content-based height
+        'auto-rows-auto',
         className
       )}
       role="list"
@@ -133,12 +177,12 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
     >
       {images.map((image, index) => (
         <div 
-          key={image.id} 
+          key={image.id}
+          data-image-id={image.id}
           role="listitem"
           className={cn(
-            // Break-inside-avoid keeps items intact in columns
-            'break-inside-avoid',
-            'mb-4 sm:mb-6',
+            // Grid item - each image is a self-contained grid cell
+            'w-full',
             // Add random rotation for polaroid effect
             getRandomRotation(index)
           )}

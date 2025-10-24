@@ -8,7 +8,7 @@
  * @module pages/admin/gallery/_components/SortableMediaCard
  */
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MediaCard } from './MediaCard';
 import { useSortableMedia } from './useSortableMedia';
 import { useSortMode } from './SortModeProvider';
@@ -42,8 +42,13 @@ export const SortableMediaCard: React.FC<SortableMediaCardProps> = ({
   onPreview,
   isSelectionMode,
 }) => {
-  const { state } = useSortMode();
-  const { isSortMode, isDragging: isGlobalDragging, draggedItemId } = state;
+  const { state, updateOrder } = useSortMode();
+  const { isSortMode, isDragging: isGlobalDragging, draggedItemId, currentOrder } = state;
+
+  // State for editable order
+  const [isEditingOrder, setIsEditingOrder] = useState(false);
+  const [orderValue, setOrderValue] = useState(media.displayOrder.toString());
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Use sortable hook
   const {
@@ -60,9 +65,56 @@ export const SortableMediaCard: React.FC<SortableMediaCardProps> = ({
   const isThisItemDragging = draggedItemId === media.id;
   const showDropIndicator = isOver && isGlobalDragging && !isThisItemDragging;
 
+  // Focus input when entering edit mode
+  useEffect(() => {
+    if (isEditingOrder && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditingOrder]);
+
+  // Handle order change
+  const handleOrderChange = (newOrder: number) => {
+    if (newOrder < 1 || Number.isNaN(newOrder)) {
+      setOrderValue(media.displayOrder.toString());
+      return;
+    }
+
+    // Create new order array with updated displayOrder
+    const newOrderArray = currentOrder.map(item => 
+      item.id === media.id 
+        ? { ...item, displayOrder: newOrder }
+        : item
+    ).sort((a, b) => a.displayOrder - b.displayOrder);
+
+    // Update context
+    updateOrder(newOrderArray);
+    setIsEditingOrder(false);
+  };
+
+  const handleOrderClick = () => {
+    setIsEditingOrder(true);
+    setOrderValue(media.displayOrder.toString());
+  };
+
+  const handleOrderBlur = () => {
+    const newOrder = Number.parseInt(orderValue, 10);
+    handleOrderChange(newOrder);
+  };
+
+  const handleOrderKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const newOrder = Number.parseInt(orderValue, 10);
+      handleOrderChange(newOrder);
+    } else if (e.key === 'Escape') {
+      setOrderValue(media.displayOrder.toString());
+      setIsEditingOrder(false);
+    }
+  };
+
   return (
     <div
-      className="relative"
+      className="relative group"
       {...dragHandleProps}
       style={{
         ...dragHandleProps.style,
@@ -90,18 +142,34 @@ export const SortableMediaCard: React.FC<SortableMediaCardProps> = ({
         </div>
       )}
 
-      {/* Order Number Badge */}
+      {/* Order Number Badge - Editable */}
       {isSortMode && (
-        <div
-          className={`absolute top-2 left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full font-bold text-xs shadow-sm transition-all ${
+        <button
+          type="button"
+          className={`absolute top-2 left-2 z-20 flex items-center justify-center w-auto min-w-[32px] h-8 px-2 rounded-full font-bold text-xs shadow-sm transition-all cursor-pointer hover:ring-2 hover:ring-white ${
             media.featured
               ? 'bg-yellow-500 text-white'
               : 'bg-blue-600 text-white'
-          }`}
-          title={`Display order: ${media.displayOrder}`}
+          } ${isEditingOrder ? 'ring-2 ring-white' : ''}`}
+          onClick={handleOrderClick}
+          title="Click to edit display order"
         >
-          {media.displayOrder}
-        </div>
+          {isEditingOrder ? (
+            <input
+              ref={inputRef}
+              type="number"
+              min="1"
+              value={orderValue}
+              onChange={(e) => setOrderValue(e.target.value)}
+              onBlur={handleOrderBlur}
+              onKeyDown={handleOrderKeyDown}
+              className="w-12 bg-transparent text-center text-white font-bold text-xs outline-none appearance-none [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <span>{media.displayOrder}</span>
+          )}
+        </button>
       )}
 
       {/* Featured Badge (when not in sort mode) */}

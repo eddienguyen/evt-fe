@@ -266,7 +266,7 @@ console.log('guest', guest);
             onClick={() => {
               onToggleExpand();
             }}
-            className="flex-1 px-3 py-2 text-sm font-medium text-text-light
+            className="flex-1 px-3 py-2 text-sm font-medium text-text-lighter
                      border border-text-light/20 rounded-md
                      hover:bg-base-light/30
                      transition-colors"

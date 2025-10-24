@@ -57,7 +57,10 @@ export interface GalleryPagination {
   page: number
   limit: number
   total: number
-  hasNext: boolean
+  totalPages: number
+  hasMore: boolean
+  /** @deprecated Use hasMore instead */
+  hasNext?: boolean
 }
 
 /**
@@ -112,13 +115,12 @@ export type MediaType = 'image' | 'video';
  * Media category enum
  */
 export type MediaCategory = 
+  | 'wedding'
+  | 'engagement'
+  | 'pre-wedding'
   | 'ceremony' 
   | 'reception' 
-  | 'portraits' 
-  | 'candid' 
-  | 'details' 
-  | 'venue'
-  | 'general';
+  | 'other';
 
 /**
  * Upload status enum
@@ -132,8 +134,9 @@ export type UploadStatus =
 
 /**
  * Sort options for media grid
+ * Must match backend validation: createdAt, displayOrder, dateTaken, updatedAt
  */
-export type MediaSortBy = 'date' | 'name' | 'size' | 'displayOrder';
+export type MediaSortBy = 'createdAt' | 'displayOrder' | 'dateTaken' | 'updatedAt';
 
 /**
  * Gallery media item interface for admin management

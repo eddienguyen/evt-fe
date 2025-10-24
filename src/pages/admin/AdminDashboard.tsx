@@ -29,7 +29,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-text">Tổng quan</h1>
+          <h1 className="text-2xl font-semibold text-text dark:text-base-light">Tổng quan</h1>
           <p className="text-text-light mt-1">
             Tổng quan về quản lý đám cưới và thống kê
           </p>

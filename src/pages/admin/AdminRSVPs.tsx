@@ -70,7 +70,7 @@ const AdminRSVPs: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text dark:text-text">
+          <h1 className="text-2xl font-bold text-text dark:text-base-light">
             Quản lý đơn tham dự
           </h1>
           <p className="text-sm text-text-light mt-1">

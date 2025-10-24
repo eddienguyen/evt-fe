@@ -63,6 +63,12 @@ export const AdminLayout: React.FC = () => {
         href: '/admin/rsvps',
         isActive: true,
       });
+    } else if (path.startsWith('/admin/gallery')) {
+      crumbs.push({
+        label: 'Gallery',
+        href: '/admin/gallery',
+        isActive: true,
+      });
     }
 
     setBreadcrumbs(crumbs);
@@ -76,7 +82,7 @@ export const AdminLayout: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-base dark:bg-gray-950">
       {/* Sidebar Navigation */}
       <AdminSidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 

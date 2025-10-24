@@ -100,7 +100,7 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
             <button
               onClick={() => handleDownload('front')}
               disabled={!guestName || isLoading}
-              className="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
+              className="text-xs px-3 py-1.5 bg-blue-600 text-gray-800 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
               title="Download preview image"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +165,7 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
             <button
               onClick={() => handleDownload('main')}
               disabled={!secondaryNote || isLoading}
-              className="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
+              className="text-xs px-3 py-1.5 bg-blue-600 text-gray-800 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
               title="Download preview image"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

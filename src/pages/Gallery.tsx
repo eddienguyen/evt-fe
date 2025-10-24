@@ -30,7 +30,7 @@ const Gallery: React.FC = () => {
         {/* Page Header */}
         <header className="text-center mb-12">
           <h1 className="font-rose text-4xl md:text-5xl text-warm-900 mb-4">
-            Khoảnh Khắc Đáng Nhớ
+            Album ảnh của chúng mình
           </h1>
           <p className="text-warm-600 text-lg max-w-2xl mx-auto italic">
             Những kỷ niệm đẹp được lưu giữ trong từng khung hình

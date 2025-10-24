@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils/cn'
 import { prefersReducedMotion } from '@/lib/a11y'
 import { Button } from '@/components/ui/Button'
 import { useLightbox } from '@/hooks/useLightbox'
-import { getFeaturedImages } from '@/config/album'
+import { useFeaturedGallery } from '@/hooks/useFeaturedGallery'
 import TeaserGrid from './TeaserGrid'
 import Lightbox from './Lightbox'
 
@@ -27,8 +27,6 @@ export interface GalleryTeaserProps {
   imageCount?: number
   /** Enable GSAP scroll animations */
   enableAnimations?: boolean
-  /** Custom featured image IDs to override default selection */
-  featuredImages?: string[]
   /** Additional CSS classes */
   className?: string
 }
@@ -50,7 +48,6 @@ export interface GalleryTeaserProps {
 const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
   imageCount = 6,
   enableAnimations = true,
-  featuredImages,
   className
 }) => {
   const navigate = useNavigate()
@@ -59,8 +56,11 @@ const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
   const descriptionRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
 
-  // Get featured images for lightbox
-  const images = getFeaturedImages(imageCount, featuredImages)
+  // Fetch featured images from API
+  const { images, isLoading, error } = useFeaturedGallery({ 
+    limit: imageCount,
+    autoLoad: true 
+  })
 
   // Setup lightbox with featured images
   const lightbox = useLightbox({
@@ -123,11 +123,11 @@ const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
 
     // Cleanup
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
+      for (const trigger of ScrollTrigger.getAll()) {
         if (trigger.vars.trigger === section) {
           trigger.kill()
         }
-      })
+      }
     }
   }, [enableAnimations])
 
@@ -157,26 +157,58 @@ const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
           Khám phá những khoảnh khắc đáng nhớ của chúng mình qua những bức ảnh đẹp nhất
         </p>
 
-        {/* Gallery Grid */}
-        <TeaserGrid
-          images={images}
-          enableAnimations={enableAnimations}
-          onImageClick={handleImageClick}
-          className="mb-12"
-        />
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        )}
 
-        {/* CTA Button */}
-        <div ref={ctaRef} className="flex justify-center">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={handleViewGallery}
-            className="px-8 py-3 text-lg"
-            aria-label="Xem toàn bộ album ảnh cưới"
-          >
-            Xem toàn bộ album
-          </Button>
-        </div>
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="text-center py-12">
+            <p className="text-error mb-4">
+              Không thể tải album ảnh. Vui lòng thử lại sau.
+            </p>
+            <p className="text-sm text-text-light">
+              {error.message}
+            </p>
+          </div>
+        )}
+
+        {/* Gallery Grid */}
+        {!isLoading && !error && images.length > 0 && (
+          <>
+            <TeaserGrid
+              images={images}
+              enableAnimations={enableAnimations}
+              onImageClick={handleImageClick}
+              className="mb-12"
+            />
+
+            {/* CTA Button */}
+            <div ref={ctaRef} className="flex justify-center">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleViewGallery}
+                className="px-8 py-3 text-lg"
+                aria-label="Xem toàn bộ album ảnh cưới"
+              >
+                Xem toàn bộ album
+              </Button>
+            </div>
+          </>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !error && images.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-text-light">
+              Chưa có ảnh nổi bật nào được chọn.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Lightbox for image preview */}

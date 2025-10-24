@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CoupleCard } from "./CoupleCard";
 import { couple } from "../../config/site";
 import type { CoupleComponentProps } from "../../types/couple";
@@ -14,6 +14,20 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
   className = "",
   eventID = "",
 }) => {
+
+  const husRef = React.useRef<HTMLDivElement>(null);
+  const wifRef = React.useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    if (enableAnimations) {
+     
+      // ScrollTrigger
+
+    }
+  }, []);
+
+
   return (
     <section
       aria-label="Couple presentation"
@@ -24,7 +38,7 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
         <div
           className={`relative flex gap-8 md:gap-16`}
         >
-          <div className="w-1/2 ">
+          <div className="w-1/2 " ref={husRef}>
             <CoupleCard
               subTitle="Chú rể"
               title={couple.husband}
@@ -36,7 +50,7 @@ export const CouplePresentation: React.FC<CoupleComponentProps> = ({
             />
           </div>
 
-          <div className="w-1/2 ">
+          <div className="w-1/2 " ref={wifRef}>
             <CoupleCard
               title={couple.wife}
               subTitle="Cô dâu"

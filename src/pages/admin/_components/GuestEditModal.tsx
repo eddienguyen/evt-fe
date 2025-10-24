@@ -201,7 +201,7 @@ export const GuestEditModal: React.FC<GuestEditModalProps> = ({
 
           {/* Info Box */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+            <p className="text-sm text-blue-800">
               <strong>Lưu ý:</strong> Chỉnh sửa thông tin không ảnh hưởng đến thiệp mời đã tạo. 
               Link thiệp và hình ảnh thiệp sẽ không thay đổi.
             </p>
@@ -213,7 +213,7 @@ export const GuestEditModal: React.FC<GuestEditModalProps> = ({
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-6 py-2 text-sm font-medium text-text-light
+              className="px-6 py-2 text-sm font-medium text-text-light dark:text-base-light
                        border border-text-light/20 rounded-lg
                        hover:bg-base-light/30
                        disabled:opacity-50 disabled:cursor-not-allowed

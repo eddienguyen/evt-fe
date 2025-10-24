@@ -26,7 +26,7 @@ interface MediaEditModalProps {
 }
 
 /**
- * Form state interface
+ * Edit form state interface
  */
 interface EditFormState {
   title: string;
@@ -37,15 +37,19 @@ interface EditFormState {
   photographer: string;
   dateTaken: string;
   featured: boolean;
+  displayOrder: number;
 }
 
 /**
  * Category options for dropdown
  */
 const CATEGORY_OPTIONS: { value: MediaCategory; label: string }[] = [
+  { value: 'wedding', label: 'Wedding' },
+  { value: 'engagement', label: 'Engagement' },
+  { value: 'pre-wedding', label: 'Pre-Wedding' },
   { value: 'ceremony', label: 'Ceremony' },
   { value: 'reception', label: 'Reception' },
-  { value: 'venue', label: 'Venue' },
+  { value: 'other', label: 'Other' },
 ];
 
 /**
@@ -70,6 +74,7 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
     photographer: mediaItem.photographer || '',
     dateTaken: mediaItem.dateTaken ? new Date(mediaItem.dateTaken).toISOString().split('T')[0] : '',
     featured: mediaItem.featured,
+    displayOrder: mediaItem.displayOrder || 0,
   });
 
   // Track if form has been modified
@@ -86,7 +91,8 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
       formState.location !== (mediaItem.location || '') ||
       formState.photographer !== (mediaItem.photographer || '') ||
       formState.dateTaken !== (mediaItem.dateTaken ? new Date(mediaItem.dateTaken).toISOString().split('T')[0] : '') ||
-      formState.featured !== mediaItem.featured;
+      formState.featured !== mediaItem.featured ||
+      formState.displayOrder !== mediaItem.displayOrder;
 
     setIsDirty(hasChanges);
   }, [formState, mediaItem]);
@@ -96,7 +102,7 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
    */
   const handleChange = (
     field: keyof EditFormState,
-    value: string | boolean
+    value: string | boolean | number
   ) => {
     setFormState((prev) => ({
       ...prev,
@@ -123,6 +129,7 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
         photographer: formState.photographer.trim() || undefined,
         dateTaken: formState.dateTaken ? new Date(formState.dateTaken) : undefined,
         featured: formState.featured,
+        displayOrder: formState.displayOrder,
       };
 
       await onSave(mediaItem.id, metadata);
@@ -139,7 +146,7 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
    */
   const handleClose = () => {
     if (isDirty) {
-      const confirmed = window.confirm(
+      const confirmed = globalThis.confirm(
         'You have unsaved changes. Are you sure you want to close?'
       );
       if (!confirmed) return;
@@ -158,13 +165,19 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onClick={handleBackdropClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') handleClose();
+      }}
     >
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h2 id="modal-title" className="text-xl font-semibold text-gray-900 dark:text-white">
             Edit Media
           </h2>
           <button
@@ -183,52 +196,77 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
             {/* Left Column: Preview */}
             <div className="space-y-4">
               <div className="aspect-video w-full bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden">
-                {mediaItem.type === 'image' ? (
+                {mediaItem.mediaType === 'image' ? (
                   <img
-                    src={mediaItem.thumbnailUrl || mediaItem.url}
-                    alt={mediaItem.metadata.altText || 'Media preview'}
+                    src={mediaItem.r2Urls.medium || mediaItem.r2Urls.thumbnail}
+                    alt={mediaItem.alt || 'Media preview'}
                     className="w-full h-full object-contain"
                   />
                 ) : (
                   <video
-                    src={mediaItem.url}
+                    src={mediaItem.r2Urls.original}
                     className="w-full h-full object-contain"
                     controls
-                  />
+                  >
+                    <track kind="captions" />
+                  </video>
                 )}
               </div>
 
               {/* File Info */}
               <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
                 <p>
-                  <span className="font-medium">Type:</span> {mediaItem.type}
+                  <span className="font-medium">Type:</span> {mediaItem.mediaType}
                 </p>
                 <p>
                   <span className="font-medium">Size:</span>{' '}
-                  {(mediaItem.fileSize / 1024 / 1024).toFixed(2)} MB
+                  {(mediaItem.metadata.fileSize / 1024 / 1024).toFixed(2)} MB
                 </p>
                 <p>
                   <span className="font-medium">Uploaded:</span>{' '}
-                  {new Date(mediaItem.uploadedAt).toLocaleDateString()}
+                  {new Date(mediaItem.createdAt).toLocaleDateString()}
                 </p>
               </div>
 
-              {/* Status Toggle */}
+              {/* Featured Toggle */}
               <div className="flex items-center gap-3">
                 <input
                   type="checkbox"
-                  id="isActive"
-                  checked={formState.isActive}
-                  onChange={(e) => handleChange('isActive', e.target.checked)}
+                  id="featured"
+                  checked={formState.featured}
+                  onChange={(e) => handleChange('featured', e.target.checked)}
                   disabled={isSaving}
                   className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                 />
                 <label
-                  htmlFor="isActive"
+                  htmlFor="featured"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
-                  Active (visible in gallery)
+                  Featured (highlight in gallery)
                 </label>
+              </div>
+
+              {/* Display Order */}
+              <div>
+                <label
+                  htmlFor="displayOrder"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >
+                  Display Order
+                </label>
+                <input
+                  type="number"
+                  id="displayOrder"
+                  min="1"
+                  value={formState.displayOrder}
+                  onChange={(e) => handleChange('displayOrder', Number.parseInt(e.target.value, 10))}
+                  disabled={isSaving}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter display order..."
+                />
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Lower numbers appear first in the gallery
+                </p>
               </div>
             </div>
 
@@ -355,16 +393,16 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
               {/* Alt Text */}
               <div>
                 <label
-                  htmlFor="altText"
+                  htmlFor="alt"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Alt Text
                 </label>
                 <input
                   type="text"
-                  id="altText"
-                  value={formState.altText}
-                  onChange={(e) => handleChange('altText', e.target.value)}
+                  id="alt"
+                  value={formState.alt}
+                  onChange={(e) => handleChange('alt', e.target.value)}
                   disabled={isSaving}
                   placeholder="Describe the image for accessibility"
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
@@ -373,32 +411,6 @@ export const MediaEditModal: React.FC<MediaEditModalProps> = ({
                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                            disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-              </div>
-
-              {/* Tags */}
-              <div>
-                <label
-                  htmlFor="tags"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                >
-                  Tags
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  value={formState.tags}
-                  onChange={(e) => handleChange('tags', e.target.value)}
-                  disabled={isSaving}
-                  placeholder="Comma-separated tags"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                           placeholder-gray-400 dark:placeholder-gray-500
-                           focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                           disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Separate multiple tags with commas
-                </p>
               </div>
             </div>
           </div>

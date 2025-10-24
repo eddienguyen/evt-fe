@@ -27,7 +27,7 @@ interface AdminHeaderProps {
  */
 export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuToggle }) => {
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-text-light/20 px-6 py-4">
+    <header className="sticky top-0 z-30 bg-white dark:bg-gray-700 border-b border-text-light/20 px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Mobile Menu Toggle */}
         <button
@@ -46,7 +46,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
             const renderBreadcrumbItem = () => {
               if (item.isActive) {
                 return (
-                  <span className="font-medium text-text truncate">
+                  <span className="font-medium text-text dark:text-base-light truncate">
                     {item.label}
                   </span>
                 );
@@ -56,7 +56,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
                 return (
                   <Link
                     to={item.href}
-                    className="text-text-light hover:text-accent-gold transition-colors truncate"
+                    className="text-text-light dark:dark:text-base-light hover:text-accent-gold transition-colors truncate"
                   >
                     {item.label}
                   </Link>
@@ -64,7 +64,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
               }
               
               return (
-                <span className="text-text-light truncate">
+                <span className="text-text-light dark:text-base-light truncate">
                   {item.label}
                 </span>
               );
@@ -73,7 +73,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
             return (
               <React.Fragment key={item.href || item.label}>
                 {index > 0 && (
-                  <svg className="w-4 h-4 text-text-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-text-light dark:text-base-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 )}

@@ -3,10 +3,12 @@
  * 
  * API client for gallery media management.
  * Handles all gallery-related API calls with proper error handling.
+ * Uses axios for better mobile device compatibility.
  * 
  * @module services/galleryApi
  */
 
+import axios, { type AxiosError } from 'axios';
 import type {
   GalleryMediaItem,
   GalleryQueryParams,
@@ -22,37 +24,42 @@ import type {
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 /**
+ * Create axios instance with default config
+ */
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true, // Include cookies for auth
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+/**
  * Gallery API endpoints
  */
 const ENDPOINTS = {
-  list: `${API_BASE_URL}/gallery`,
-  upload: `${API_BASE_URL}/gallery`,
-  detail: (id: string) => `${API_BASE_URL}/gallery/${id}`,
-  update: (id: string) => `${API_BASE_URL}/gallery/${id}`,
-  delete: (id: string) => `${API_BASE_URL}/gallery/${id}`,
-  bulkDelete: `${API_BASE_URL}/gallery/bulk/delete`,
+  list: '/admin/gallery',
+  upload: '/admin/gallery',
+  detail: (id: string) => `/admin/gallery/${id}`,
+  update: (id: string) => `/admin/gallery/${id}`,
+  delete: (id: string) => `/admin/gallery/${id}`,
+  bulkDelete: '/admin/gallery/bulk/delete',
+  reorder: '/admin/gallery/reorder',
 } as const;
 
 /**
- * Build URL query parameters from gallery query params
- * 
- * @param params - Gallery query parameters
- * @returns URLSearchParams object
+ * Handle API errors
  */
-const buildQueryParams = (params?: GalleryQueryParams): URLSearchParams => {
-  const queryParams = new URLSearchParams();
-  
-  if (!params) return queryParams;
-  
-  if (params.page) queryParams.append('page', params.page.toString());
-  if (params.limit) queryParams.append('limit', params.limit.toString());
-  if (params.search) queryParams.append('search', params.search);
-  if (params.category) queryParams.append('category', params.category);
-  if (params.featured !== undefined) queryParams.append('featured', params.featured.toString());
-  if (params.sortBy) queryParams.append('sortBy', params.sortBy);
-  if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder);
-  
-  return queryParams;
+const handleApiError = (error: unknown): never => {
+  if (axios.isAxiosError(error)) {
+    const axiosError = error as AxiosError<{ error?: string; message?: string }>;
+    const errorMessage = axiosError.response?.data?.error 
+      || axiosError.response?.data?.message 
+      || axiosError.message 
+      || 'An error occurred';
+    throw new Error(errorMessage);
+  }
+  throw error;
 };
 
 /**
@@ -66,24 +73,40 @@ export const galleryApi = {
    * @returns Promise resolving to gallery list response
    */
   getMedia: async (params?: GalleryQueryParams): Promise<GalleryListResponse> => {
-    const queryParams = buildQueryParams(params);
-    const queryString = queryParams.toString();
-    const url = queryString ? `${ENDPOINTS.list}?${queryString}` : ENDPOINTS.list;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // Include cookies for auth
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to fetch media' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      // Transform page-based pagination to offset-based for admin API
+      const page = params?.page || 1;
+      const limit = params?.limit || 20;
+      const offset = (page - 1) * limit;
+      
+      // Build query params for admin API (uses offset instead of page)
+      const queryParams = {
+        ...params,
+        limit,
+        offset,
+      };
+      delete queryParams.page; // Remove page param, admin API doesn't use it
+      
+      const response = await axiosInstance.get(ENDPOINTS.list, { params: queryParams });
+      
+      // Admin endpoint returns: { success: true, data: { items, total, limit, offset } }
+      // Transform to: { success, items, pagination: { total, totalPages, page, limit } }
+      const data = response.data.data;
+      const totalPages = Math.ceil(data.total / limit);
+      
+      return {
+        success: response.data.success,
+        items: data.items,
+        pagination: {
+          total: data.total,
+          page: page,
+          limit: limit,
+          totalPages: totalPages,
+        },
+      };
+    } catch (error) {
+      return handleApiError(error);
     }
-    
-    return response.json();
   },
 
   /**
@@ -93,21 +116,12 @@ export const galleryApi = {
    * @returns Promise resolving to media item
    */
   getMediaById: async (id: string): Promise<GalleryMediaItem> => {
-    const response = await fetch(ENDPOINTS.detail(id), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to fetch media' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      const response = await axiosInstance.get(ENDPOINTS.detail(id));
+      return response.data.data.mediaItem;
+    } catch (error) {
+      return handleApiError(error);
     }
-    
-    const data = await response.json();
-    return data.mediaItem;
   },
 
   /**
@@ -118,18 +132,16 @@ export const galleryApi = {
    * @returns Promise resolving to upload response
    */
   uploadMedia: async (formData: FormData): Promise<GalleryUploadResponse> => {
-    const response = await fetch(ENDPOINTS.upload, {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Upload failed' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      const response = await axiosInstance.post(ENDPOINTS.upload, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return handleApiError(error);
     }
-    
-    return response.json();
   },
 
   /**
@@ -140,22 +152,23 @@ export const galleryApi = {
    * @returns Promise resolving to updated media item
    */
   updateMedia: async (id: string, metadata: Partial<MediaMetadata>): Promise<GalleryMediaItem> => {
-    const response = await fetch(ENDPOINTS.update(id), {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(metadata),
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Update failed' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      console.log('🔄 updateMedia called for ID:', id);
+      console.log('📦 Metadata:', metadata);
+      console.log('📤 Sending PATCH to:', ENDPOINTS.update(id));
+      
+      const response = await axiosInstance.patch(ENDPOINTS.update(id), metadata);
+      
+      console.log('✅ Response received:', response.data);
+      return response.data.data.mediaItem;
+    } catch (error) {
+      console.error('❌ updateMedia error:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
+      }
+      return handleApiError(error);
     }
-    
-    const data = await response.json();
-    return data.mediaItem;
   },
 
   /**
@@ -165,17 +178,12 @@ export const galleryApi = {
    * @returns Promise resolving to success response
    */
   deleteMedia: async (id: string): Promise<{ success: boolean }> => {
-    const response = await fetch(ENDPOINTS.delete(id), {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Delete failed' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      const response = await axiosInstance.delete(ENDPOINTS.delete(id));
+      return response.data;
+    } catch (error) {
+      return handleApiError(error);
     }
-    
-    return response.json();
   },
 
   /**
@@ -185,21 +193,12 @@ export const galleryApi = {
    * @returns Promise resolving to bulk operation result
    */
   bulkDelete: async (ids: string[]): Promise<BulkOperationResult> => {
-    const response = await fetch(ENDPOINTS.bulkDelete, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ids }),
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Bulk delete failed' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      const response = await axiosInstance.post(ENDPOINTS.bulkDelete, { ids });
+      return response.data;
+    } catch (error) {
+      return handleApiError(error);
     }
-    
-    return response.json();
   },
 
   /**
@@ -213,21 +212,23 @@ export const galleryApi = {
     message: string;
     data: { updated: number };
   }> => {
-    const response = await fetch(`${API_BASE_URL}/gallery/reorder`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ items }),
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Reorder failed' }));
-      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    try {
+      console.log('🔄 reorderMedia called with items:', items);
+      console.log('📤 Sending request to:', ENDPOINTS.reorder);
+      console.log('📦 Request body:', { items });
+      
+      const response = await axiosInstance.put(ENDPOINTS.reorder, { items });
+      
+      console.log('✅ Response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ reorderMedia error:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
+      }
+      return handleApiError(error);
     }
-    
-    return response.json();
   },
 };
 
@@ -270,7 +271,7 @@ export const mockGalleryApi = {
         filename: 'mock-upload.jpg',
         alt: 'Mock upload',
         mediaType: 'image',
-        category: 'general',
+        category: 'other',
         r2ObjectKey: 'mock-key',
         r2Urls: {
           thumbnail: '/placeholder-thumbnail.jpg',
@@ -313,7 +314,7 @@ export const mockGalleryApi = {
       title: metadata.title,
       caption: metadata.caption,
       mediaType: 'image',
-      category: metadata.category || 'general',
+      category: metadata.category || 'other',
       r2ObjectKey: 'mock-key',
       r2Urls: {
         thumbnail: '/placeholder-thumbnail.jpg',

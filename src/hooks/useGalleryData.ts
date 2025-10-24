@@ -1,27 +1,26 @@
 /**
  * Gallery Data Hook
  * 
- * Custom hook for fetching and managing gallery image data.
+ * Custom hook for fetching and managing gallery image data from the API.
  * 
  * @module hooks/useGalleryData
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import type { GalleryImage, GalleryState } from '@/types/gallery'
-import { ALBUM_IMAGES } from '@/config/album'
-
-// Use real album images from /public/album/
-const MOCK_IMAGES: GalleryImage[] = ALBUM_IMAGES
+import type { GalleryState } from '@/types/gallery'
+import { publicGalleryApi, type PublicGalleryQueryParams } from '@/services/publicGalleryApi'
 
 export interface UseGalleryDataOptions {
   /** Initial page to load */
   initialPage?: number
   /** Items per page */
   limit?: number
-  /** Initial category filter */
-  initialCategory?: string | null
   /** Enable auto-loading */
   autoLoad?: boolean
+  /** Sort field */
+  sortBy?: 'createdAt' | 'displayOrder' | 'dateTaken' | 'updatedAt'
+  /** Sort order */
+  sortOrder?: 'asc' | 'desc'
 }
 
 export interface UseGalleryDataReturn extends Omit<GalleryState, 'lightboxOpen' | 'selectedImageIndex' | 'viewMode'> {
@@ -62,8 +61,9 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
   const {
     initialPage = 1,
     limit = 20,
-    initialCategory = null,
     autoLoad = true,
+    sortBy = 'displayOrder',
+    sortOrder = 'asc',
   } = options
 
   // Track if initial load has been completed to prevent double loading
@@ -76,7 +76,7 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
     hasMore: true,
     currentPage: initialPage,
     searchQuery: '',
-    selectedCategory: initialCategory,
+    selectedCategory: null,
     sortBy: 'date',
   })
 
@@ -84,18 +84,19 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
     setState(prev => ({ ...prev, isLoading: true, error: null }))
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const params: PublicGalleryQueryParams = {
+        page,
+        limit,
+        sortBy,
+        sortOrder,
+      }
 
-      // Mock pagination
-      const start = (page - 1) * limit
-      const end = start + limit
-      const pageImages = MOCK_IMAGES.slice(start, end)
+      const response = await publicGalleryApi.getGallery(params)
 
       setState(prev => ({
         ...prev,
-        images: append ? [...prev.images, ...pageImages] : pageImages,
-        hasMore: end < MOCK_IMAGES.length,
+        images: append ? [...prev.images, ...response.items] : response.items,
+        hasMore: response.pagination.hasMore,
         currentPage: page,
         isLoading: false,
       }))
@@ -106,7 +107,7 @@ export function useGalleryData(options: UseGalleryDataOptions = {}): UseGalleryD
         isLoading: false,
       }))
     }
-  }, [limit])
+  }, [limit, sortBy, sortOrder])
 
   const loadMore = useCallback(() => {
     if (state.hasMore && !state.isLoading) {

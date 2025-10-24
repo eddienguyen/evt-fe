@@ -36,7 +36,7 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
   return (
     <div
       className="bg-base dark:bg-base border border-text-light/10 rounded-lg overflow-hidden
-                 hover:bg-base-light/30 dark:hover:bg-base-light/10 transition-colors"
+                 hover:bg-base-light/30 dark:hover:bg-accent-taupe-light transition-colors"
     >
       {/* Main Row */}
       <div

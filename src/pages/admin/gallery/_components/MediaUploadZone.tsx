@@ -60,7 +60,7 @@ export const MediaUploadZone: React.FC<MediaUploadZoneProps> = ({
   const [files, setFiles] = useState<FilePreview[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [metadata, setMetadata] = useState<UploadMetadata>({
-    category: 'ceremony',
+    category: 'wedding',
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -372,11 +372,11 @@ export const MediaUploadZone: React.FC<MediaUploadZoneProps> = ({
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     disabled={isUploading}
                   >
+                    <option value="wedding">Wedding</option>
+                    <option value="engagement">Engagement</option>
+                    <option value="pre-wedding">Pre-Wedding</option>
                     <option value="ceremony">Ceremony</option>
                     <option value="reception">Reception</option>
-                    <option value="venue">Venue</option>
-                    <option value="portraits">Portraits</option>
-                    <option value="details">Details</option>
                     <option value="other">Other</option>
                   </select>
                 </div>

@@ -28,13 +28,12 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
 
   // Category options
   const categoryOptions: { value: MediaCategory; label: string }[] = [
+    { value: 'wedding', label: 'Wedding' },
+    { value: 'engagement', label: 'Engagement' },
+    { value: 'pre-wedding', label: 'Pre-Wedding' },
     { value: 'ceremony', label: 'Ceremony' },
     { value: 'reception', label: 'Reception' },
-    { value: 'portraits', label: 'Portraits' },
-    { value: 'candid', label: 'Candid' },
-    { value: 'details', label: 'Details' },
-    { value: 'venue', label: 'Venue' },
-    { value: 'general', label: 'General' },
+    { value: 'other', label: 'Other' },
   ];
 
   const handleBulkDelete = async () => {

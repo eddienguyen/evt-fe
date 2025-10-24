@@ -67,7 +67,10 @@ export const SortableMediaGrid: React.FC<SortableMediaGridProps> = ({
     createSnapshot,
   } = useSortMode();
 
-  const { isSortMode } = state;
+  const { isSortMode, currentOrder } = state;
+
+  // Use currentOrder from context when in sort mode, otherwise use props
+  const displayItems = isSortMode && currentOrder.length > 0 ? currentOrder : mediaItems;
 
   // Configure drag sensors
   const sensors = useSensors(
@@ -106,9 +109,9 @@ export const SortableMediaGrid: React.FC<SortableMediaGridProps> = ({
         return;
       }
 
-      // Calculate new order
+      // Calculate new order using displayItems (current order in context)
       const newOrder = calculateDragDropOrder(
-        mediaItems,
+        displayItems,
         active.id as string,
         over.id as string,
         'after'
@@ -123,11 +126,11 @@ export const SortableMediaGrid: React.FC<SortableMediaGridProps> = ({
       // Notify parent component
       onOrderChange?.(newOrder);
     },
-    [mediaItems, endDrag, createSnapshot, updateOrder, onOrderChange]
+    [displayItems, endDrag, createSnapshot, updateOrder, onOrderChange]
   );
 
   // Extract item IDs for sortable context
-  const itemIds = mediaItems.map(item => item.id);
+  const itemIds = displayItems.map(item => item.id);
 
   return (
     <DndContext
@@ -152,7 +155,7 @@ export const SortableMediaGrid: React.FC<SortableMediaGridProps> = ({
             ${isSortMode ? 'cursor-default' : ''}
           `}
         >
-          {mediaItems.map((media, index) => (
+          {displayItems.map((media, index) => (
             <SortableMediaCard
               key={media.id}
               media={media}
