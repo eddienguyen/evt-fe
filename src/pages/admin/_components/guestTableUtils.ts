@@ -47,8 +47,8 @@ export const getVenueName = (venue: 'hue' | 'hanoi'): string => {
  */
 export const getVenueBadgeColor = (venue: 'hue' | 'hanoi'): string => {
   return venue === 'hue'
-    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
-    : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
+    ? 'bg-purple-100 text-accent-gold-dark dark:bg-purple-900/30'
+    : 'bg-blue-100 text-accent-gold-dark dark:bg-blue-900/30';
 };
 
 /**

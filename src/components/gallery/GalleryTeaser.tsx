@@ -135,7 +135,7 @@ const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
     <section 
       ref={sectionRef}
       className={cn(
-        "container mx-auto px-4 py-16 bg-base-light",
+        "mx-auto px-4 py-16 bg-base-light",
         className
       )}
       aria-labelledby="gallery-teaser-heading"
@@ -147,14 +147,14 @@ const GalleryTeaser: React.FC<GalleryTeaserProps> = ({
           id="gallery-teaser-heading" 
           className="font-heading text-3xl md:text-4xl font-bold text-text mb-6"
         >
-          📸 Album ảnh cưới
+          Album ảnh cưới
         </h2>
         
         <p 
           ref={descriptionRef}
           className="text-text-light text-lg mb-12 max-w-2xl mx-auto"
         >
-          Khám phá những khoảnh khắc đáng nhớ của chúng tôi qua những bức ảnh đẹp nhất
+          Khám phá những khoảnh khắc đáng nhớ của chúng mình qua những bức ảnh đẹp nhất
         </p>
 
         {/* Gallery Grid */}

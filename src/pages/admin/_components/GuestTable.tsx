@@ -70,26 +70,31 @@ export const GuestTable: React.FC<GuestTableProps> = ({
     <div className="space-y-2">
       {/* Desktop Table Header */}
       <div className="hidden md:grid md:grid-cols-6 gap-4 p-4 bg-base-light/30 dark:bg-base-light/10 rounded-lg items-center">
-        <Button onClick={() => onSort("name")} className="">
-          <div className="flex items-center gap-2 text-left">
-            <span className="text-nowrap">Tên khách </span>
-            <span className="text-xs">
-              {getSortIcon("name", sortField, sortDirection)}
-            </span>
-          </div>
-        </Button>
-
-        <button
-          onClick={() => onSort("venue")}
+        <Button
+          variant="outline"
+          onClick={() => onSort("name")}
           className="text-sm font-medium text-text-light uppercase tracking-wide
                    hover:text-accent-gold transition-colors text-left
                    flex items-center gap-1"
         >
-          Địa điểm{" "}
-          <span className="text-xs">
+          Tên khách
+          <span className="text-xs block">
+            {getSortIcon("name", sortField, sortDirection)}
+          </span>
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => onSort("venue")}
+          className="text-sm font-medium text-text-light uppercase tracking-wide
+                   hover:text-accent-gold transition-colors text-left
+                   flex items-center justify-between"
+        >
+          Địa điểm
+          <span className="text-xs block">
             {getSortIcon("venue", sortField, sortDirection)}
           </span>
-        </button>
+        </Button>
 
         <div className="text-sm font-medium text-text-light uppercase tracking-wide text-left">
           Ghi chú
@@ -99,17 +104,18 @@ export const GuestTable: React.FC<GuestTableProps> = ({
           Thiệp mời
         </div>
 
-        <button
+        <Button
+          variant="outline"
           onClick={() => onSort("createdAt")}
           className="text-sm font-medium text-text-light uppercase tracking-wide
                    hover:text-accent-gold transition-colors text-left
                    flex items-center gap-1"
         >
           Ngày tạo{" "}
-          <span className="text-xs">
+          <span className="text-xs block">
             {getSortIcon("createdAt", sortField, sortDirection)}
           </span>
-        </button>
+        </Button>
 
         <div className="text-sm font-medium text-text-light uppercase tracking-wide text-right">
           Thao tác

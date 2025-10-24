@@ -201,6 +201,34 @@ export const galleryApi = {
     
     return response.json();
   },
+
+  /**
+   * Reorder media items in bulk
+   * 
+   * @param items - Array of items with id and displayOrder
+   * @returns Promise resolving to reorder result
+   */
+  reorderMedia: async (items: Array<{ id: string; displayOrder: number }>): Promise<{
+    success: boolean;
+    message: string;
+    data: { updated: number };
+  }> => {
+    const response = await fetch(`${API_BASE_URL}/gallery/reorder`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ items }),
+      credentials: 'include',
+    });
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Reorder failed' }));
+      throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    return response.json();
+  },
 };
 
 /**
@@ -312,6 +340,8 @@ export const mockGalleryApi = {
 
 /**
  * Export appropriate API based on environment
- * Use mock API for development until backend is ready
+ * Use real API in both development and production
+ * Set VITE_USE_MOCK_API=true to use mock data
  */
-export const api = import.meta.env.DEV ? mockGalleryApi : galleryApi;
+const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
+export const api = USE_MOCK_API ? mockGalleryApi : galleryApi;

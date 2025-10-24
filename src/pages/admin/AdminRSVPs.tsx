@@ -71,7 +71,7 @@ const AdminRSVPs: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text dark:text-text">
-            Quản lý RSVP
+            Quản lý đơn tham dự
           </h1>
           <p className="text-sm text-text-light mt-1">
             {paginationInfo.showing}

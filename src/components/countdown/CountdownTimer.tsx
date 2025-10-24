@@ -122,7 +122,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       <section
         ref={sectionRef}
         className={cn(
-          'container mx-auto px-4 py-12 md:py-16 bg-base',
+          'mx-auto px-4 py-12 md:py-16 bg-base',
           className
         )}
         aria-labelledby="countdown-heading"
@@ -147,7 +147,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     <section
       ref={sectionRef}
       className={cn(
-        'container mx-auto px-4 py-12 md:py-16 bg-base',
+        'mx-auto px-4 py-12 md:py-16 bg-base',
         className
       )}
       aria-labelledby="countdown-heading"

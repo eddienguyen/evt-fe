@@ -118,7 +118,7 @@ const AdminGuests: React.FC = () => {
         
         <Link
           to="/admin/guests/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text- rounded-lg hover:bg-primary-dark transition-colors"
         >
           <Plus className="h-5 w-5" />
           Tạo thiệp mời

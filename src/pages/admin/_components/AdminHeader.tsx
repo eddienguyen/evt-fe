@@ -32,7 +32,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ breadcrumbs, onMenuTog
         {/* Mobile Menu Toggle */}
         <button
           onClick={onMenuToggle}
-          className="lg:hidden text-text-light hover:text-text transition-colors p-2 -ml-2"
+          className="lg:hidden text-text-light hover:text-text transition-colors p-2 -ml-2 mr-2"
           aria-label="Toggle menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

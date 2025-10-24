@@ -51,7 +51,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ eventID = "" }) => {
 
   return (
     <section
-      className="relative h-screen w-full flex items-center justify-center z-content overflow-hidden"
+      className="relative h-screen w-full flex items-start lg:items-center justify-center z-content overflow-hidden"
       aria-label="Hero section"
     >
       {/* Parallax Background Image - Full Screen */}
@@ -76,7 +76,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ eventID = "" }) => {
       </div>
 
       {/* Hero Content */}
-      <div className="text-center text-accent-white px-4 relative z-10">
+      <div className="text-center mix-blend-soft-light text-accent-white px-4 relative z-10">
         {/* Couple Names - Positioned to align with 3D text */}
         <div className="mb-32">
           <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold mb-4 opacity-0">
@@ -87,15 +87,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ eventID = "" }) => {
 
         {/* Event Details */}
         <div className="space-y-4">
-          <h2 className="font-handwritten text-8xl md:text-10xl font-bold mb-2">
-            <span className="block mb-10 text-left pr-10 lg:inline-block">{couple.husbandShortName}</span>
-            <span className="hidden lg:inline-block mx-2">&</span>
-            <span className="block text-right pl-10 mt-10 lg:inline-block">{couple.wifeShortName}</span>
-          </h2>
+          <h5 className="text-8xl font-bold mb-2 px-6 py-3 rounded-lg font-handwritten text-white/80">
+            <span className="inline-block mb-10 text-left pr-10 ">
+              {couple.husbandShortName}
+            </span>
+            <span className="inline-block mx-2">&</span>
+            <span className="inline-block text-right pl-10 mt-10 ">
+              {couple.wifeShortName}
+            </span>
+          </h5>
           {/* <p className="text-xl md:text-2xl font-light tracking-wide opacity-90">
             {eventID === "hanoi" ? events.hanoi.dateDisplay + " • " + events.hanoi.locationShort : events.hue.dateDisplay + " • " + events.hue.locationShort}
-          </p> */}
-          <div className="w-16 h-px bg-accent-gold mx-auto"></div>
+          </p>
+          <div className="w-16 h-px bg-accent-gold mx-auto"></div> */}
         </div>
       </div>
     </section>

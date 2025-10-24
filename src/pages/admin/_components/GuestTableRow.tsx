@@ -35,7 +35,7 @@ export const GuestTableRow: React.FC<GuestTableRowProps> = ({
   const venueBadgeColor = getVenueBadgeColor(guest.venue);
   const initials = getGuestInitials(guest.name);
   const hasImages = hasInvitationImages(guest);
-
+console.log('guest', guest);
   return (
     <>
       {/* Desktop Row */}
@@ -129,6 +129,7 @@ export const GuestTableRow: React.FC<GuestTableRowProps> = ({
               Xóa
             </button>
             <button
+              onClick={onToggleExpand}
               className={`ml-2 text-text-light transition-transform duration-200
                          ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
               aria-label={isExpanded ? 'Thu gọn' : 'Mở rộng'}

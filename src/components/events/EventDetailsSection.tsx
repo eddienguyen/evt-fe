@@ -84,7 +84,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
     <section
       ref={sectionRef}
       className={cn(
-        "container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-base-light",
+        " mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-base-light",
         className
       )}
       aria-labelledby="event-details-heading"

@@ -16,6 +16,7 @@ import { MediaFilters } from './_components/MediaFilters';
 import { SortableMediaGrid } from './_components/SortableMediaGrid';
 import { GalleryMediaList } from './_components/GalleryMediaList';
 import { MediaBulkActions } from './_components/MediaBulkActions';
+import { MediaUploadZone } from './_components/MediaUploadZone';
 import type { GalleryMediaItem } from '../../../types/gallery';
 
 /**
@@ -196,21 +197,33 @@ export const AdminGallery: React.FC = () => {
         {/* Sort Toolbar */}
         <MediaSortToolbar onSaveSuccess={handleSaveSuccess} />
 
-      {/* Upload Zone Placeholder */}
+      {/* Upload Zone */}
       {showUploadZone && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-300 dark:border-blue-600 rounded-lg p-8">
-          <div className="text-center">
-            <p className="text-blue-600 dark:text-blue-400 font-medium">
-              Upload Zone (Component Coming Soon)
-            </p>
-            <button
-              onClick={() => setShowUploadZone(false)}
-              className="mt-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <MediaUploadZone
+          onClose={() => setShowUploadZone(false)}
+          onUpload={async (files) => {
+            await galleryState.uploadFiles(files);
+            setShowUploadZone(false);
+          }}
+          uploadProgress={
+            // Convert Record<string, number> to Record<string, UploadProgressItem>
+            Object.entries(galleryState.uploadProgress).reduce(
+              (acc, [fileId, progress]) => ({
+                ...acc,
+                [fileId]: {
+                  fileId,
+                  filename: fileId,
+                  progress,
+                  status: progress === 100 ? 'success' : 'uploading' as const,
+                  error: galleryState.uploadErrors[fileId],
+                },
+              }),
+              {}
+            )
+          }
+          uploadErrors={galleryState.uploadErrors}
+          isUploading={galleryState.uploading}
+        />
       )}
 
       {/* Filters */}

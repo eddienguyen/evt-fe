@@ -25,6 +25,7 @@ export default {
           'gold-dark': '#8F7245',
           taupe: '#7A6C5D',
           'taupe-light': '#9A8C7D',
+          red: '#E73238'
         },
         hero: {
           from: '#4F46E5',

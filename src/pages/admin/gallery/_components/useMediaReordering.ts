@@ -9,6 +9,7 @@
 
 import { useCallback } from 'react';
 import { useSortMode } from './SortModeProvider';
+import { galleryApi } from '../../../../services/galleryApi';
 import {
   moveItemsToTop,
   moveItemsToBottom,
@@ -20,8 +21,6 @@ import {
 import type { 
   MediaCategory,
   QuickSortAction,
-  ReorderRequestPayload,
-  ReorderResponse,
 } from '../../../../types/gallery';
 
 /**
@@ -136,29 +135,14 @@ export const useMediaReordering = () => {
       setError(null);
 
       try {
-        // Prepare reorder payload
-        const payload: ReorderRequestPayload = {
-          operations: currentOrder.map((item) => ({
-            id: item.id,
-            displayOrder: item.displayOrder,
-            category: item.category,
-          })),
-        };
+        // Prepare reorder items (backend expects { items: [{id, displayOrder}] })
+        const items = currentOrder.map((item) => ({
+          id: item.id,
+          displayOrder: item.displayOrder,
+        }));
 
-        // Make API request
-        const response = await fetch('/api/gallery/reorder', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to save order: ${response.statusText}`);
-        }
-
-        const data: ReorderResponse = await response.json();
+        // Make API request using gallery API service
+        const data = await galleryApi.reorderMedia(items);
 
         if (!data.success) {
           throw new Error(data.message || 'Failed to save order');

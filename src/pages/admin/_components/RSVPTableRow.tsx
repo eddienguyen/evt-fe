@@ -1,20 +1,20 @@
 /**
  * RSVP Table Row
- * 
+ *
  * Individual row component for RSVP table with expand/collapse functionality.
  * Displays RSVP summary and detailed information when expanded.
- * 
+ *
  * @module pages/admin/_components/RSVPTableRow
  */
 
-import type { RSVPRecord } from '../../../types/rsvp';
+import type { RSVPRecord } from "../../../types/rsvp";
 import {
   formatDateShort,
   getVenueName,
   getAttendanceStatus,
   getGuestDisplayName,
   formatDate,
-} from './rsvpTableUtils';
+} from "./rsvpTableUtils";
 
 interface RSVPTableRowProps {
   rsvp: RSVPRecord;
@@ -34,8 +34,10 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
   const attendanceStatus = getAttendanceStatus(rsvp.willAttend);
 
   return (
-    <div className="bg-base dark:bg-base border border-text-light/10 rounded-lg overflow-hidden
-                 hover:bg-base-light/30 dark:hover:bg-base-light/10 transition-colors">
+    <div
+      className="bg-base dark:bg-base border border-text-light/10 rounded-lg overflow-hidden
+                 hover:bg-base-light/30 dark:hover:bg-base-light/10 transition-colors"
+    >
       {/* Main Row */}
       <div
         className="grid grid-cols-7 gap-4 p-4 cursor-pointer items-center"
@@ -43,7 +45,7 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             onToggleExpand();
           }
@@ -85,7 +87,7 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
           className="flex items-center justify-end gap-2"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === "Enter" || e.key === " ") {
               e.stopPropagation();
             }
           }}
@@ -113,9 +115,10 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
             Xóa
           </button>
           <button
+            onClick={onToggleExpand}
             className={`ml-2 text-text-light transition-transform duration-200
-                       ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
-            aria-label={isExpanded ? 'Thu gọn' : 'Mở rộng'}
+                       ${isExpanded ? "rotate-180" : "rotate-0"}`}
+            aria-label={isExpanded ? "Thu gọn" : "Mở rộng"}
           >
             ▼
           </button>
@@ -128,35 +131,45 @@ export const RSVPTableRow: React.FC<RSVPTableRowProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Wishes/Message */}
             <div>
-              <h4 className="text-sm font-medium text-text-light mb-2">Lời chúc:</h4>
+              <h4 className="text-sm font-medium text-text-light mb-2">
+                Lời chúc:
+              </h4>
               <p className="text-sm text-text dark:text-text whitespace-pre-wrap">
-                {rsvp.wishes || 'Không có lời chúc'}
+                {rsvp.wishes || "Không có lời chúc"}
               </p>
             </div>
 
             {/* Timestamps */}
             <div className="space-y-2">
               <div>
-                <span className="text-sm font-medium text-text-light">Ngày tạo: </span>
+                <span className="text-sm font-medium text-text-light">
+                  Ngày tạo:{" "}
+                </span>
                 <span className="text-sm text-text dark:text-text">
                   {formatDate(rsvp.createdAt)}
                 </span>
               </div>
               <div>
-                <span className="text-sm font-medium text-text-light">Cập nhật: </span>
+                <span className="text-sm font-medium text-text-light">
+                  Cập nhật:{" "}
+                </span>
                 <span className="text-sm text-text dark:text-text">
                   {formatDate(rsvp.updatedAt)}
                 </span>
               </div>
               <div>
-                <span className="text-sm font-medium text-text-light">ID: </span>
+                <span className="text-sm font-medium text-text-light">
+                  ID:{" "}
+                </span>
                 <span className="text-sm text-text-light font-mono">
                   {rsvp.id}
                 </span>
               </div>
               {rsvp.guestId && (
                 <div>
-                  <span className="text-sm font-medium text-text-light">Guest ID: </span>
+                  <span className="text-sm font-medium text-text-light">
+                    Guest ID:{" "}
+                  </span>
                   <span className="text-sm text-text-light font-mono">
                     {rsvp.guestId}
                   </span>

@@ -145,7 +145,7 @@ export function StackedWishCards({
               cardRefs[index].current = el
             }
           }}
-          className="will-change-transform"
+          className="will-change-transform mb-2"
         >
           <WishCard wish={wish} />
         </div>
