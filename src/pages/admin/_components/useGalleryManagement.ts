@@ -20,10 +20,10 @@ import { validateFile } from '../../../utils/fileValidation';
 import { uploadWithProgress, generateFileId, createUploadFormData } from '../../../utils/uploadHelpers';
 
 /**
- * Upload endpoint
+ * Upload endpoint - consistent with other services (VITE_API_BASE_URL)
  */
-const UPLOAD_URL = import.meta.env.VITE_API_URL 
-  ? `${import.meta.env.VITE_API_URL}/gallery`
+const UPLOAD_URL = import.meta.env.VITE_API_BASE_URL 
+  ? `${import.meta.env.VITE_API_BASE_URL}/api/gallery`
   : 'http://localhost:3000/api/gallery';
 
 /**

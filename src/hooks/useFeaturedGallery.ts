@@ -13,9 +13,9 @@ import axios from 'axios'
 import type { GalleryImage } from '@/types/gallery'
 
 /**
- * API base URL
+ * API base URL - consistent with other services (VITE_API_BASE_URL)
  */
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 
 /**
  * Transform backend gallery item to frontend GalleryImage format
@@ -125,7 +125,7 @@ export function useFeaturedGallery(options: UseFeaturedGalleryOptions = {}): Use
     setError(null)
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/gallery/featured`)
+      const response = await axios.get(`${API_BASE_URL}/api/gallery/featured`)
       
       // Backend returns: { success: true, data: { items: [...] } }
       const backendItems = response.data.data.items

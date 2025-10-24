@@ -11,15 +11,15 @@ import axios, { type AxiosError } from 'axios';
 import type { GalleryImage, GalleryPagination } from '../types/gallery';
 
 /**
- * API base URL
+ * API base URL - consistent with other services (VITE_API_BASE_URL)
  */
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 /**
  * Create axios instance with default config
  */
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}/api`, // Append /api to match backend routes
   headers: {
     'Content-Type': 'application/json',
   },

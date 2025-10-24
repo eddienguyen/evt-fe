@@ -20,14 +20,15 @@ import type {
 
 /**
  * API base URL - will be configured based on environment
+ * Uses VITE_API_BASE_URL (without /api suffix) for consistency with other services
  */
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 /**
  * Create axios instance with default config
  */
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}/api`, // Append /api to match backend routes
   withCredentials: true, // Include cookies for auth
   headers: {
     'Content-Type': 'application/json',
