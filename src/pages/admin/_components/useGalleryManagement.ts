@@ -41,13 +41,6 @@ interface GalleryManagementActions {
   updateMediaMetadata: (id: string, metadata: Partial<MediaMetadata>) => Promise<void>;
   deleteMedia: (ids: string[]) => Promise<void>;
   
-  // Selection actions
-  selectMedia: (id: string) => void;
-  deselectMedia: (id: string) => void;
-  selectAll: () => void;
-  clearSelection: () => void;
-  toggleSelect: (id: string) => void;
-  
   // Modal actions
   openEditModal: (media: GalleryMediaItem) => void;
   closeEditModal: () => void;
@@ -62,8 +55,7 @@ interface GalleryManagementActions {
   setCategoryFilter: (category: MediaCategory | 'all') => void;
   setSortBy: (sortBy: MediaSortBy) => void;
   
-  // Bulk actions
-  toggleBulkMode: () => void;
+  // Bulk actions (accept IDs from external selection state)
   bulkDeleteMedia: (ids: string[]) => Promise<void>;
   bulkUpdateCategory: (ids: string[], category: MediaCategory) => Promise<void>;
 }
@@ -88,7 +80,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
     
     // Media data
     mediaItems: [],
-    selectedItems: [],
     isLoading: false,
     error: null,
     
@@ -97,7 +88,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
     showPreviewModal: false,
     editingMedia: null,
     previewMedia: null,
-    bulkActionMode: false,
     viewMode: 'grid',
     
     // Filter/search states
@@ -267,7 +257,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
       setState(prev => ({
         ...prev,
         mediaItems: prev.mediaItems.filter(item => !ids.includes(item.id)),
-        selectedItems: prev.selectedItems.filter(id => !ids.includes(id)),
         totalItems: prev.totalItems - ids.length,
       }));
     } catch (error) {
@@ -275,55 +264,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
       setState(prev => ({ ...prev, error: message }));
       throw error;
     }
-  }, []);
-
-  /**
-   * Select media item
-   */
-  const selectMedia = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      selectedItems: [...prev.selectedItems, id],
-    }));
-  }, []);
-
-  /**
-   * Deselect media item
-   */
-  const deselectMedia = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      selectedItems: prev.selectedItems.filter(itemId => itemId !== id),
-    }));
-  }, []);
-
-  /**
-   * Toggle media selection
-   */
-  const toggleSelect = useCallback((id: string) => {
-    setState(prev => ({
-      ...prev,
-      selectedItems: prev.selectedItems.includes(id)
-        ? prev.selectedItems.filter(itemId => itemId !== id)
-        : [...prev.selectedItems, id],
-    }));
-  }, []);
-
-  /**
-   * Select all visible media items
-   */
-  const selectAll = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      selectedItems: prev.mediaItems.map(item => item.id),
-    }));
-  }, []);
-
-  /**
-   * Clear all selections
-   */
-  const clearSelection = useCallback(() => {
-    setState(prev => ({ ...prev, selectedItems: [] }));
   }, []);
 
   /**
@@ -400,15 +340,11 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
 
   /**
    * Bulk delete media items
+   * Note: IDs come from external selection state (useMediaSelection)
    */
   const bulkDeleteMedia = useCallback(async (ids: string[]) => {
     try {
       await deleteMedia(ids);
-      setState(prev => ({
-        ...prev,
-        selectedItems: [],
-        bulkActionMode: false,
-      }));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Bulk delete failed';
       setState(prev => ({ ...prev, error: message }));
@@ -418,6 +354,7 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
 
   /**
    * Bulk update category for multiple items
+   * Note: IDs come from external selection state (useMediaSelection)
    */
   const bulkUpdateCategory = useCallback(async (ids: string[], category: MediaCategory) => {
     try {
@@ -429,25 +366,12 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
         mediaItems: prev.mediaItems.map(item =>
           ids.includes(item.id) ? { ...item, category } : item
         ),
-        selectedItems: [],
-        bulkActionMode: false,
       }));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Bulk update failed';
       setState(prev => ({ ...prev, error: message }));
       throw error;
     }
-  }, []);
-
-  /**
-   * Toggle bulk action mode
-   */
-  const toggleBulkMode = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      bulkActionMode: !prev.bulkActionMode,
-      selectedItems: prev.bulkActionMode ? prev.selectedItems : [],
-    }));
   }, []);
 
   // Fetch media on mount and when filters change
@@ -464,11 +388,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
     refreshMedia,
     updateMediaMetadata,
     deleteMedia,
-    selectMedia,
-    deselectMedia,
-    selectAll,
-    clearSelection,
-    toggleSelect,
     openEditModal,
     closeEditModal,
     openPreviewModal,
@@ -477,7 +396,6 @@ export const useGalleryManagement = (): UseGalleryManagementReturn => {
     setSearchQuery,
     setCategoryFilter,
     setSortBy,
-    toggleBulkMode,
     bulkDeleteMedia,
     bulkUpdateCategory,
   };

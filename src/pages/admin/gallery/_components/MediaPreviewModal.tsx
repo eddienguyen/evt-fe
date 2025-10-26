@@ -1,15 +1,22 @@
 /**
  * Media Preview Modal Component
- * 
+ *
  * Full-screen lightbox modal for viewing media in detail.
  * Supports navigation between items, metadata display, and quick actions.
- * 
+ *
  * @module pages/admin/gallery/_components/MediaPreviewModal
  */
 
-import React, { useEffect, useCallback } from 'react';
-import { X, ChevronLeft, ChevronRight, Edit2, Trash2, Download } from 'lucide-react';
-import type { GalleryMediaItem } from '../../../../types/gallery';
+import React, { useEffect, useCallback } from "react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Edit2,
+  Trash2,
+  Download,
+} from "lucide-react";
+import type { GalleryMediaItem } from "../../../../types/gallery";
 
 /**
  * MediaPreviewModal Props
@@ -33,7 +40,7 @@ interface MediaPreviewModalProps {
 
 /**
  * MediaPreviewModal Component
- * 
+ *
  * Full-screen lightbox for viewing media with navigation,
  * metadata sidebar, and action buttons.
  */
@@ -57,16 +64,16 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'Escape':
+        case "Escape":
           onClose();
           break;
-        case 'ArrowLeft':
+        case "ArrowLeft":
           if (hasPrevious && onPrevious) {
             e.preventDefault();
             onPrevious();
           }
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           if (hasNext && onNext) {
             e.preventDefault();
             onNext();
@@ -79,8 +86,8 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
 
   // Add keyboard event listener
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   /**
@@ -96,7 +103,7 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
    * Handle download
    */
   const handleDownload = () => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = mediaItem.r2Urls.original;
     link.download = mediaItem.filename;
     document.body.appendChild(link);
@@ -109,7 +116,7 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="preview-modal-title"
-      className="fixed inset-0 z-50 bg-black flex"
+      className="fixed inset-0 z-50 max-h-full overflow-y-auto bg-black flex flex-col md:flex-row"
       onClick={handleBackdropClick}
     >
       {/* Header Bar */}
@@ -151,7 +158,11 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
             {onDelete && (
               <button
                 onClick={() => {
-                  if (globalThis.confirm('Are you sure you want to delete this media?')) {
+                  if (
+                    globalThis.confirm(
+                      "Are you sure you want to delete this media?"
+                    )
+                  ) {
                     onDelete(mediaItem.id);
                     onClose();
                   }
@@ -199,28 +210,8 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
         </button>
       )}
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex items-center justify-center p-20">
-        {mediaItem.mediaType === 'image' ? (
-          <img
-            src={mediaItem.r2Urls.large || mediaItem.r2Urls.original}
-            alt={mediaItem.alt || mediaItem.title || 'Preview'}
-            className="max-w-full max-h-full object-contain"
-          />
-        ) : (
-          <video
-            src={mediaItem.r2Urls.original}
-            controls
-            autoPlay
-            className="max-w-full max-h-full"
-          >
-            <track kind="captions" />
-          </video>
-        )}
-      </div>
-
       {/* Metadata Sidebar */}
-      <div className="w-80 bg-gray-900 text-white p-6 overflow-y-auto">
+      <div className="w-full md:w-80 bg-gray-900 text-white p-6">
         <h3 className="text-lg font-semibold mb-4">Details</h3>
 
         <div className="space-y-4 text-sm">
@@ -300,7 +291,9 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
             {/* Format */}
             <div className="mb-2">
               <p className="text-gray-500 text-xs">Format</p>
-              <p className="font-medium uppercase">{mediaItem.metadata.format}</p>
+              <p className="font-medium uppercase">
+                {mediaItem.metadata.format}
+              </p>
             </div>
 
             {/* Duration (for videos) */}
@@ -309,7 +302,9 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
                 <p className="text-gray-500 text-xs">Duration</p>
                 <p className="font-medium">
                   {Math.floor(mediaItem.metadata.duration / 60)}:
-                  {String(Math.floor(mediaItem.metadata.duration % 60)).padStart(2, '0')}
+                  {String(
+                    Math.floor(mediaItem.metadata.duration % 60)
+                  ).padStart(2, "0")}
                 </p>
               </div>
             )}
@@ -339,6 +334,26 @@ export const MediaPreviewModal: React.FC<MediaPreviewModalProps> = ({
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex items-center justify-center p-20">
+        {mediaItem.mediaType === "image" ? (
+          <img
+            src={mediaItem.r2Urls.large || mediaItem.r2Urls.original}
+            alt={mediaItem.alt || mediaItem.title || "Preview"}
+            className="max-w-full max-h-full object-contain"
+          />
+        ) : (
+          <video
+            src={mediaItem.r2Urls.original}
+            controls
+            autoPlay
+            className="max-w-full max-h-full"
+          >
+            <track kind="captions" />
+          </video>
+        )}
       </div>
     </div>
   );

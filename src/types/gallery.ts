@@ -1,8 +1,8 @@
 /**
  * Gallery Type Definitions
- * 
+ *
  * Type definitions for gallery images, metadata, and state management.
- * 
+ *
  * @module types/gallery
  */
 
@@ -10,65 +10,65 @@
  * Image size variant interface
  */
 export interface ImageSize {
-  url: string
-  width: number
-  height: number
-  format: string
+  url: string;
+  width: number;
+  height: number;
+  format: string;
 }
 
 /**
  * Image metadata interface
  */
 export interface ImageMetadata {
-  width: number
-  height: number
-  format: string
-  size?: number
-  capturedDate?: string
-  dateTaken?: Date
-  location?: string
-  photographer?: string
+  width: number;
+  height: number;
+  format: string;
+  size?: number;
+  capturedDate?: string;
+  dateTaken?: Date;
+  location?: string;
+  photographer?: string;
 }
 
 /**
  * Gallery image interface
  */
 export interface GalleryImage {
-  id: string
-  filename: string
-  alt: string
-  caption?: string
-  date: string
-  category: string
+  id: string;
+  filename: string;
+  alt: string;
+  caption?: string;
+  date: string;
+  category: string;
   sizes: {
-    thumbnail: ImageSize
-    medium: ImageSize
-    large: ImageSize
-    original: ImageSize
-  }
-  metadata: ImageMetadata
-  blurhash?: string
+    thumbnail: ImageSize;
+    medium: ImageSize;
+    large: ImageSize;
+    original: ImageSize;
+  };
+  metadata: ImageMetadata;
+  blurhash?: string;
 }
 
 /**
  * Pagination interface
  */
 export interface GalleryPagination {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-  hasMore: boolean
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
   /** @deprecated Use hasMore instead */
-  hasNext?: boolean
+  hasNext?: boolean;
 }
 
 /**
  * Gallery API response interface
  */
 export interface GalleryAPIResponse {
-  images: GalleryImage[]
-  pagination: GalleryPagination
+  images: GalleryImage[];
+  pagination: GalleryPagination;
 }
 
 /**
@@ -76,30 +76,30 @@ export interface GalleryAPIResponse {
  */
 export interface GalleryState {
   // Data States
-  images: GalleryImage[]
-  isLoading: boolean
-  error: string | null
-  hasMore: boolean
-  currentPage: number
-  
+  images: GalleryImage[];
+  isLoading: boolean;
+  error: string | null;
+  hasMore: boolean;
+  currentPage: number;
+
   // UI States
-  selectedImageIndex: number | null
-  lightboxOpen: boolean
-  viewMode: 'grid' | 'masonry'
-  
+  selectedImageIndex: number | null;
+  lightboxOpen: boolean;
+  viewMode: "grid" | "masonry";
+
   // Filter/Search States
-  searchQuery: string
-  selectedCategory: string | null
-  sortBy: 'date' | 'name' | 'size'
+  searchQuery: string;
+  selectedCategory: string | null;
+  sortBy: "date" | "name" | "size";
 }
 
 /**
  * Lightbox state interface
  */
 export interface LightboxState {
-  isOpen: boolean
-  currentIndex: number
-  images: GalleryImage[]
+  isOpen: boolean;
+  currentIndex: number;
+  images: GalleryImage[];
 }
 
 // ===================================================================
@@ -109,34 +109,38 @@ export interface LightboxState {
 /**
  * Media type enum for admin uploads
  */
-export type MediaType = 'image' | 'video';
+export type MediaType = "image" | "video";
 
 /**
  * Media category enum
  */
-export type MediaCategory = 
-  | 'wedding'
-  | 'engagement'
-  | 'pre-wedding'
-  | 'ceremony' 
-  | 'reception' 
-  | 'other';
+export type MediaCategory =
+  | "wedding"
+  | "engagement"
+  | "pre-wedding"
+  | "ceremony"
+  | "reception"
+  | "other";
 
 /**
  * Upload status enum
  */
-export type UploadStatus = 
-  | 'pending' 
-  | 'uploading' 
-  | 'processing' 
-  | 'completed' 
-  | 'error';
+export type UploadStatus =
+  | "pending"
+  | "uploading"
+  | "processing"
+  | "completed"
+  | "error";
 
 /**
  * Sort options for media grid
  * Must match backend validation: createdAt, displayOrder, dateTaken, updatedAt
  */
-export type MediaSortBy = 'createdAt' | 'displayOrder' | 'dateTaken' | 'updatedAt';
+export type MediaSortBy =
+  | "createdAt"
+  | "displayOrder"
+  | "dateTaken"
+  | "updatedAt";
 
 /**
  * Gallery media item interface for admin management
@@ -218,24 +222,22 @@ export interface GalleryManagementState {
   uploading: boolean;
   uploadProgress: Record<string, number>; // fileId -> progress %
   uploadErrors: Record<string, string>;
-  
+
   // Media Data
   mediaItems: GalleryMediaItem[];
-  selectedItems: string[]; // Array of media IDs
   isLoading: boolean;
   error: string | null;
-  
+
   // UI States
   showMetadataModal: boolean;
   showPreviewModal: boolean;
   editingMedia: GalleryMediaItem | null;
   previewMedia: GalleryMediaItem | null;
-  bulkActionMode: boolean;
-  viewMode: 'grid' | 'list';
-  
+  viewMode: "grid" | "list";
+
   // Filter/Search States
   searchQuery: string;
-  categoryFilter: MediaCategory | 'all';
+  categoryFilter: MediaCategory | "all";
   sortBy: MediaSortBy;
   currentPage: number;
   totalPages: number;
@@ -252,7 +254,7 @@ export interface GalleryQueryParams {
   category?: MediaCategory;
   featured?: boolean;
   sortBy?: MediaSortBy;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 /**
@@ -296,7 +298,7 @@ export interface BulkOperationResult {
 /**
  * Image loading state
  */
-export type ImageLoadState = 'idle' | 'loading' | 'loaded' | 'error'
+export type ImageLoadState = "idle" | "loading" | "loaded" | "error";
 
 // ===================================================================
 // MEDIA SORTING AND REORDERING TYPES
@@ -305,23 +307,23 @@ export type ImageLoadState = 'idle' | 'loading' | 'loaded' | 'error'
 /**
  * Sort operation types
  */
-export type SortOperationType = 
-  | 'drag' 
-  | 'quick-sort' 
-  | 'category-move' 
-  | 'bulk-move'
-  | 'alphabetical'
-  | 'reset';
+export type SortOperationType =
+  | "drag"
+  | "quick-sort"
+  | "category-move"
+  | "bulk-move"
+  | "alphabetical"
+  | "reset";
 
 /**
  * Quick sort action types
  */
-export type QuickSortAction = 
-  | 'move-to-top' 
-  | 'move-to-bottom' 
-  | 'alphabetical-asc' 
-  | 'alphabetical-desc' 
-  | 'reset-to-upload';
+export type QuickSortAction =
+  | "move-to-top"
+  | "move-to-bottom"
+  | "alphabetical-asc"
+  | "alphabetical-desc"
+  | "reset-to-upload";
 
 /**
  * Media order snapshot for history/undo functionality
@@ -341,28 +343,28 @@ export interface MediaSortState {
   isSortMode: boolean;
   isDragging: boolean;
   draggedItemId: string | null;
-  
+
   // Order States
   originalOrder: GalleryMediaItem[];
   currentOrder: GalleryMediaItem[];
   pendingChanges: boolean;
-  
+
   // History States
   history: MediaOrderSnapshot[];
   historyIndex: number;
   canUndo: boolean;
   canRedo: boolean;
-  
+
   // Category Transfer States
   dragOverCategory: MediaCategory | null;
   categoryTransferMode: boolean;
-  
+
   // UI States
   autoSave: boolean;
   isLoading: boolean;
   isSaving: boolean;
   error: string | null;
-  
+
   // Selection States (for batch operations)
   selectedItems: Set<string>;
   bulkSortMode: boolean;
@@ -385,7 +387,7 @@ export interface ReorderRequestPayload {
 export interface QuickSortRequestPayload {
   operation: QuickSortAction;
   itemIds: string[];
-  direction?: 'asc' | 'desc';
+  direction?: "asc" | "desc";
   category?: MediaCategory;
 }
 

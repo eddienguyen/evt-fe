@@ -50,10 +50,10 @@ export const MediaFilters: React.FC<MediaFiltersProps> = ({
 
   // Sort options - must match backend validation
   const sortOptions: Array<{ value: MediaSortBy; label: string }> = [
-    { value: 'createdAt', label: 'Date Added' },
-    { value: 'dateTaken', label: 'Date Taken' },
-    { value: 'updatedAt', label: 'Last Modified' },
-    { value: 'displayOrder', label: 'Display Order' },
+    { value: 'createdAt', label: 'Ngày tạo' },
+    { value: 'dateTaken', label: 'Ngày chụp' },
+    { value: 'updatedAt', label: 'Cập nhật lần cuối' },
+    { value: 'displayOrder', label: 'Thứ tự hiển thị' },
   ];
 
   return (

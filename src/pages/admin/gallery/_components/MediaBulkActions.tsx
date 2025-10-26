@@ -79,7 +79,7 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
             <div className="flex items-center gap-4">
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 <span className="font-medium">{selectedCount}</span>{' '}
-                {selectedCount === 1 ? 'item' : 'items'} selected
+                mục đã chọn
               </div>
               <button
                 type="button"
@@ -87,7 +87,7 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
                 disabled={disabled || isProcessing}
                 className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Clear selection
+                Bỏ chọn tất cả
               </button>
             </div>
 
@@ -108,7 +108,7 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
                     d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                   />
                 </svg>
-                Update Category
+                Update thể loại
               </button>
 
               {/* Delete */}
@@ -149,11 +149,11 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-                      Delete {selectedCount} {selectedCount === 1 ? 'item' : 'items'}
+                      Xóa {selectedCount} mục ?
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Are you sure you want to delete {selectedCount === 1 ? 'this item' : 'these items'}? This action cannot be undone.
+                        Xóa {selectedCount === 1 ? 'mục này' : 'những mục này'}? (Không thể hoàn tác).
                       </p>
                       {selectedCount <= 3 && (
                         <div className="mt-3 space-y-1">
@@ -175,7 +175,7 @@ export const MediaBulkActions: React.FC<MediaBulkActionsProps> = ({
                   disabled={isProcessing}
                   className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                  {isProcessing ? 'Deleting...' : 'Delete'}
+                  {isProcessing ? 'Đang xóa...' : 'Xóa'}
                 </button>
                 <button
                   type="button"
