@@ -87,7 +87,13 @@ export const useNativeShare = (): UseNativeShareReturn => {
    */
   const urlToFile = async (url: string, filename: string): Promise<File | null> => {
     try {
-      const response = await fetch(url);
+      // Use fetch with mode: 'cors' and try to handle CORS issues
+      // For R2 images that might have CORS restrictions, we could proxy through backend
+      const response = await fetch(url, {
+        mode: 'cors',
+        credentials: 'omit', // Don't send credentials for R2 requests
+      });
+      
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
@@ -104,6 +110,13 @@ export const useNativeShare = (): UseNativeShareReturn => {
       return file;
     } catch (err) {
       console.error(`Error converting URL to file: ${url}`, err);
+      
+      // If CORS error, try to provide helpful message
+      if (err instanceof TypeError && err.message === 'Load failed') {
+        console.error('CORS Error: The image server (R2) is not configured to allow requests from this domain.');
+        console.error('Please configure CORS on your R2 bucket to allow origin:', globalThis.location?.origin);
+      }
+      
       return null;
     }
   };
@@ -171,9 +184,10 @@ export const useNativeShare = (): UseNativeShareReturn => {
       const files = await prepareFiles(data);
 
       if (files.length === 0) {
-        const errorMsg = 'Failed to prepare images for sharing';
+        const errorMsg = 'Failed to prepare images for sharing. Please check that CORS is configured on the image storage (R2 bucket).';
         setError(errorMsg);
         setIsSharing(false);
+        console.error('Image preparation failed - likely CORS issue. Configure R2 bucket CORS to allow origin:', globalThis.location?.origin);
         return { success: false, error: errorMsg };
       }
 
