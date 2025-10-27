@@ -8,9 +8,10 @@
  * @module pages/admin/_components/InvitationPreview
  */
 
-import { useImperativeHandle, forwardRef } from 'react';
+import { useImperativeHandle, forwardRef, useState, useEffect } from 'react';
 import { useCanvasPreview } from './useCanvasPreview';
 import { cn } from '../../../lib/utils';
+import { NativeShareButton } from './NativeShareButton';
 
 export interface InvitationPreviewProps {
   venue: 'hue' | 'hanoi';
@@ -52,11 +53,53 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
     overrides: positionOverrides
   });
 
+  const [canvasImageUrls, setCanvasImageUrls] = useState<{
+    front: string | null;
+    main: string | null;
+  }>({ front: null, main: null });
+
   // Expose export methods to parent
   useImperativeHandle(ref, () => ({
     exportPreview,
     exportHighResolution
   }), [exportPreview, exportHighResolution]);
+
+  /**
+   * Generate data URLs from canvas for sharing
+   */
+  const generateShareUrls = async () => {
+    try {
+      if (!guestName && !secondaryNote) return;
+
+      const urls: { front: string | null; main: string | null } = {
+        front: null,
+        main: null
+      };
+
+      // Generate front image URL if guest name exists
+      if (guestName && frontCanvasRef.current) {
+        urls.front = frontCanvasRef.current.toDataURL('image/png');
+      }
+
+      // Generate main image URL if secondary note exists
+      if (secondaryNote && mainCanvasRef.current) {
+        urls.main = mainCanvasRef.current.toDataURL('image/png');
+      }
+
+      setCanvasImageUrls(urls);
+    } catch (err) {
+      console.error('Failed to generate share URLs:', err);
+    }
+  };
+
+  // Update share URLs when canvas content changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      void generateShareUrls();
+    }, 500); // Debounce canvas updates
+
+    return () => clearTimeout(timeoutId);
+  }, [guestName, secondaryNote]);
 
   /**
    * Handle direct download from canvas preview
@@ -70,7 +113,7 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
       a.download = `${guestName || 'invitation'}-${canvasType === 'front' ? 'mat-ngoai' : 'mat-trong'}.png`;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      a.remove();
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Failed to download image:', err);
@@ -97,17 +140,21 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Mặt ngoài
             </h3>
-            <button
-              onClick={() => handleDownload('front')}
-              disabled={!guestName || isLoading}
-              className="text-xs px-3 py-1.5 bg-blue-600 text-gray-800 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
-              title="Download preview image"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Tải xuống
-            </button>
+            {guestName && !isLoading && (
+              <NativeShareButton
+                guestName={guestName}
+                frontImageUrl={canvasImageUrls.front || undefined}
+                message={`Thiệp mời mặt ngoài - ${guestName}`}
+                className="text-xs"
+                onShareSuccess={() => {
+                  console.log('Share successful - Front');
+                }}
+                onShareError={(error) => {
+                  console.error('Share failed - Front:', error);
+                }}
+                onDownload={() => handleDownload('front')}
+              />
+            )}
           </div>
           <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <div className="relative w-full max-w-md mx-auto group">
@@ -162,17 +209,21 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Mặt trong
             </h3>
-            <button
-              onClick={() => handleDownload('main')}
-              disabled={!secondaryNote || isLoading}
-              className="text-xs px-3 py-1.5 bg-blue-600 text-gray-800 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-1.5"
-              title="Download preview image"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Tải xuống
-            </button>
+            {secondaryNote && !isLoading && (
+              <NativeShareButton
+                guestName={guestName || 'Guest'}
+                mainImageUrl={canvasImageUrls.main || undefined}
+                message={`Thiệp mời mặt trong - ${guestName || 'Guest'}`}
+                className="text-xs"
+                onShareSuccess={() => {
+                  console.log('Share successful - Main');
+                }}
+                onShareError={(error) => {
+                  console.error('Share failed - Main:', error);
+                }}
+                onDownload={() => handleDownload('main')}
+              />
+            )}
           </div>
           <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <div className="relative w-full max-w-md mx-auto group">

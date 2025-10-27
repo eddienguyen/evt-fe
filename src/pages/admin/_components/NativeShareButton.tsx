@@ -105,7 +105,7 @@ export const NativeShareButton: React.FC<NativeShareButtonProps> = ({
   // Theme-specific classes matching wedding design system
   const themeClasses = shouldShowShare
     ? 'bg-gold-500 hover:bg-gold-600 text-white focus:ring-gold-500'
-    : 'bg-taupe-100 hover:bg-taupe-200 text-taupe-800 focus:ring-taupe-500';
+    : 'bg-taupe-100 hover:bg-taupe-200 text-white focus:ring-taupe-500';
 
   const buttonClasses = `${baseClasses} ${themeClasses} ${className}`;
 
@@ -122,12 +122,12 @@ export const NativeShareButton: React.FC<NativeShareButtonProps> = ({
         {isSharing ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Sharing...</span>
+            <span>Đang chia sẻ...</span>
           </>
         ) : (
           <>
             <Share2 className="h-4 w-4" />
-            <span>Share</span>
+            <span>Chia sẻ</span>
           </>
         )}
       </button>
@@ -144,7 +144,7 @@ export const NativeShareButton: React.FC<NativeShareButtonProps> = ({
       aria-label="Download invitation images"
     >
       <Download className="h-4 w-4" />
-      <span>Download</span>
+      <span>Tải ảnh</span>
     </button>
   );
 };

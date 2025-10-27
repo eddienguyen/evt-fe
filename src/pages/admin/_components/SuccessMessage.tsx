@@ -9,6 +9,7 @@
 import React from 'react';
 import type { GuestRecord } from '../../../types/admin';
 import { Button } from '../../../components/ui/Button';
+import { NativeShareButton } from './NativeShareButton';
 
 export interface SuccessMessageProps {
   guest: GuestRecord;
@@ -148,6 +149,37 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({
                 className="w-full rounded-lg border border-gray-200 dark:border-gray-700"
               />
             </div>
+          </div>
+        )}
+
+        {/* Share Button for Invitation Images */}
+        {(guest.invitationImageFrontUrl || guest.invitationImageMainUrl) && (
+          <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+              Chia sẻ thiệp mời
+            </div>
+            <NativeShareButton
+              guestName={guest.name}
+              frontImageUrl={guest.invitationImageFrontUrl}
+              mainImageUrl={guest.invitationImageMainUrl}
+              message={`Thiệp mời cho ${guest.name}`}
+              className="w-full"
+              onShareSuccess={() => {
+                console.log('Share successful from SuccessMessage');
+              }}
+              onShareError={(error) => {
+                console.error('Share failed from SuccessMessage:', error);
+              }}
+              onDownload={() => {
+                // Open images in new tabs for download (desktop fallback)
+                if (guest.invitationImageFrontUrl) {
+                  window.open(guest.invitationImageFrontUrl, '_blank');
+                }
+                if (guest.invitationImageMainUrl) {
+                  window.open(guest.invitationImageMainUrl, '_blank');
+                }
+              }}
+            />
           </div>
         )}
       </div>
