@@ -16,6 +16,7 @@ import {
   getGuestInitials,
   hasInvitationImages,
 } from './guestTableUtils';
+import { NativeShareButton } from './NativeShareButton';
 
 interface GuestTableRowProps {
   guest: GuestRecord;
@@ -170,28 +171,28 @@ console.log('guest', guest);
                 <div>
                   <h4 className="text-sm font-medium text-text-light mb-2">Hình ảnh thiệp:</h4>
                   {hasImages ? (
-                    <div className="flex gap-2">
-                      {guest.invitationImageFrontUrl && (
-                        <a
-                          href={guest.invitationImageFrontUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          Mặt trước
-                        </a>
-                      )}
-                      {guest.invitationImageMainUrl && (
-                        <a
-                          href={guest.invitationImageMainUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          Mặt chính
-                        </a>
-                      )}
-                    </div>
+                    <NativeShareButton
+                      guestName={guest.name}
+                      frontImageUrl={guest.invitationImageFrontUrl}
+                      mainImageUrl={guest.invitationImageMainUrl}
+                      message={`Invitation for ${guest.name}`}
+                      className="text-xs"
+                      onShareSuccess={() => {
+                        console.log('Share successful');
+                      }}
+                      onShareError={(error) => {
+                        console.error('Share failed:', error);
+                      }}
+                      onDownload={() => {
+                        // Open images in new tabs for download (desktop fallback)
+                        if (guest.invitationImageFrontUrl) {
+                          window.open(guest.invitationImageFrontUrl, '_blank');
+                        }
+                        if (guest.invitationImageMainUrl) {
+                          window.open(guest.invitationImageMainUrl, '_blank');
+                        }
+                      }}
+                    />
                   ) : (
                     <p className="text-sm text-text-light">Chưa có hình ảnh</p>
                   )}
@@ -311,28 +312,28 @@ console.log('guest', guest);
             {hasImages && (
               <div>
                 <h4 className="text-sm font-medium text-text-light mb-2">Hình ảnh:</h4>
-                <div className="flex gap-2">
-                  {guest.invitationImageFrontUrl && (
-                    <a
-                      href={guest.invitationImageFrontUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      Mặt trước
-                    </a>
-                  )}
-                  {guest.invitationImageMainUrl && (
-                    <a
-                      href={guest.invitationImageMainUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      Mặt chính
-                    </a>
-                  )}
-                </div>
+                <NativeShareButton
+                  guestName={guest.name}
+                  frontImageUrl={guest.invitationImageFrontUrl}
+                  mainImageUrl={guest.invitationImageMainUrl}
+                  message={`Invitation for ${guest.name}`}
+                  className="text-xs"
+                  onShareSuccess={() => {
+                    console.log('Share successful');
+                  }}
+                  onShareError={(error) => {
+                    console.error('Share failed:', error);
+                  }}
+                  onDownload={() => {
+                    // Open images in new tabs for download (desktop fallback)
+                    if (guest.invitationImageFrontUrl) {
+                      window.open(guest.invitationImageFrontUrl, '_blank');
+                    }
+                    if (guest.invitationImageMainUrl) {
+                      window.open(guest.invitationImageMainUrl, '_blank');
+                    }
+                  }}
+                />
               </div>
             )}
 

@@ -127,7 +127,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const currentLength = typeof value === 'string' ? value.length : 0
     const showCounter = showCharCount || (maxLength !== undefined)
 
-    // Base textarea styles
     const baseTextareaStyles = cn(
       'w-full px-4 py-3 rounded-lg',
       'font-body text-base text-text',

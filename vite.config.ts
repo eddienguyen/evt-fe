@@ -28,6 +28,11 @@ const getBuildTimestamp = () => {
 export default defineConfig({
   plugins: [react()],
   base: '/',
+  server: {
+    host: '0.0.0.0', // Allow connections from any IP
+    port: 5173,
+    strictPort: true, // Fail if port is already in use
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

@@ -206,7 +206,7 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
                   isLoading || error ? 'opacity-0' : 'opacity-100',
                   secondaryNote && !isLoading && 'cursor-pointer hover:shadow-lg hover:scale-[1.02]'
                 )}
-                title={secondaryNote && !isLoading ? 'Click to download' : ''}
+                title={secondaryNote && !isLoading ? 'Download' : ''}
               />
 
               {/* Placeholder when no secondary note */}
