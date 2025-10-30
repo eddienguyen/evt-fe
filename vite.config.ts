@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import path from 'path'
 import { execSync } from 'node:child_process'
 
@@ -26,7 +27,10 @@ const getBuildTimestamp = () => {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    basicSsl() // Enable HTTPS for Web Share API support (auto-generates self-signed cert)
+  ],
   base: '/',
   server: {
     host: '0.0.0.0', // Allow connections from any IP

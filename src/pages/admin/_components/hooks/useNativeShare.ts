@@ -84,14 +84,17 @@ export const useNativeShare = (): UseNativeShareReturn => {
   /**
    * Convert image URL to File object for sharing
    * Required because Web Share API accepts File objects, not URLs
+   * 
+   * Strategy:
+   * 1. Try direct fetch with CORS (works if R2 CORS is properly configured)
+   * 2. If CORS fails, try backend proxy as fallback
    */
   const urlToFile = async (url: string, filename: string): Promise<File | null> => {
+    // First attempt: Direct fetch with CORS
     try {
-      // Use fetch with mode: 'cors' and try to handle CORS issues
-      // For R2 images that might have CORS restrictions, we could proxy through backend
       const response = await fetch(url, {
         mode: 'cors',
-        credentials: 'omit', // Don't send credentials for R2 requests
+        credentials: 'omit',
       });
       
       if (!response.ok) {
@@ -99,25 +102,63 @@ export const useNativeShare = (): UseNativeShareReturn => {
       }
 
       const blob = await response.blob();
-      
-      // Determine MIME type from blob or default to jpeg
       const mimeType = blob.type || 'image/jpeg';
-      
-      // Create File object with proper extension
       const extension = mimeType.split('/')[1] || 'jpg';
       const file = new File([blob], `${filename}.${extension}`, { type: mimeType });
       
+      console.log(`✅ Successfully fetched image directly: ${filename}`);
       return file;
-    } catch (err) {
-      console.error(`Error converting URL to file: ${url}`, err);
       
-      // If CORS error, try to provide helpful message
-      if (err instanceof TypeError && err.message === 'Load failed') {
-        console.error('CORS Error: The image server (R2) is not configured to allow requests from this domain.');
-        console.error('Please configure CORS on your R2 bucket to allow origin:', globalThis.location?.origin);
+    } catch (directError) {
+      console.warn(`⚠️ Direct fetch failed for ${url}, trying backend proxy...`, directError);
+      
+      // Second attempt: Backend proxy
+      try {
+        const backendUrl = import.meta.env.VITE_API_BASE_URL || 'https://192.168.0.101:3000';
+        const proxyUrl = `${backendUrl}/api/proxy-image?url=${encodeURIComponent(url)}`;
+        
+        const proxyResponse = await fetch(proxyUrl, {
+          mode: 'cors',
+          credentials: 'omit', // Don't send credentials for proxy requests (allows wildcard CORS)
+        });
+        
+        if (!proxyResponse.ok) {
+          throw new Error(`Proxy fetch failed: ${proxyResponse.statusText}`);
+        }
+
+        const blob = await proxyResponse.blob();
+        const mimeType = blob.type || 'image/jpeg';
+        const extension = mimeType.split('/')[1] || 'jpg';
+        const file = new File([blob], `${filename}.${extension}`, { type: mimeType });
+        
+        console.log(`✅ Successfully fetched image via proxy: ${filename}`);
+        return file;
+        
+      } catch (proxyError) {
+        console.error(`❌ Both direct and proxy fetch failed for: ${url}`);
+        console.error('Direct fetch error:', directError);
+        console.error('Proxy fetch error:', proxyError);
+        
+        // Provide helpful CORS error message
+        if (directError instanceof TypeError && directError.message === 'Load failed') {
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('🚨 CORS CONFIGURATION REQUIRED');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('Your R2 bucket needs CORS configuration to allow:');
+          console.error('  Origin:', globalThis.location?.origin);
+          console.error('  Methods: GET, HEAD');
+          console.error('  Headers: Content-Type, Range');
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+          console.error('Steps to fix:');
+          console.error('  1. Go to Cloudflare Dashboard > R2');
+          console.error('  2. Select your bucket');
+          console.error('  3. Go to Settings > CORS Policy');
+          console.error('  4. Add this origin:', globalThis.location?.origin);
+          console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        }
+        
+        return null;
       }
-      
-      return null;
     }
   };
 
