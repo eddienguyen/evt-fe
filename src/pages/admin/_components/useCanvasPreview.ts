@@ -44,11 +44,11 @@ function renderTextOnCanvas(
   position: TextPosition,
   canvasWidth: number,
   autoSizeConfig?: AutoSizeConfig,
-  overrides?: { x?: number; y?: number; color?: string }
+  overrides?: { x?: number; y?: number; color?: string; fontFamily?: string }
 ) {
   // Calculate optimal font size if auto-sizing is enabled
   let fontSize = position.fontSize;
-  if (autoSizeConfig && autoSizeConfig.enabled) {
+  if (autoSizeConfig?.enabled) {
     fontSize = canvasService.calculateOptimalFontSize(ctx, text, {
       minFontSize: autoSizeConfig.minFontSize,
       maxFontSize: autoSizeConfig.maxFontSize,
@@ -57,8 +57,9 @@ function renderTextOnCanvas(
     });
   }
 
-  // Set font and styling
-  ctx.font = `${fontSize}px ${position.fontFamily}`;
+  // Set font and styling - use override font family if provided
+  const fontFamily = overrides?.fontFamily || position.fontFamily;
+  ctx.font = `${fontSize}px ${fontFamily}`;
   ctx.fillStyle = overrides?.color || position.color;
   ctx.textAlign = position.align;
   ctx.textBaseline = 'middle';
@@ -82,10 +83,10 @@ function renderTextOnCanvas(
   // Handle multi-line text if line height is specified
   if (position.lineHeight && position.maxWidth) {
     const lines = canvasService.wrapText(ctx, text, position.maxWidth);
-    lines.forEach((line, index) => {
+    for (const [index, line] of lines.entries()) {
       const lineY = y + (index * (position.lineHeight || 0));
       ctx.fillText(line, x, lineY);
-    });
+    }
   } else {
     // Single line text
     ctx.fillText(text, x, y);
@@ -110,6 +111,7 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
   const frontImageRef = useRef<HTMLImageElement | null>(null);
   const mainImageRef = useRef<HTMLImageElement | null>(null);
   const fontLoadedRef = useRef(false);
+  const fontFamilyRef = useRef<string>('italic "Times New Roman", serif');
 
   useEffect(() => {
     const frontCanvas = frontCanvasRef.current;
@@ -141,15 +143,17 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
       }
     };
 
-    // Load Dancing Script font
+    // Load font (Dancing Script or fallback)
     if (!fontLoadedRef.current) {
       loadDancingScriptFont()
-        .then(() => {
+        .then((fontFamily) => {
+          fontFamilyRef.current = fontFamily;
           fontLoadedRef.current = true;
           checkBothLoaded();
         })
         .catch((err) => {
-          console.warn('Failed to load Dancing Script font:', err);
+          console.warn('Failed to load font:', err);
+          fontFamilyRef.current = 'italic "Times New Roman", serif';
           fontLoadedRef.current = true; // Proceed with fallback
           checkBothLoaded();
         });
@@ -179,7 +183,8 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             {
               x: config.overrides?.nameX,
               y: config.overrides?.nameY,
-              color: config.overrides?.textColor
+              color: config.overrides?.textColor,
+              fontFamily: fontFamilyRef.current
             }
           );
         }
@@ -226,7 +231,8 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
             {
               x: config.overrides?.secondaryNoteX,
               y: config.overrides?.secondaryNoteY,
-              color: config.overrides?.textColor
+              color: config.overrides?.textColor,
+              fontFamily: fontFamilyRef.current
             }
           );
         }
@@ -250,13 +256,13 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
     mainImg.addEventListener('error', handleMainImageError);
 
     // Trigger image loading
-    if (frontImg.src !== window.location.origin + venueConfig.frontImage.path) {
+    if (frontImg.src !== globalThis.location.origin + venueConfig.frontImage.path) {
       frontImg.src = venueConfig.frontImage.path;
     } else if (frontImg.complete) {
       handleFrontImageLoad();
     }
 
-    if (mainImg.src !== window.location.origin + venueConfig.mainImage.path) {
+    if (mainImg.src !== globalThis.location.origin + venueConfig.mainImage.path) {
       mainImg.src = venueConfig.mainImage.path;
     } else if (mainImg.complete) {
       handleMainImageLoad();
@@ -359,14 +365,15 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
         {
           x: config.overrides?.[canvasType === 'front' ? 'nameX' : 'secondaryNoteX'],
           y: config.overrides?.[canvasType === 'front' ? 'nameY' : 'secondaryNoteY'],
-          color: config.overrides?.textColor
+          color: config.overrides?.textColor,
+          fontFamily: fontFamilyRef.current
         }
       );
     }
 
     // Export at maximum PNG quality (lossless)
     return canvasService.exportAsBlob(highResCanvas, 1.0, 'image/png');
-  }, [config.venue, config.guestName, config.secondaryNote, config.overrides]);
+  }, [config.venue, config.guestName, config.secondaryNote, config.overrides, fontFamilyRef]);
 
   return {
     frontCanvasRef,

@@ -29,7 +29,8 @@ const getBuildTimestamp = () => {
 export default defineConfig({
   plugins: [
     react(),
-    basicSsl() // Enable HTTPS for Web Share API support (auto-generates self-signed cert)
+    // Uncomment for HTTPS (Web Share API testing on mobile):
+    // basicSsl()
   ],
   base: '/',
   server: {

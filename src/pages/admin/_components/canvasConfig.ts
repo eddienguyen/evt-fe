@@ -139,22 +139,63 @@ export const CANVAS_CONFIG: Record<"hue" | "hanoi", VenueCanvasConfig> = {
 };
 
 /**
- * Load Dancing Script font for canvas rendering
+ * Check if a font supports Vietnamese characters properly
+ * Tests common Vietnamese diacritical marks
  */
-export function loadDancingScriptFont(): Promise<void> {
-  return new Promise((resolve, reject) => {
+function testVietnameseSupport(fontFamily: string): boolean {
+  if (typeof document === "undefined") return false;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return false;
+
+  // Test Vietnamese characters with various diacritical marks
+  const testChars = "ắằẳẵặấầẩẫậếềểễệốồổỗộớờởỡợứừửữựỳýỷỹỵ";
+  
+  ctx.font = `48px ${fontFamily}`;
+  const widthWithFont = ctx.measureText(testChars).width;
+  
+  // Compare with fallback serif font
+  ctx.font = "48px serif";
+  const widthWithSerif = ctx.measureText(testChars).width;
+  
+  // If the widths are very similar, the font likely doesn't support Vietnamese
+  // (it's falling back to serif internally)
+  const difference = Math.abs(widthWithFont - widthWithSerif);
+  return difference > 5; // Allow small tolerance
+}
+
+/**
+ * Get the appropriate font family for canvas rendering
+ * Falls back to Times New Roman italic if Dancing Script doesn't support Vietnamese
+ */
+export function getCanvasFontFamily(): string {
+  const dancingScript = '"Dancing Script", cursive';
+  const fallback = 'italic "Times New Roman", serif';
+
+  // Check if Dancing Script supports Vietnamese
+  if (testVietnameseSupport(dancingScript)) {
+    return dancingScript;
+  }
+
+  console.warn(
+    "Dancing Script doesn't support Vietnamese characters properly, using Times New Roman italic as fallback"
+  );
+  return fallback;
+}
+
+/**
+ * Load Dancing Script font for canvas rendering
+ * Returns the appropriate font family to use
+ */
+export function loadDancingScriptFont(): Promise<string> {
+  return new Promise((resolve) => {
     if (typeof document === "undefined") {
-      resolve();
+      resolve(getCanvasFontFamily());
       return;
     }
 
-    // Check if font is already loaded
-    if (document.fonts?.check('12px "Dancing Script"')) {
-      resolve();
-      return;
-    }
-
-    // Create link element for Google Fonts
+    // Try to load Dancing Script
     const link = document.createElement("link");
     link.href =
       "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap";
@@ -163,15 +204,25 @@ export function loadDancingScriptFont(): Promise<void> {
     link.onload = () => {
       // Wait for font to be actually loaded
       if (document.fonts) {
-        document.fonts.ready.then(() => resolve());
+        document.fonts.ready.then(() => {
+          // Test if font supports Vietnamese after loading
+          const fontFamily = getCanvasFontFamily();
+          resolve(fontFamily);
+        });
       } else {
         // Fallback: wait a bit for font to load
-        setTimeout(resolve, 100);
+        setTimeout(() => {
+          const fontFamily = getCanvasFontFamily();
+          resolve(fontFamily);
+        }, 200);
       }
     };
 
-    link.onerror = () =>
-      reject(new Error("Failed to load Dancing Script font"));
+    link.onerror = () => {
+      console.warn("Failed to load Dancing Script font, using fallback");
+      // Return fallback font instead of rejecting
+      resolve('italic "Times New Roman", serif');
+    };
 
     document.head.appendChild(link);
   });
