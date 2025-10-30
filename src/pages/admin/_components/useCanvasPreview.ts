@@ -287,9 +287,9 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
       throw new Error('Canvas not available');
     }
 
-    // Use PNG format with maximum quality (1.0) to preserve exact canvas pixels
+    // Use PNG format with maximum quality (1) to preserve exact canvas pixels
     // This is the same as "Save Image" - no compression or quality loss
-    return canvasService.exportAsBlob(canvas, 1.0, 'image/png');
+    return canvasService.exportAsBlob(canvas, 1, 'image/png');
   }, []);
 
   /**
@@ -372,7 +372,7 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
     }
 
     // Export at maximum PNG quality (lossless)
-    return canvasService.exportAsBlob(highResCanvas, 1.0, 'image/png');
+    return canvasService.exportAsBlob(highResCanvas, 1, 'image/png');
   }, [config.venue, config.guestName, config.secondaryNote, config.overrides, fontFamilyRef]);
 
   return {
