@@ -37,38 +37,43 @@ export const TextPositionControls: React.FC<TextPositionControlsProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleNameXChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       nameX: parseInt(e.target.value, 10)
-    });
+    };
+    onSettingsChange(newSettings);
   };
 
   const handleNameYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       nameY: parseInt(e.target.value, 10)
-    });
+    };
+    onSettingsChange(newSettings);
   };
 
   const handleSecondaryNoteXChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       secondaryNoteX: parseInt(e.target.value, 10)
-    });
+    };
+    onSettingsChange(newSettings);
   };
 
   const handleSecondaryNoteYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       secondaryNoteY: parseInt(e.target.value, 10)
-    });
+    };
+    onSettingsChange(newSettings);
   };
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
+    const newSettings = {
       ...settings,
       textColor: e.target.value
-    });
+    };
+    onSettingsChange(newSettings);
   };
 
   return (
@@ -152,8 +157,8 @@ export const TextPositionControls: React.FC<TextPositionControlsProps> = ({
                 id="nameX"
                 type="range"
                 min="0"
-                max="2000"
-                step="10"
+                max="5000"
+                step="5"
                 value={settings.nameX}
                 onChange={handleNameXChange}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
@@ -177,8 +182,8 @@ export const TextPositionControls: React.FC<TextPositionControlsProps> = ({
                 id="nameY"
                 type="range"
                 min="0"
-                max="1200"
-                step="10"
+                max="5000"
+                step="5"
                 value={settings.nameY}
                 onChange={handleNameYChange}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"

@@ -98,10 +98,10 @@ export const CANVAS_CONFIG: Record<"hue" | "hanoi", VenueCanvasConfig> = {
       path: "/invitations/HN-inv-front-2.png",
       namePosition: {
         x: 850,
-        y: 3650,
-        fontSize: 100,
+        y: 3620,
+        fontSize: 190,
         fontFamily: "Dancing Script, cursive",
-        color: "#2C1810",
+        color: "#1e2b82",
         align: "left",
         maxWidth: 1000,
         lineHeight: 100,
@@ -109,7 +109,7 @@ export const CANVAS_CONFIG: Record<"hue" | "hanoi", VenueCanvasConfig> = {
       autoSize: {
         enabled: true,
         minFontSize: 28,
-        maxFontSize: 100,
+        maxFontSize: 190,
         baseFontSize: 100,
         maxWidth: 1000,
       },
@@ -118,11 +118,11 @@ export const CANVAS_CONFIG: Record<"hue" | "hanoi", VenueCanvasConfig> = {
     mainImage: {
       path: "/invitations/HN-invitation-2.jpg",
       secondaryNotePosition: {
-        x: 1060,
-        y: 180,
+        x: 760,
+        y: 135,
         fontSize: 40,
         fontFamily: "Dancing Script, cursive",
-        color: "#5A4A42",
+        color: "#1e2b82",
         align: "left",
         maxWidth: 600,
         lineHeight: 50,
@@ -171,7 +171,7 @@ function testVietnameseSupport(fontFamily: string): boolean {
  */
 export function getCanvasFontFamily(): string {
   const dancingScript = '"Dancing Script", cursive';
-  const fallback = 'italic "Times New Roman", serif';
+  const fallback = 'italic "Times New Roman"';
 
   // Check if Dancing Script supports Vietnamese
   if (testVietnameseSupport(dancingScript)) {
@@ -188,7 +188,7 @@ export function getCanvasFontFamily(): string {
  * Load Dancing Script font for canvas rendering
  * Returns the appropriate font family to use
  */
-export function loadDancingScriptFont(): Promise<string> {
+export function loadDancingScriptFont(): Promise<string> {  
   return new Promise((resolve) => {
     if (typeof document === "undefined") {
       resolve(getCanvasFontFamily());

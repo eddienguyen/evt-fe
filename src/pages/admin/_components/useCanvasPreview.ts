@@ -111,7 +111,7 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
   const frontImageRef = useRef<HTMLImageElement | null>(null);
   const mainImageRef = useRef<HTMLImageElement | null>(null);
   const fontLoadedRef = useRef(false);
-  const fontFamilyRef = useRef<string>('italic "Times New Roman", serif');
+  const fontFamilyRef = useRef<string>('italic "Times New Roman"');
 
   useEffect(() => {
     const frontCanvas = frontCanvasRef.current;
@@ -153,7 +153,7 @@ export function useCanvasPreview(config: CanvasPreviewConfig): UseCanvasPreviewR
         })
         .catch((err) => {
           console.warn('Failed to load font:', err);
-          fontFamilyRef.current = 'italic "Times New Roman", serif';
+          fontFamilyRef.current = 'italic "Times New Roman"';
           fontLoadedRef.current = true; // Proceed with fallback
           checkBothLoaded();
         });

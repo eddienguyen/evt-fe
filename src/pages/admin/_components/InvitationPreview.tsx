@@ -52,7 +52,7 @@ export const InvitationPreview = forwardRef<InvitationPreviewHandle, InvitationP
     secondaryNote,
     overrides: positionOverrides
   });
-
+// console.log("positionoverried", positionOverrides)
   const [canvasImageUrls, setCanvasImageUrls] = useState<{
     front: string | null;
     main: string | null;
