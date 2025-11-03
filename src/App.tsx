@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'hue',
-        element: <Suspense fallback={<div>Loading...</div>}><LazyHue /></Suspense>,
+        element: <Suspense fallback={<div>Loading...</div>}><LazyHN /></Suspense>,
       },
       {
         path: 'hue/:guestId',

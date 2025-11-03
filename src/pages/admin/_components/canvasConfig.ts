@@ -116,7 +116,7 @@ export const CANVAS_CONFIG: Record<"hue" | "hanoi", VenueCanvasConfig> = {
     },
     // Main image - for secondary note
     mainImage: {
-      path: "/invitations/HN-invitation.jpg",
+      path: "/invitations/HN-invitation-2.jpg",
       secondaryNotePosition: {
         x: 1060,
         y: 180,

@@ -45,14 +45,14 @@ const AdminGuestCreate: React.FC = () => {
   // Form state for live preview
   const [previewData, setPreviewData] = useState<Partial<GuestFormData>>({
     name: "",
-    venue: "hue",
+    venue: "hanoi",
     secondaryNote: "",
   });
 
   // Text position settings
   const [positionSettings, setPositionSettings] =
     useState<TextPositionSettings>(() => {
-      const venue = "hue"; // Default venue
+      const venue = "hanoi"; // Default venue
       const config = CANVAS_CONFIG[venue];
       return {
         nameX: config.frontImage.namePosition.x,
@@ -65,7 +65,7 @@ const AdminGuestCreate: React.FC = () => {
 
   // Update position settings when venue changes
   React.useEffect(() => {
-    const venue = previewData.venue || "hue";
+    const venue = previewData.venue || "hanoi";
     const config = CANVAS_CONFIG[venue];
     setPositionSettings({
       nameX: config.frontImage.namePosition.x,
@@ -218,7 +218,7 @@ const AdminGuestCreate: React.FC = () => {
     setError(null);
     setPreviewData({
       name: "",
-      venue: "hue",
+      venue: "hanoi",
       secondaryNote: "",
     });
   };
@@ -309,7 +309,7 @@ const AdminGuestCreate: React.FC = () => {
             <TextPositionControls
               settings={positionSettings}
               onSettingsChange={setPositionSettings}
-              venue={previewData.venue || "hue"}
+              venue={previewData.venue || "hanoi"}
             />
           </div>
 
@@ -319,7 +319,7 @@ const AdminGuestCreate: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
               <InvitationPreview
                 ref={previewRef}
-                venue={previewData.venue || "hue"}
+                venue={previewData.venue || "hanoi"}
                 guestName={previewData.name || ""}
                 secondaryNote={previewData.secondaryNote}
                 positionOverrides={positionSettings}

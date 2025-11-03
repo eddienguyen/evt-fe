@@ -8,7 +8,6 @@ import { CouplePresentation } from "../components/couple";
 import { FamilyInformation } from "../components/family";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
-import figure from "../public/Hue-invitation.jpg";
 import { events } from "@/config/site";
 import { GalleryTeaser } from "@/components/gallery";
 import HeroSection from "@/components/HeroSection";
@@ -113,14 +112,14 @@ const Hue: React.FC = () => {
           )}
 
           {/* Latest Wishes Section */}
-          {/* <section className="container mx-auto px-4 py-16 bg-base-light">
+          <section className="container mx-auto px-4 py-16 bg-base-light">
             <WishesSection 
               venue="hue"
               limit={9}
               animationMode="stacked"
               className=""
             />
-          </section> */}
+          </section>
 
           <GalleryTeaser enableAnimations={true} />
 

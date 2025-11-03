@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SEOHead } from "../components/SEO";
-import { StoryTimeline } from "../components/timeline";
 import { EventDetailsSection } from "../components/events";
 import { CountdownTimer } from "../components/countdown";
 import { CouplePresentation } from "../components/couple";
 import { FamilyInformation } from "../components/family";
 import { eventsConfig } from "../config/events";
 import { useGuest } from "../contexts/GuestContext";
-import figure from "../public/HN-invitation.jpg";
 import HeroSection from "@/components/HeroSection";
 import BackgroundCanvas from "@/components/BackgroundCanvas";
-import Gallery from "./Gallery";
 import { GalleryTeaser } from "@/components/gallery";
 import MobileRSVPSection from "@/components/MobileRSVPSection";
 import GiftPanel from "@/components/GiftPanel";
@@ -113,14 +110,14 @@ const HN: React.FC = () => {
           )}
 
           {/* Latest Wishes Section */}
-          {/* <section className="container mx-auto px-4 py-16 bg-base-light">
+          <section className="container mx-auto px-4 py-16 bg-base-light">
             <WishesSection 
               venue="hanoi"
               limit={9}
               animationMode="stacked"
               className=""
             />
-          </section> */}
+          </section>
 
           <GalleryTeaser enableAnimations={true} />
 
