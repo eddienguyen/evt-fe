@@ -133,8 +133,11 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
             id="countdown-heading"
             className="font-heading text-3xl md:text-4xl font-bold text-accent-gold mb-4"
           >
-            Ngày cưới ở {eventLocation} đã đến! 🎉
+            Ngày cưới đã đến! 
           </h2>
+          <h4 className='font-heading text-xl text-accent-taupe'>
+            Xin cảm ơn tất cả mọi người đã chúc phúc cho chúng mình!
+          </h4>
           <p className="font-sans text-base md:text-lg text-text-secondary">
             Cảm ơn bạn đã tham dự đám cưới của chúng tôi
           </p>

@@ -29,10 +29,17 @@ export const OpenGraphTags = ({ data, siteName }: OpenGraphTagsProps) => {
       <meta property="og:site_name" content={siteName} />
       
       {/* Additional OG tags for better sharing */}
-      <meta property="og:locale" content="en_US" />
+      <meta property="og:locale" content="vi_VN" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={data.title} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={data.ogUrl || data.canonical} />
+      <meta name="twitter:title" content={data.ogTitle || data.title} />
+      <meta name="twitter:description" content={data.ogDescription || data.description} />
+      <meta name="twitter:image" content={data.ogImage} />
     </Helmet>
   );
 };
